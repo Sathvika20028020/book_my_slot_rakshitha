@@ -96,3 +96,27 @@ Route::get('/convention-centres', function () {
     Route::get('/convention-centres/edit', function () {
         return view('admin.center_admin.convention-centres.edit');
     })->name('admin.center_admin.convention-centres.edit');
+
+
+// Book My Slot - Frontend Authentication Pages
+Route::view('/user/login', 'user.auth.login')->name('user.login');
+
+Route::view('/user/otp', 'user.auth.otp')->name('user.otp');
+
+Route::view('/user/dashboard', 'user.dashboard')
+    ->name('user.dashboard');
+
+    Route::view('/user/center', 'user.center.index')
+    ->name('user.center');
+
+    Route::view('/user/center/details', 'user.center.show')
+    ->name('user.center.details');
+
+    Route::view('/user/center/booking', 'user.center.booking')
+    ->name('user.center.booking');
+    
+    Route::view('/user/payments', 'user.payments.index')
+    ->name('user.payments');
+
+    Route::view('/user/bookings', 'user.bookings')
+    ->name('user.bookings');
