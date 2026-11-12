@@ -218,93 +218,165 @@
         </a>
     </div>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const mobile = params.get('mobile') || '';
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <script>
+document.addEventListener('DOMContentLoaded', function () {
 
-        document.getElementById('mobileDisplay').textContent =
-            mobile ? '+91 ' + mobile : '+91 XXXXXXXXXX';
+    // Mobile number from URL
+    const params = new URLSearchParams(window.location.search);
+    const mobile = params.get('mobile') || '';
 
-        const otpInputs = Array.from(document.querySelectorAll('.otp-inputs input'));
-        const otpError = document.getElementById('otpError');
-        const resendBtn = document.getElementById('resendBtn');
-        let  timerDisplay = document.getElementById('timer');
+    document.getElementById('mobileDisplay').textContent =
+        mobile ? '+91 ' + mobile : '+91 XXXXXXXXXX';
 
-        otpInputs.forEach((input, index) => {
-            input.addEventListener('input', function () {
-                this.value = this.value.replace(/\D/g, '').slice(-1);
-                otpError.style.display = 'none';
+    // OTP elements
+    const otpInputs = Array.from(
+        document.querySelectorAll('.otp-inputs input')
+    );
 
-                if (this.value && index < otpInputs.length - 1) {
-                    otpInputs[index + 1].focus();
-                }
-            });
+    const otpForm = document.getElementById('otpForm');
+    const otpError = document.getElementById('otpError');
+    const resendBtn = document.getElementById('resendBtn');
+    const timerDisplay = document.getElementById('timer');
 
-            input.addEventListener('keydown', function (e) {
-                if (e.key === 'Backspace' && !this.value && index > 0) {
-                    otpInputs[index - 1].focus();
-                }
-            });
+    // OTP input handling
+    otpInputs.forEach((input, index) => {
 
-            input.addEventListener('paste', function (e) {
-                e.preventDefault();
+        input.addEventListener('input', function () {
 
-                const pasted = (e.clipboardData || window.clipboardData)
-                    .getData('text')
-                    .replace(/\D/g, '')
-                    .slice(0, 6);
+            this.value = this.value.replace(/\D/g, '').slice(-1);
 
-                pasted.split('').forEach((digit, i) => {
-                    if (otpInputs[i]) otpInputs[i].value = digit;
-                });
+            otpError.style.display = 'none';
 
-                otpInputs[Math.min(pasted.length, 5)].focus();
-            });
+            if (this.value && index < otpInputs.length - 1) {
+                otpInputs[index + 1].focus();
+            }
         });
 
-        document.getElementById('otpForm').addEventListener('submit', function (e) {
+        // Backspace handling
+        input.addEventListener('keydown', function (e) {
+
+            if (e.key === 'Backspace' && !this.value && index > 0) {
+                otpInputs[index - 1].focus();
+            }
+        });
+
+        // Paste OTP
+        input.addEventListener('paste', function (e) {
+
             e.preventDefault();
 
-            const otp = otpInputs.map(input => input.value).join('');
+            const pasted = (e.clipboardData || window.clipboardData)
+                .getData('text')
+                .replace(/\D/g, '')
+                .slice(0, 6);
 
-            if (otp.length !== 6) {
-                otpError.style.display = 'block';
-                otpInputs.find(input => !input.value)?.focus();
-                return;
+            pasted.split('').forEach((digit, i) => {
+                if (otpInputs[i]) {
+                    otpInputs[i].value = digit;
+                }
+            });
+
+            otpInputs[Math.min(pasted.length, 5)].focus();
+        });
+    });
+
+    // VERIFY OTP
+    otpForm.addEventListener('submit', function (e) {
+
+        e.preventDefault();
+
+        // Read all six OTP boxes
+        const otp = otpInputs
+            .map(input => input.value)
+            .join('');
+
+        // Validate OTP
+        if (!/^\d{6}$/.test(otp)) {
+
+            otpError.style.display = 'block';
+
+            const firstEmpty = otpInputs.find(input => !input.value);
+
+            if (firstEmpty) {
+                firstEmpty.focus();
             }
 
-            // Frontend demo only: no real OTP verification takes place.
-            window.location.href = "{{ url('/user/dashboard') }}";
-        });
+            Swal.fire({
+                icon: 'warning',
+                title: 'Incomplete OTP',
+                text: 'Please enter all 6 digits.',
+                confirmButtonColor: '#0A0F1D'
+            });
 
-        let remainingSeconds = 30;
-        let countdown;
-
-        function startTimer() {
-            resendBtn.disabled = true;
-            remainingSeconds = 30;
-            timerDisplay.textContent = remainingSeconds;
-
-            clearInterval(countdown);
-
-            countdown = setInterval(function () {
-                remainingSeconds--;
-                timerDisplay.textContent = remainingSeconds;
-
-                if (remainingSeconds <= 0) {
-                    clearInterval(countdown);
-                    resendBtn.disabled = false;
-                    resendBtn.textContent = 'Resend OTP';
-                }
-            }, 1000);
+            return;
         }
 
-        resendBtn.addEventListener('click', function () {
-            // UI demo only: this does not send an SMS.
-            startTimer();
+        // Success message
+        Swal.fire({
+            icon: 'success',
+            title: 'Login Successful!',
+            text: 'Welcome to Book My Slot.',
+            confirmButtonText: 'Go to Dashboard',
+            confirmButtonColor: '#0A0F1D'
+        }).then(() => {
+
+            window.location.href = "{{ route('user.dashboard') }}";
+
         });
 
+    });
+
+    // RESEND OTP TIMER
+    let remainingSeconds = 30;
+    let countdown;
+
+    function startTimer() {
+
+        resendBtn.disabled = true;
+        resendBtn.innerHTML = 'Resend OTP in <span id="timer">30</span>s';
+
+        clearInterval(countdown);
+
+        remainingSeconds = 30;
+        timerDisplay = document.getElementById('timer');
+        timerDisplay.textContent = remainingSeconds;
+
+        countdown = setInterval(function () {
+
+            remainingSeconds--;
+
+            timerDisplay.textContent = remainingSeconds;
+
+            if (remainingSeconds <= 0) {
+
+                clearInterval(countdown);
+
+                resendBtn.disabled = false;
+                resendBtn.textContent = 'Resend OTP';
+            }
+
+        }, 1000);
+    }
+
+    resendBtn.addEventListener('click', function () {
+
+        // Frontend demonstration only
         startTimer();
-    </script>
+
+        Swal.fire({
+            icon: 'success',
+            title: 'OTP Requested',
+            text: 'OTP resend interface is working.',
+            confirmButtonColor: '#0A0F1D'
+        });
+
+    });
+
+    // Start timer on page load
+    startTimer();
+
+});
+</script>
 </body>
 </html>
