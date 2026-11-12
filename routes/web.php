@@ -120,3 +120,6 @@ Route::view('/user/dashboard', 'user.dashboard')
 
     Route::view('/user/bookings', 'user.bookings')
     ->name('user.bookings');
+
+   Route::view('/user/forgot-password', 'user.auth.forgot-password')
+    ->name('user.forgot-password');

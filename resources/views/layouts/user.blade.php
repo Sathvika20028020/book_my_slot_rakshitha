@@ -567,6 +567,7 @@ body {
     <!-- Azures PWA JavaScript -->
     <script src="{{ asset('pwa/scripts/bootstrap.min.js') }}"></script>
     <script src="{{ asset('pwa/scripts/custom.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @stack('scripts')
 

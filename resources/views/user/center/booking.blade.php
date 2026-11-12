@@ -147,6 +147,44 @@
 
                     </div>
 
+
+<hr class="my-4">
+
+<!-- EVENT TIMING -->
+<h6 class="form-section-title">Event Timing</h6>
+
+<div class="p-3 mb-3" style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;">
+
+    <div class="mb-3">
+        <label class="form-label">Event Day</label>
+        <div class="form-control d-flex align-items-center"
+             style="background:#fff;">
+            <i class="fas fa-calendar-day me-2" style="color:#D97706;"></i>
+            <span id="eventDayText">Select event date first</span>
+        </div>
+        <small class="text-muted">The day will be displayed automatically based on your selected date.</small>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Event Starting Time <span>*</span></label>
+            <input type="time" id="startTime" class="form-control" required>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Event Ending Time <span>*</span></label>
+            <input type="time" id="endTime" class="form-control" required>
+        </div>
+    </div>
+
+    <div id="timeMessage" class="mt-2" style="font-size:12px;font-weight:600;"></div>
+
+    <small class="text-muted d-block mt-2">
+        Select the time from which your event starts until it ends.
+    </small>
+</div>
+
+
                     <hr class="my-4">
 
                     <!-- ADDITIONAL DETAILS -->
@@ -545,6 +583,11 @@
     const eventDate = document.getElementById('eventDate');
     const duration = document.getElementById('duration');
     const dateMessage = document.getElementById('dateMessage');
+    
+    const eventDayText = document.getElementById('eventDayText');
+const startTime = document.getElementById('startTime');
+const endTime = document.getElementById('endTime');
+const timeMessage = document.getElementById('timeMessage');
 
     const dailyPrice = document.getElementById('dailyPrice');
     const totalPrice = document.getElementById('totalPrice');
@@ -569,6 +612,43 @@
         summaryDuration.textContent = days + (days === 1 ? ' Day' : ' Days');
         summaryTotal.textContent = formatCurrency(total);
     }
+
+    function updateEventDay() {
+    if (!eventDate.value) {
+        eventDayText.textContent = 'Select event date first';
+        return;
+    }
+
+    const selected = new Date(eventDate.value + 'T00:00:00');
+
+    eventDayText.textContent = selected.toLocaleDateString('en-IN', {
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    });
+}
+
+function checkTiming() {
+    const start = startTime.value;
+    const end = endTime.value;
+
+    if (!start || !end) {
+        timeMessage.textContent = 'Please select both starting and ending times.';
+        timeMessage.style.color = '#DC2626';
+        return false;
+    }
+
+    if (end <= start) {
+        timeMessage.textContent = 'Ending time must be later than starting time.';
+        timeMessage.style.color = '#DC2626';
+        return false;
+    }
+
+    timeMessage.textContent = 'Event timing looks good.';
+    timeMessage.style.color = '#16A34A';
+    return true;
+}
 
     function checkDate() {
         const selectedDate = eventDate.value;
@@ -612,6 +692,9 @@
     eventDate.min = new Date().toISOString().split('T')[0];
 
     eventDate.addEventListener('change', checkDate);
+    eventDate.addEventListener('change', updateEventDay);
+startTime.addEventListener('change', checkTiming);
+endTime.addEventListener('change', checkTiming);
     duration.addEventListener('change', updatePrice);
 
     document.getElementById('mobile').addEventListener('input', function () {
@@ -625,6 +708,11 @@
             eventDate.focus();
             return;
         }
+
+        if (!checkTiming()) {
+    startTime.focus();
+    return;
+}
 
         const mobile = document.getElementById('mobile').value;
 
