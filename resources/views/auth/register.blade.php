@@ -173,14 +173,15 @@
                 </div>
 
                 <!-- Registration Form with Bootstrap Validation -->
-                <form class="needs-validation" novalidate id="registerForm">
+                <form class="needs-validation" action="{{route('register.store')}}"  novalidate id="registerForm">
+                    @csrf
                     <div class="row g-3">
                         <!-- Full Name -->
                         <div class="col-md-6">
                             <label for="fullName" class="form-label small fw-semibold">Full Name <span class="text-danger">*</span></label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-muted"></i></span>
-                                <input type="text" class="form-control border-start-0" id="fullName" placeholder="e.g. Ramesh Varma" minlength="3" required>
+                                <input type="text" class="form-control border-start-0" name="name" id="fullName" placeholder="e.g. Ramesh Varma" minlength="3" required>
                                 <div class="invalid-feedback">
                                     Please enter your full name (min. 3 characters).
                                 </div>
@@ -202,6 +203,7 @@
                                        maxlength="10" 
                                        minlength="10" 
                                        pattern="[0-9]{10}" 
+                                       name="phone"
                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" 
                                        required>
                                 <div class="invalid-feedback" id="mobileFeedback">
@@ -218,7 +220,7 @@
                             <label for="emailAddress" class="form-label small fw-semibold">Email Address <span class="text-danger">*</span></label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope text-muted"></i></span>
-                                <input type="email" class="form-control border-start-0" id="emailAddress" placeholder="name@domain.com" required>
+                                <input type="email" class="form-control border-start-0" name="email" id="emailAddress" placeholder="name@domain.com" required>
                                 <div class="invalid-feedback">
                                     Please provide a valid email address.
                                 </div>
@@ -233,7 +235,7 @@
                             <label for="citySelect" class="form-label small fw-semibold">City <span class="text-danger">*</span></label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-muted"></i></span>
-                                <select class="form-select border-start-0" id="citySelect" required>
+                                <select class="form-select border-start-0" name="city_id" id="citySelect" required>
                                     <option value="" disabled selected>Select city</option>
                                     <option value="Hyderabad">Hyderabad</option>
                                     <option value="Bengaluru">Bengaluru</option>
@@ -256,7 +258,7 @@
                             <label for="regPass" class="form-label small fw-semibold">Password <span class="text-danger">*</span></label>
                             <div class="input-group has-validation">
                                 <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock text-muted"></i></span>
-                                <input type="password" class="form-control border-start-0" id="regPass" placeholder="Min. 6 characters" minlength="6" required>
+                                <input type="password" class="form-control border-start-0" name="password" id="regPass" placeholder="Min. 6 characters" minlength="6" required>
                                 <div class="invalid-feedback">
                                     Must be at least 6 characters.
                                 </div>
