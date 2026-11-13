@@ -550,17 +550,17 @@ body {
 
     <div id="page">
 
-        @include('partials.user.header')
+        @include('user.layouts.header')
 
         <div class="page-content">
             @yield('content')
 
-            @include('partials.user.footer')
+            @include('user.layouts.footer')
         </div>
 
-        @include('partials.user.sidebar')
+        @include('user.layouts.sidebar')
 
-        @include('partials.user.bottom-nav')
+        @include('user.layouts.bottom-nav')
 
     </div>
 

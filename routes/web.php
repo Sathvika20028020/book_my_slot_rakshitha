@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+
+
+Route::resource('register', UserController::class)->names('register'); 
 
 // Frontend Routes
 Route::get('/', function () {
