@@ -69,6 +69,15 @@ Route::prefix('admin')->group(function () {
     Route::get('/centers/edit', function () {
         return view('admin.centers.edit');
     })->name('admin.centers.edit');
+
+    // Bookings UI
+    Route::get('/bookings', function () {
+        return view('admin.bookings.index');
+    })->name('admin.bookings.index');
+
+    Route::get('/bookings/show', function () {
+        return view('admin.bookings.show');
+    })->name('admin.bookings.show');
 });
 
 // Aliases for layout compatibility

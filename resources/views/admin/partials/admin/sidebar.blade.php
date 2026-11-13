@@ -47,6 +47,15 @@
                         </a>
                     </li>
 
+                    <!-- Bookings -->
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title link-nav {{ request()->routeIs('admin.bookings.*') ? 'active' : '' }}"
+                            href="{{ route('admin.bookings.index') }}">
+                            <span><i class="bi bi-calendar2-check-fill me-2"></i></span>
+                            <span>Bookings</span>
+                        </a>
+                    </li>
+
                     <!-- Convention Centres (Vendors & Credentials) -->
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav {{ request()->routeIs('admin.convention-centres.index.*') ? 'active' : '' }}"
