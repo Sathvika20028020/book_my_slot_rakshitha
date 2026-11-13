@@ -268,9 +268,11 @@
                             <span class="badge-status badge-status-confirmed">Confirmed</span>
                         </td>
                         <td class="text-end">
-                            <a href="{{ route('admin.bookings.show') }}" class="btn btn-sm btn-primary" title="View details">
-                                <i class="bi bi-eye me-1"></i> View
-                            </a>
+                            <div class="d-inline-flex align-items-center gap-1">
+                                <a href="{{ route('admin.bookings.show') }}" class="btn btn-sm btn-light border" title="View details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>
 
@@ -288,9 +290,17 @@
                             <span class="badge-status badge-status-pending">Pending</span>
                         </td>
                         <td class="text-end">
-                            <a href="{{ route('admin.bookings.show') }}" class="btn btn-sm btn-primary" title="View details">
-                                <i class="bi bi-eye me-1"></i> View
-                            </a>
+                            <div class="d-inline-flex align-items-center gap-1">
+                                <button type="button" class="btn btn-sm btn-success rounded-pill px-2 py-1" title="Approve Booking" onclick="this.closest('tr').querySelector('.badge-status').className='badge-status badge-status-confirmed'; this.closest('tr').querySelector('.badge-status').innerText='Confirmed'; this.parentElement.innerHTML='<span class=\'badge bg-success bg-opacity-10 text-success me-1\'>Approved</span><a href=\'{{ route('admin.bookings.show') }}\' class=\'btn btn-sm btn-light border\'><i class=\'bi bi-eye\'></i></a>';">
+                                    <i class="bi bi-check-lg"></i> Approve
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1" title="Reject Booking" onclick="this.closest('tr').querySelector('.badge-status').className='badge-status badge-status-cancelled'; this.closest('tr').querySelector('.badge-status').innerText='Rejected'; this.parentElement.innerHTML='<span class=\'badge bg-danger bg-opacity-10 text-danger me-1\'>Rejected</span><a href=\'{{ route('admin.bookings.show') }}\' class=\'btn btn-sm btn-light border\'><i class=\'bi bi-eye\'></i></a>';">
+                                    <i class="bi bi-x-lg"></i> Reject
+                                </button>
+                                <a href="{{ route('admin.bookings.show') }}" class="btn btn-sm btn-light border" title="View details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>
 

@@ -49,10 +49,28 @@
 
                     <!-- Bookings -->
                     <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title link-nav {{ request()->routeIs('admin.bookings.*') ? 'active' : '' }}"
+                        <a class="sidebar-link sidebar-title link-nav {{ request()->is('admin/booking*') ? 'active' : '' }}"
                             href="{{ route('admin.bookings.index') }}">
                             <span><i class="bi bi-calendar2-check-fill me-2"></i></span>
                             <span>Bookings</span>
+                        </a>
+                    </li>
+
+                    <!-- Calendar -->
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title link-nav {{ request()->is('*calendar*') ? 'active' : '' }}"
+                            href="{{ route('center_admin.calendar.index') }}">
+                            <span><i class="bi bi-calendar3 me-2"></i></span>
+                            <span>Calendar</span>
+                        </a>
+                    </li>
+
+                    <!-- Payments -->
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title link-nav {{ request()->is('admin/payment*') ? 'active' : '' }}"
+                            href="{{ route('admin.payments.index') }}">
+                            <span><i class="bi bi-credit-card-2-front-fill me-2"></i></span>
+                            <span>Payments</span>
                         </a>
                     </li>
 
