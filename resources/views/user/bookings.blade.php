@@ -198,6 +198,11 @@
             font-size: 13px;
         }
     }
+
+    .status-completed {
+    color: #166534;
+    background: #dcfce7;
+}
 </style>
 
 <div class="bookings-page">
@@ -234,6 +239,8 @@
         <button class="filter-item" type="button" onclick="filterBookings('confirmed', this)">Confirmed</button>
         <button class="filter-item" type="button" onclick="filterBookings('pending', this)">Pending</button>
         <button class="filter-item" type="button" onclick="filterBookings('cancelled', this)">Cancelled</button>
+        <button class="filter-item" type="button"
+    onclick="filterBookings('completed', this)">Completed</button>
     </div>
 
     <h5 class="booking-section-title">Your Booking History</h5>
@@ -381,6 +388,49 @@
         <a href="#" class="booking-button">View Booking Details</a>
 
     </div>
+
+
+<!-- BOOKING 5 - COMPLETED -->
+<div class="booking-card" data-status="completed">
+
+    <div class="booking-card-header">
+        <h5>Grand Palace Convention Hall</h5>
+        <span class="status status-completed">Completed</span>
+    </div>
+
+    <div class="booking-id">Booking ID: BMS-1005</div>
+
+    <div class="booking-details">
+
+        <div class="detail-row">
+            <span>Event Date</span>
+            <strong>05 November 2026</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Event Type</span>
+            <strong>Wedding</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Booking Amount</span>
+            <strong>₹25,000</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Payment Status</span>
+            <strong class="payment-paid">Paid</strong>
+        </div>
+
+    </div>
+
+    <a href="{{ route('user.reviews.create', ['booking' => 'BMS-1005']) }}"
+       class="booking-button">
+        <i class="fas fa-star me-1"></i> Rate & Review
+    </a>
+
+</div>
+
 
 </div>
 
