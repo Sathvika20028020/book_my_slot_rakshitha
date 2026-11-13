@@ -116,6 +116,12 @@
             <button class="btn btn-outline-secondary rounded-pill px-3 d-inline-flex align-items-center gap-2" onclick="window.print()">
                 <i class="bi bi-printer"></i> Print Details
             </button>
+            <button class="btn btn-outline-danger rounded-pill px-3 d-inline-flex align-items-center gap-2" onclick="alert('Booking BMS-4821 Rejected'); document.querySelector('.badge-status').className='badge-status badge-status-cancelled'; document.querySelector('.badge-status').innerText='Rejected';">
+                <i class="bi bi-x-circle"></i> Reject
+            </button>
+            <button class="btn btn-success rounded-pill px-3 d-inline-flex align-items-center gap-2" onclick="alert('Booking BMS-4821 Approved'); document.querySelector('.badge-status').className='badge-status badge-status-confirmed'; document.querySelector('.badge-status').innerText='Confirmed';">
+                <i class="bi bi-check-circle"></i> Approve
+            </button>
             <a href="#" class="btn btn-outline-primary rounded-pill px-3 d-inline-flex align-items-center gap-2">
                 <i class="bi bi-download"></i> Invoice PDF
             </a>
