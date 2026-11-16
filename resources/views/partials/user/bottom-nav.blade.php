@@ -25,10 +25,10 @@
         <span>Payments</span>
     </a>
 
-    <!-- <a href="{{ url('/user/profile') }}"
+    <a href="{{ url('/user/profile') }}"
        class="{{ request()->is('user/profile*') ? 'active-nav' : '' }}">
         <i class="fa fa-user"></i>
         <span>Profile</span>
-    </a> -->
+    </a>
 
 </nav>

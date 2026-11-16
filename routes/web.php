@@ -98,7 +98,7 @@ Route::get('/convention-centres', function () {
     })->name('admin.center_admin.convention-centres.edit');
 
 
-// Book My Slot - Frontend Authentication Pages
+// Book My Slot UI (User Portal)
 Route::view('/user/login', 'user.auth.login')->name('user.login');
 
 Route::view('/user/otp', 'user.auth.otp')->name('user.otp');
@@ -126,3 +126,6 @@ Route::view('/user/dashboard', 'user.dashboard')
 
     Route::view('/user/reviews/create', 'user.reviews.create')
     ->name('user.reviews.create');
+
+    Route::view('/user/profile', 'user.profile')
+    ->name('user.profile');
