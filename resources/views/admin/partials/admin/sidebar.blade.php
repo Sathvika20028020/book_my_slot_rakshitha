@@ -68,7 +68,7 @@
                     <!-- Payments -->
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav {{ request()->is('admin/payment*') ? 'active' : '' }}"
-                            href="{{ route('admin.payments.index') }}">
+                            href="">
                             <span><i class="bi bi-credit-card-2-front-fill me-2"></i></span>
                             <span>Payments</span>
                         </a>
