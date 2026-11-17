@@ -1,7 +1,7 @@
 <div class="sidebar-wrapper">
     <div>
         <div class="logo-wrapper d-flex align-items-center gap-2 py-3 px-3">
-            <a href="{{ route('admin.dashboard') }}" class="d-flex align-items-center gap-2 text-decoration-none">
+            <a href="" class="d-flex align-items-center gap-2 text-decoration-none">
                 <div style="width: 36px; height: 36px; border-radius: 10px; background: #F59E0B; display: flex; align-items: center; justify-content: center; color: #0A0F1D; font-size: 1.2rem; font-weight: bold;">
                     <i class="bi bi-buildings-fill"></i>
                 </div>
@@ -30,8 +30,8 @@
 
                     <!-- Dashboard -->
                     <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title link-nav {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
-                            href="{{ route('admin.dashboard') }}">
+                        <a class="sidebar-link sidebar-title link-nav "
+                            href="">
                             <span><i class="bi bi-speedometer2 me-2"></i></span>
                             <span>Dashboard</span>
                         </a>
@@ -40,7 +40,7 @@
                     <!-- Applications (User Registrations) -->
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav {{ request()->routeIs('admin.application.*') ? 'active' : '' }}"
-                            href="{{ route('admin.application.index') }}">
+                            href="">
                             <span><i class="bi bi-file-earmark-person-fill me-2"></i></span>
                             <span>Applications</span>
 
@@ -68,7 +68,7 @@
                     <!-- Payments -->
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav {{ request()->is('admin/payment*') ? 'active' : '' }}"
-                            href="{{ route('admin.payments.index') }}">
+                            href="">
                             <span><i class="bi bi-credit-card-2-front-fill me-2"></i></span>
                             <span>Payments</span>
                         </a>

@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('conventions', function (Blueprint $table) {
+        Schema::create('superadmin_logins', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
+            $table->string('username')->nullable();
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
+           
         });
     }
 
@@ -22,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('conventions');
+        Schema::dropIfExists('superadmin_logins');
     }
 };
