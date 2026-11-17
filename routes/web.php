@@ -174,60 +174,12 @@ Route::match(['get', 'post'], '/logout', function () {
     return redirect('/');
 })->name('logout');
 
-<<<<<<< HEAD
-
-Route::get('/convention-centres', function () {
-        return view('admin.center_admin.convention-centres.index');
-    })->name('admin.center_admin.convention-centres.index');
-
-    Route::get('/convention-centres/create', function () {
-        return view('admin.center_admin.convention-centres.create');
-    })->name('admin.center_admin.convention-centres.create');
-
-    Route::get('/convention-centres/show', function () {
-        return view('admin.center_admin.convention-centres.show');
-    })->name('admin.center_admin.convention-centres.show');
-
-    Route::get('/convention-centres/edit', function () {
-        return view('admin.center_admin.convention-centres.edit');
-    })->name('admin.center_admin.convention-centres.edit');
 
 
-// Book My Slot UI (User Portal)
-=======
+
 // Book My Slot - Frontend Authentication Pages
->>>>>>> 4ba928820c3759f2b5fec6207bb01c5b3dc1fb60
 Route::view('/user/login', 'user.auth.login')->name('user.login');
 Route::view('/user/otp', 'user.auth.otp')->name('user.otp');
-<<<<<<< HEAD
-
-Route::view('/user/dashboard', 'user.dashboard')
-    ->name('user.dashboard');
-
-    Route::view('/user/center', 'user.center.index')
-    ->name('user.center');
-
-    Route::view('/user/center/details', 'user.center.show')
-    ->name('user.center.details');
-
-    Route::view('/user/center/booking', 'user.center.booking')
-    ->name('user.center.booking');
-    
-    Route::view('/user/payments', 'user.payments.index')
-    ->name('user.payments');
-
-    Route::view('/user/bookings', 'user.bookings')
-    ->name('user.bookings');
-
-   Route::view('/user/forgot-password', 'user.auth.forgot-password')
-    ->name('user.forgot-password');
-
-    Route::view('/user/reviews/create', 'user.reviews.create')
-    ->name('user.reviews.create');
-
-    Route::view('/user/profile', 'user.profile')
-    ->name('user.profile');
-=======
 Route::view('/user/dashboard', 'user.dashboard')->name('user.dashboard');
 Route::view('/user/center', 'user.center.index')->name('user.center');
 Route::view('/user/center/details', 'user.center.show')->name('user.center.details');
@@ -236,4 +188,12 @@ Route::view('/user/payments', 'user.payments.index')->name('user.payments');
 Route::view('/user/bookings', 'user.bookings')->name('user.bookings');
 Route::view('/user/forgot-password', 'user.auth.forgot-password')->name('user.forgot-password');
 Route::view('/user/reviews/create', 'user.reviews.create')->name('user.reviews.create');
->>>>>>> 4ba928820c3759f2b5fec6207bb01c5b3dc1fb60
+ Route::view('/user/profile', 'user.profile')
+    ->name('user.profile');
+
+
+Route::get('/invoice-preview', function () {
+    return view('user.invoice.show', [
+        'bookingId' => 'BMS-2026-001'
+    ]);
+})->name('user.invoice.preview');
