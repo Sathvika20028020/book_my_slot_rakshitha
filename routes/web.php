@@ -151,6 +151,9 @@ Route::match(['get', 'post'], '/logout', function () {
     return redirect('/');
 })->name('logout');
 
+
+
+
 // Book My Slot - Frontend Authentication Pages
 
 // Frontend Routes
@@ -176,3 +179,12 @@ Route::view('/user/payments', 'user.payments.index')->name('user.payments');
 Route::view('/user/bookings', 'user.bookings')->name('user.bookings');
 Route::view('/user/forgot-password', 'user.auth.forgot-password')->name('user.forgot-password');
 Route::view('/user/reviews/create', 'user.reviews.create')->name('user.reviews.create');
+ Route::view('/user/profile', 'user.profile')
+    ->name('user.profile');
+
+
+Route::get('/invoice-preview', function () {
+    return view('user.invoice.show', [
+        'bookingId' => 'BMS-2026-001'
+    ]);
+})->name('user.invoice.preview');

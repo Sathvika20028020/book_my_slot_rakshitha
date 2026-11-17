@@ -7,19 +7,15 @@
 
 <div class="container-fluid px-3 px-md-4 py-4">
 
-    <!-- BACK LINK -->
     <a href="{{ route('user.center.details') }}"
-       class="text-decoration-none d-inline-flex align-items-center mb-3"
-       style="color:#64748B;font-size:14px;font-weight:700;">
+       class="booking-back">
         <i class="fas fa-arrow-left me-2"></i> Back to Centre Details
     </a>
 
     <div class="mb-4">
-        <h3 class="fw-bold mb-1" style="color:#0A0F1D;">
-            Book Your Venue
-        </h3>
-        <p class="text-muted mb-0" style="font-size:14px;">
-            Select an available date and submit your booking request.
+        <h3 class="fw-bold mb-1 page-heading">Book Your Venue</h3>
+        <p class="text-muted mb-0 page-subtitle">
+            Select your hall, event dates and timings to submit your booking request.
         </p>
     </div>
 
@@ -27,7 +23,6 @@
 
         <!-- BOOKING FORM -->
         <div class="col-lg-8">
-
             <div class="booking-section">
 
                 <h5 class="section-title">
@@ -39,10 +34,9 @@
                     <div class="hall-icon">
                         <i class="fas fa-landmark"></i>
                     </div>
-
                     <div>
                         <h6 class="fw-bold mb-1">Grand Palace Convention Hall</h6>
-                        <p class="mb-0 text-muted" style="font-size:13px;">
+                        <p class="mb-0 text-muted">
                             <i class="fas fa-map-marker-alt me-1"></i>
                             Bengaluru, Karnataka
                         </p>
@@ -51,29 +45,53 @@
 
                 <form id="bookingForm">
 
-                    <!-- EVENT DETAILS -->
-                    <h6 class="form-section-title">Event Information</h6>
+                    <!-- HALL SELECTION -->
+                    <h6 class="form-section-title">Select Hall</h6>
+
+                    <div class="row g-3 mb-4">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Hall Name <span>*</span></label>
+                            <select id="hallName" class="form-select" required>
+                                <option value="Grand Palace Convention Hall">
+                                    Grand Palace Convention Hall
+                                </option>
+                                <option value="Banquet Hall">Banquet Hall</option>
+<option value="Mini Hall">Mini Hall</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Hall Type <span>*</span></label>
+                            <select id="hallType" class="form-select" required>
+                                <option value="AC" data-price="25000">AC Hall</option>
+                                <option value="Non-AC" data-price="20000">Non-AC Hall</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- APPLICANT DETAILS -->
+                    <h6 class="form-section-title">Applicant & Event Information</h6>
 
                     <div class="row g-3">
 
                         <div class="col-md-6">
                             <label class="form-label">Applicant Name <span>*</span></label>
-                            <input type="text"
-                                   id="applicantName"
+                            <input type="text" id="applicantName"
                                    class="form-control"
-                                   placeholder="Enter your full name"
-                                   required>
+                                   placeholder="Enter your full name" required>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label">Mobile Number <span>*</span></label>
-                            <input type="tel"
-                                   id="mobile"
+                            <input type="tel" id="mobile"
                                    class="form-control"
                                    placeholder="10-digit mobile number"
                                    maxlength="10"
-                                   inputmode="numeric"
-                                   required>
+                                   inputmode="numeric" required>
                         </div>
 
                         <div class="col-md-6">
@@ -92,102 +110,67 @@
 
                         <div class="col-md-6">
                             <label class="form-label">Expected Guests <span>*</span></label>
-                            <input type="number"
-                                   id="guestCount"
+                            <input type="number" id="guestCount"
                                    class="form-control"
                                    min="1"
-                                   placeholder="Number of guests"
-                                   required>
+                                   placeholder="Number of guests" required>
                         </div>
 
                     </div>
 
                     <hr class="my-4">
 
-                    <!-- DATE AVAILABILITY -->
-                    <h6 class="form-section-title">Select Event Date</h6>
+                    <!-- DATE SELECTION -->
+                    <h6 class="form-section-title">Select Event Dates</h6>
 
                     <div class="availability-note mb-3">
-                        <div>
-                            <span class="date-dot available-dot"></span>
-                            Available
-                        </div>
-                        <div>
-                            <span class="date-dot booked-dot"></span>
-                            Already Booked
-                        </div>
+                        <span><i class="date-dot available-dot"></i> Available</span>
+                        <span><i class="date-dot booked-dot"></i> Already Booked</span>
                     </div>
 
                     <div class="row g-3">
 
                         <div class="col-md-6">
-                            <label class="form-label">Event Date <span>*</span></label>
-
-                            <input type="date"
-                                   id="eventDate"
-                                   class="form-control"
-                                   required>
-
-                            <small class="text-muted d-block mt-2">
-                                Choose a date that is available for this hall.
-                            </small>
-
-                            <div id="dateMessage" class="date-message"></div>
+                            <label class="form-label">From Date <span>*</span></label>
+                            <input type="date" id="fromDate"
+                                   class="form-control" required>
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Booking Duration <span>*</span></label>
-
-                            <select id="duration" class="form-select" required>
-                                <option value="1">1 Day</option>
-                                <option value="2">2 Days</option>
-                                <option value="3">3 Days</option>
-                            </select>
+                            <label class="form-label">To Date <span>*</span></label>
+                            <input type="date" id="toDate"
+                                   class="form-control" required>
                         </div>
 
                     </div>
 
+                    <div id="dateMessage" class="date-message"></div>
 
-<hr class="my-4">
-
-<!-- EVENT TIMING -->
-<h6 class="form-section-title">Event Timing</h6>
-
-<div class="p-3 mb-3" style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;">
-
-    <div class="mb-3">
-        <label class="form-label">Event Day</label>
-        <div class="form-control d-flex align-items-center"
-             style="background:#fff;">
-            <i class="fas fa-calendar-day me-2" style="color:#D97706;"></i>
-            <span id="eventDayText">Select event date first</span>
-        </div>
-        <small class="text-muted">The day will be displayed automatically based on your selected date.</small>
-    </div>
-
-    <div class="row g-3">
-        <div class="col-md-6">
-            <label class="form-label">Event Starting Time <span>*</span></label>
-            <input type="time" id="startTime" class="form-control" required>
-        </div>
-
-        <div class="col-md-6">
-            <label class="form-label">Event Ending Time <span>*</span></label>
-            <input type="time" id="endTime" class="form-control" required>
-        </div>
-    </div>
-
-    <div id="timeMessage" class="mt-2" style="font-size:12px;font-weight:600;"></div>
-
-    <small class="text-muted d-block mt-2">
-        Select the time from which your event starts until it ends.
-    </small>
-</div>
-
+                    <div class="date-range-summary mt-3">
+                        <div class="d-flex justify-content-between flex-wrap gap-2">
+                            <strong>Selected Event Dates</strong>
+                            <span id="numberOfDays">0 Days</span>
+                        </div>
+                        <div id="selectedDatesList" class="selected-dates-list">
+                            Select your event dates to view them here.
+                        </div>
+                    </div>
 
                     <hr class="my-4">
 
-                    <!-- ADDITIONAL DETAILS -->
+<!-- EVENT TIMING FOR EACH SELECTED DATE -->
+<h6 class="form-section-title">Event Timing</h6>
+
+<div id="eventTimingsContainer">
+    <div class="p-3 text-muted"
+         style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;">
+        Select the event dates to enter timings for each day.
+    </div>
+</div>
+
+                    <hr class="my-4">
+
+                    <!-- ADDITIONAL INFORMATION -->
                     <h6 class="form-section-title">Additional Information</h6>
 
                     <div class="mb-3">
@@ -198,72 +181,63 @@
                                   placeholder="Mention any additional requirements..."></textarea>
                     </div>
 
-                    <!-- PRICE SUMMARY -->
+                    <!-- PRICE -->
                     <div class="price-summary mt-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>Hall rental per day</span>
+
+                        <div class="summary-row">
+                            <span>Selected Hall</span>
+                            <strong id="priceHallName">Grand Palace Convention Hall</strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Hall Type</span>
+                            <strong id="priceHallType">AC</strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Price per day</span>
                             <strong id="dailyPrice">₹25,000</strong>
                         </div>
 
-                        <div class="d-flex justify-content-between align-items-center mt-2">
-                            <span>Duration</span>
-                            <strong id="durationText">1 Day</strong>
+                        <div class="summary-row">
+                            <span>Number of days</span>
+                            <strong id="durationText">0 Days</strong>
                         </div>
 
-                        <div class="price-total d-flex justify-content-between align-items-center mt-3 pt-3">
+                        <div class="price-total">
                             <strong>Estimated Total</strong>
-                            <strong id="totalPrice">₹25,000</strong>
+                            <strong id="totalPrice">₹0</strong>
                         </div>
 
                         <small class="text-muted d-block mt-2">
                             Sample price for demonstration. Final amount is subject to centre confirmation.
                         </small>
+
                     </div>
 
                     <div class="form-check mt-4">
                         <input class="form-check-input"
-                               type="checkbox"
-                               id="agree"
-                               required>
-                        <label class="form-check-label" for="agree"
-                               style="font-size:13px;color:#64748B;">
+                               type="checkbox" id="agree" required>
+                        <label class="form-check-label" for="agree">
                             I confirm that the booking details provided above are correct.
                         </label>
                     </div>
 
-                    <button type="submit"
-                            class="btn submit-booking-btn w-100 mt-4">
+                    <button type="submit" class="btn submit-booking-btn w-100 mt-4">
                         Submit Booking Request
                         <i class="fas fa-arrow-right ms-2"></i>
                     </button>
 
-                    <p class="text-muted text-center mt-3 mb-0"
-                       style="font-size:12px;">
+                    <p class="text-muted text-center mt-3 mb-0 payment-note">
                         No payment is required now. Payment will be available only after approval.
                     </p>
 
                 </form>
-
-                <!-- FRONTEND SUCCESS MESSAGE -->
-                <div id="successMessage" class="success-message mt-4" style="display:none;">
-                    <div class="success-icon">
-                        <i class="fas fa-check"></i>
-                    </div>
-
-                    <h5 class="fw-bold mt-3">Booking Request Submitted!</h5>
-
-                    <p class="mb-0">
-                        Your request has been submitted for approval.
-                        You will get the payment option after the Admin or Convention Centre approves it.
-                    </p>
-                </div>
-
             </div>
         </div>
 
-        <!-- PRICE AND AVAILABILITY SIDEBAR -->
+        <!-- BOOKING SUMMARY -->
         <div class="col-lg-4">
-
             <div class="booking-sidebar">
 
                 <h5 class="fw-bold mb-3">Booking Summary</h5>
@@ -271,7 +245,7 @@
                 <div class="summary-hall">
                     <i class="fas fa-landmark"></i>
                     <div>
-                        <strong>Grand Palace Convention Hall</strong>
+                        <strong id="summaryHallName">Grand Palace Convention Hall</strong>
                         <small>Bengaluru, Karnataka</small>
                     </div>
                 </div>
@@ -279,25 +253,35 @@
                 <hr>
 
                 <div class="summary-row">
-                    <span>Price per day</span>
-                    <strong>₹25,000</strong>
+                    <span>Hall Type</span>
+                    <strong id="summaryHallType">AC</strong>
                 </div>
 
                 <div class="summary-row">
-                    <span>Selected date</span>
-                    <strong id="summaryDate">Not selected</strong>
+                    <span>Price per day</span>
+                    <strong id="summaryDailyPrice">₹25,000</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>From Date</span>
+                    <strong id="summaryFromDate">Not selected</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>To Date</span>
+                    <strong id="summaryToDate">Not selected</strong>
                 </div>
 
                 <div class="summary-row">
                     <span>Duration</span>
-                    <strong id="summaryDuration">1 Day</strong>
+                    <strong id="summaryDuration">0 Days</strong>
                 </div>
 
                 <hr>
 
                 <div class="summary-row total-row">
                     <span>Estimated Total</span>
-                    <strong id="summaryTotal">₹25,000</strong>
+                    <strong id="summaryTotal">₹0</strong>
                 </div>
 
                 <div class="approval-note mt-4">
@@ -306,13 +290,35 @@
                 </div>
 
             </div>
-
         </div>
 
     </div>
 </div>
 
 <style>
+    .booking-back {
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 18px;
+        color: #64748B;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .booking-back:hover {
+        color: #D97706;
+    }
+
+    .page-heading {
+        color: #0A0F1D;
+        font-size: 24px;
+    }
+
+    .page-subtitle {
+        font-size: 14px;
+    }
+
     .booking-section,
     .booking-sidebar {
         background: #fff;
@@ -358,19 +364,23 @@
 
     .selected-hall h6 {
         color: #0A0F1D;
-        font-size: 14px;
+        font-size: 15px;
+    }
+
+    .selected-hall p {
+        font-size: 13px;
     }
 
     .form-section-title {
         color: #0A0F1D;
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 800;
         margin-bottom: 17px;
     }
 
     .form-label {
         color: #334155;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 700;
         margin-bottom: 8px;
     }
@@ -379,22 +389,22 @@
         color: #DC2626;
     }
 
-    .form-control,
-    .form-select {
-        min-height: 46px;
-        border: 1px solid #E2E8F0;
+    .booking-section .form-control,
+    .booking-section .form-select {
+        min-height: 47px;
+        border: 1px solid #CBD5E1;
         border-radius: 8px;
         font-family: inherit;
-        font-size: 13px;
+        font-size: 14px;
         color: #0A0F1D;
     }
 
-    textarea.form-control {
-        min-height: 90px;
+    .booking-section textarea.form-control {
+        min-height: 95px;
     }
 
-    .form-control:focus,
-    .form-select:focus {
+    .booking-section .form-control:focus,
+    .booking-section .form-select:focus {
         border-color: #F59E0B;
         box-shadow: 0 0 0 3px rgba(245,158,11,.12);
     }
@@ -404,12 +414,12 @@
         gap: 20px;
         flex-wrap: wrap;
         color: #64748B;
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .date-dot {
-        width: 9px;
-        height: 9px;
+        width: 10px;
+        height: 10px;
         display: inline-block;
         border-radius: 50%;
         margin-right: 5px;
@@ -424,37 +434,102 @@
     }
 
     .date-message {
-        margin-top: 8px;
-        font-size: 12px;
+        margin-top: 10px;
+        font-size: 13px;
         font-weight: 700;
     }
 
-    .price-summary {
-        padding: 17px;
+    .date-range-summary,
+    .timing-box {
+        padding: 16px;
         background: #F8FAFC;
         border: 1px solid #E2E8F0;
         border-radius: 10px;
+    }
+
+    .date-range-summary {
+        color: #334155;
+        font-size: 14px;
+    }
+
+    .date-range-summary > div:first-child span {
+        color: #B45309;
+        font-weight: 800;
+    }
+
+    .selected-dates-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
         color: #64748B;
         font-size: 13px;
     }
 
-    .price-summary strong {
+    .selected-date-chip {
+        padding: 7px 10px;
+        background: #fff;
+        border: 1px solid #DCE3EC;
+        border-radius: 7px;
+        color: #334155;
+        font-weight: 600;
+    }
+
+    .timing-info {
+        color: #64748B;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .timing-info i {
+        color: #D97706;
+    }
+
+    .price-summary {
+        padding: 18px;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        color: #64748B;
+        font-size: 14px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin: 14px 0;
+        color: #64748B;
+        font-size: 14px;
+    }
+
+    .summary-row strong {
         color: #0A0F1D;
+        text-align: right;
+        overflow-wrap: anywhere;
     }
 
     .price-total {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
         border-top: 1px solid #E2E8F0;
-        font-size: 15px;
+        padding-top: 15px;
+        margin-top: 15px;
+        color: #0A0F1D;
+        font-size: 16px;
+        font-weight: 800;
     }
 
     .submit-booking-btn {
-        min-height: 51px;
+        min-height: 52px;
         background: #0A0F1D;
         color: #F59E0B;
         border: 0;
         border-radius: 9px;
         font-family: inherit;
-        font-size: 14px;
+        font-size: 15px;
         font-weight: 800;
     }
 
@@ -476,82 +551,53 @@
     }
 
     .summary-hall > i {
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
+        flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 9px;
         background: #FEF3C7;
         color: #B45309;
-        font-size: 18px;
+        font-size: 19px;
     }
 
     .summary-hall strong {
         display: block;
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .summary-hall small {
         display: block;
         margin-top: 4px;
         color: #64748B;
-        font-size: 11px;
-    }
-
-    .summary-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-        margin: 15px 0;
-        color: #64748B;
-        font-size: 13px;
-    }
-
-    .summary-row strong {
-        color: #0A0F1D;
-        text-align: right;
+        font-size: 12px;
     }
 
     .total-row {
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 800;
     }
 
     .approval-note {
-        padding: 13px;
+        padding: 14px;
         background: #FFFBEB;
         border: 1px solid #FDE68A;
         border-radius: 8px;
         color: #92400E;
-        font-size: 12px;
+        font-size: 13px;
         line-height: 1.6;
     }
 
-    .success-message {
-        padding: 25px;
-        background: #F0FDF4;
-        border: 1px solid #BBF7D0;
-        border-radius: 12px;
-        text-align: center;
-        color: #166534;
-    }
-
-    .success-icon {
-        width: 50px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: auto;
-        background: #DCFCE7;
-        border-radius: 50%;
-        font-size: 22px;
-    }
-
-    .success-message p {
+    .form-check-label {
+        color: #64748B;
         font-size: 13px;
-        line-height: 1.7;
+        line-height: 1.6;
+    }
+
+    .payment-note {
+        font-size: 13px;
     }
 
     @media (max-width: 575px) {
@@ -563,12 +609,21 @@
         .booking-sidebar {
             position: static;
         }
+
+        .page-heading {
+            font-size: 22px;
+        }
     }
 </style>
 
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <script>
-    // DEMO DATA FOR THIS HALL ONLY.
-    // Replace these dates with actual booked dates from the database later.
+document.addEventListener('DOMContentLoaded', function () {
+
+    // DEMO BOOKED DATES
     const bookedDates = [
         '2026-11-15',
         '2026-11-20',
@@ -577,161 +632,456 @@
         '2026-12-10'
     ];
 
-    // DEMO PRICE. Replace with the actual hall price later.
-    const pricePerDay = 25000;
+    const fromDate = document.getElementById('fromDate');
+    const toDate = document.getElementById('toDate');
+    const hallName = document.getElementById('hallName');
+    const hallType = document.getElementById('hallType');
 
-    const eventDate = document.getElementById('eventDate');
-    const duration = document.getElementById('duration');
     const dateMessage = document.getElementById('dateMessage');
-    
-    const eventDayText = document.getElementById('eventDayText');
-const startTime = document.getElementById('startTime');
-const endTime = document.getElementById('endTime');
-const timeMessage = document.getElementById('timeMessage');
+    const form = document.getElementById('bookingForm');
+    const eventTimingsContainer = document.getElementById('eventTimingsContainer');
 
-    const dailyPrice = document.getElementById('dailyPrice');
-    const totalPrice = document.getElementById('totalPrice');
-    const durationText = document.getElementById('durationText');
-
-    const summaryDate = document.getElementById('summaryDate');
-    const summaryDuration = document.getElementById('summaryDuration');
-    const summaryTotal = document.getElementById('summaryTotal');
+    let selectedDays = 0;
+let currentPrice = 25000;
+let renderedDatesKey = '';
 
     function formatCurrency(amount) {
         return '₹' + amount.toLocaleString('en-IN');
     }
 
+    function formatDate(dateString) {
+        if (!dateString) return 'Not selected';
+
+        return new Date(dateString + 'T00:00:00').toLocaleDateString('en-IN', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
+    }
+
+    function formatFullDate(dateString) {
+        return new Date(dateString + 'T00:00:00').toLocaleDateString('en-IN', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+    }
+
+    function getLocalDate() {
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    }
+
+    // PRICE CALCULATION
     function updatePrice() {
-        const days = parseInt(duration.value) || 1;
-        const total = pricePerDay * days;
+        const selectedOption = hallType.options[hallType.selectedIndex];
 
-        dailyPrice.textContent = formatCurrency(pricePerDay);
-        totalPrice.textContent = formatCurrency(total);
-        durationText.textContent = days + (days === 1 ? ' Day' : ' Days');
+        currentPrice = Number(selectedOption?.dataset.price || 0);
 
-        summaryDuration.textContent = days + (days === 1 ? ' Day' : ' Days');
-        summaryTotal.textContent = formatCurrency(total);
+        const total = currentPrice * selectedDays;
+        const daysText = selectedDays + (selectedDays === 1 ? ' Day' : ' Days');
+
+        document.getElementById('priceHallName').textContent = hallName.value;
+        document.getElementById('priceHallType').textContent = hallType.value;
+        document.getElementById('dailyPrice').textContent = formatCurrency(currentPrice);
+        document.getElementById('durationText').textContent = daysText;
+        document.getElementById('totalPrice').textContent = formatCurrency(total);
+
+        document.getElementById('summaryHallName').textContent = hallName.value;
+        document.getElementById('summaryHallType').textContent = hallType.value;
+        document.getElementById('summaryDailyPrice').textContent = formatCurrency(currentPrice);
+        document.getElementById('summaryDuration').textContent = daysText;
+        document.getElementById('summaryTotal').textContent = formatCurrency(total);
     }
 
-    function updateEventDay() {
-    if (!eventDate.value) {
-        eventDayText.textContent = 'Select event date first';
-        return;
+    // GENERATE SEPARATE TIMING FIELDS FOR EVERY DATE
+    function renderEventTimings(dates) {
+
+        if (!eventTimingsContainer) return;
+
+        eventTimingsContainer.innerHTML = '';
+
+        if (!dates.length) {
+            eventTimingsContainer.innerHTML = `
+                <div class="p-3 text-muted"
+                     style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;">
+                    Select your event dates to enter timings for each day.
+                </div>
+            `;
+            return;
+        }
+
+        dates.forEach(function (date) {
+
+            const card = document.createElement('div');
+
+            card.className = 'p-3 mb-3';
+            card.style.cssText =
+                'background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;';
+
+            card.innerHTML = `
+                <h6 class="fw-bold mb-3" style="color:#0A0F1D;">
+                    <i class="fas fa-calendar-day me-2" style="color:#D97706;"></i>
+                    ${formatFullDate(date)}
+                </h6>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Starting Time <span>*</span>
+                        </label>
+
+                        <input type="time"
+                               class="form-control daily-start-time"
+                               data-date="${date}"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            Ending Time <span>*</span>
+                        </label>
+
+                        <input type="time"
+                               class="form-control daily-end-time"
+                               data-date="${date}"
+                               required>
+                    </div>
+
+                </div>
+
+                <div class="daily-time-message mt-2"
+                     data-date="${date}"
+                     style="font-size:13px;font-weight:600;">
+                </div>
+            `;
+
+            eventTimingsContainer.appendChild(card);
+        });
+
+        eventTimingsContainer.querySelectorAll('input[type="time"]').forEach(function (input) {
+            input.addEventListener('change', checkAllEventTimings);
+        });
     }
 
-    const selected = new Date(eventDate.value + 'T00:00:00');
+    // VALIDATE EACH DATE'S TIMING
+    function checkAllEventTimings() {
 
-    eventDayText.textContent = selected.toLocaleDateString('en-IN', {
-        weekday: 'long',
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-    });
-}
+        const startInputs = eventTimingsContainer.querySelectorAll('.daily-start-time');
+        let allValid = true;
+        let firstInvalid = null;
 
-function checkTiming() {
-    const start = startTime.value;
-    const end = endTime.value;
+        startInputs.forEach(function (startInput) {
 
-    if (!start || !end) {
-        timeMessage.textContent = 'Please select both starting and ending times.';
-        timeMessage.style.color = '#DC2626';
-        return false;
+            const date = startInput.dataset.date;
+
+            const endInput = eventTimingsContainer.querySelector(
+                `.daily-end-time[data-date="${date}"]`
+            );
+
+            const message = eventTimingsContainer.querySelector(
+                `.daily-time-message[data-date="${date}"]`
+            );
+
+            const start = startInput.value;
+            const end = endInput.value;
+
+            if (!start || !end) {
+
+                message.textContent = 'Please select both starting and ending times.';
+                message.style.color = '#DC2626';
+
+                allValid = false;
+                firstInvalid = firstInvalid || startInput;
+
+            } else if (end <= start) {
+
+                message.textContent = 'Ending time must be later than starting time.';
+                message.style.color = '#DC2626';
+
+                allValid = false;
+                firstInvalid = firstInvalid || endInput;
+
+            } else {
+
+                message.textContent = 'Timing looks good.';
+                message.style.color = '#16A34A';
+
+            }
+        });
+
+        return {
+            valid: allValid,
+            firstInvalid: firstInvalid
+        };
     }
 
-    if (end <= start) {
-        timeMessage.textContent = 'Ending time must be later than starting time.';
-        timeMessage.style.color = '#DC2626';
-        return false;
+    // GET ALL DAILY TIMINGS FOR SUCCESS MESSAGE
+    function getDailyTimings() {
+
+        const timings = [];
+
+        eventTimingsContainer.querySelectorAll('.daily-start-time').forEach(function (startInput) {
+
+            const date = startInput.dataset.date;
+
+            const endInput = eventTimingsContainer.querySelector(
+                `.daily-end-time[data-date="${date}"]`
+            );
+
+            timings.push({
+                date: date,
+                start: startInput.value,
+                end: endInput.value
+            });
+        });
+
+        return timings;
     }
 
-    timeMessage.textContent = 'Event timing looks good.';
-    timeMessage.style.color = '#16A34A';
-    return true;
-}
+    // UPDATE DATE RANGE
+    function updateDates() {
 
-    function checkDate() {
-        const selectedDate = eventDate.value;
+        const start = fromDate.value;
+        const end = toDate.value;
 
         dateMessage.textContent = '';
         dateMessage.style.color = '#64748B';
-        summaryDate.textContent = 'Not selected';
 
-        if (!selectedDate) return true;
+        document.getElementById('summaryFromDate').textContent = formatDate(start);
+        document.getElementById('summaryToDate').textContent = formatDate(end);
 
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        selectedDays = 0;
 
-        const chosen = new Date(selectedDate + 'T00:00:00');
+        if (!start || !end) {
 
-        if (chosen < today) {
-            dateMessage.textContent = 'Please select a future date.';
-            dateMessage.style.color = '#DC2626';
+            document.getElementById('numberOfDays').textContent = '0 Days';
+
+            document.getElementById('selectedDatesList').textContent =
+                'Select your event dates to view them here.';
+
+                renderedDatesKey = '';
+
+            renderEventTimings([]);
+            updatePrice();
+
             return false;
         }
 
-        if (bookedDates.includes(selectedDate)) {
-            dateMessage.textContent = 'This date is already booked. Please choose another date.';
+        if (end < start) {
+
+            dateMessage.textContent = 'To Date cannot be earlier than From Date.';
             dateMessage.style.color = '#DC2626';
+
+            document.getElementById('selectedDatesList').textContent =
+                'Please select a valid date range.';
+
+                renderedDatesKey = '';
+
+            renderEventTimings([]);
+            updatePrice();
+
             return false;
         }
 
-        dateMessage.textContent = 'This date is available in the demo schedule.';
+        const startDate = new Date(start + 'T00:00:00');
+        const endDate = new Date(end + 'T00:00:00');
+
+        const dates = [];
+        const unavailableDates = [];
+
+        for (
+            let current = new Date(startDate);
+            current <= endDate;
+            current.setDate(current.getDate() + 1)
+        ) {
+
+            const year = current.getFullYear();
+            const month = String(current.getMonth() + 1).padStart(2, '0');
+            const day = String(current.getDate()).padStart(2, '0');
+
+            const dateString = `${year}-${month}-${day}`;
+
+            dates.push(dateString);
+
+            if (bookedDates.includes(dateString)) {
+                unavailableDates.push(dateString);
+            }
+        }
+
+        selectedDays = dates.length;
+
+        document.getElementById('numberOfDays').textContent =
+            selectedDays + (selectedDays === 1 ? ' Day' : ' Days');
+
+        document.getElementById('selectedDatesList').innerHTML =
+            dates.map(date =>
+                `<span class="selected-date-chip">${formatDate(date)}</span>`
+            ).join('');
+
+        // CREATE TIMING INPUTS FOR EVERY SELECTED DATE
+
+const datesKey = dates.join('|');
+
+if (datesKey !== renderedDatesKey) {
+    renderEventTimings(dates);
+    renderedDatesKey = datesKey;
+}
+
+updatePrice();
+
+        if (unavailableDates.length) {
+
+            dateMessage.textContent =
+                'Unavailable date(s): ' +
+                unavailableDates.map(formatDate).join(', ') +
+                '. Please select another date range.';
+
+            dateMessage.style.color = '#DC2626';
+
+            return false;
+        }
+
+        dateMessage.textContent =
+            'All selected dates are available in the demo schedule.';
+
         dateMessage.style.color = '#16A34A';
-
-        summaryDate.textContent = new Date(selectedDate + 'T00:00:00')
-            .toLocaleDateString('en-IN', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-            });
 
         return true;
     }
 
-    eventDate.min = new Date().toISOString().split('T')[0];
+    // MINIMUM DATE
+    fromDate.min = getLocalDate();
+    toDate.min = getLocalDate();
 
-    eventDate.addEventListener('change', checkDate);
-    eventDate.addEventListener('change', updateEventDay);
-startTime.addEventListener('change', checkTiming);
-endTime.addEventListener('change', checkTiming);
-    duration.addEventListener('change', updatePrice);
+    // DATE EVENTS
+    fromDate.addEventListener('change', function () {
 
+        toDate.min = this.value || getLocalDate();
+
+        if (toDate.value && toDate.value < this.value) {
+            toDate.value = this.value;
+        }
+
+        updateDates();
+    });
+
+    toDate.addEventListener('change', updateDates);
+
+    // HALL AND TYPE EVENTS
+    hallName.addEventListener('change', updatePrice);
+    hallType.addEventListener('change', updatePrice);
+
+    // MOBILE NUMBER VALIDATION
     document.getElementById('mobile').addEventListener('input', function () {
         this.value = this.value.replace(/\D/g, '').slice(0, 10);
     });
 
-    document.getElementById('bookingForm').addEventListener('submit', function (e) {
+    // FORM SUBMISSION
+    form.addEventListener('submit', function (e) {
+
         e.preventDefault();
 
-        if (!checkDate()) {
-            eventDate.focus();
+        if (!updateDates()) {
+            fromDate.focus();
             return;
         }
 
-        if (!checkTiming()) {
-    startTime.focus();
-    return;
-}
+        const timingValidation = checkAllEventTimings();
+
+        if (!timingValidation.valid) {
+
+            if (timingValidation.firstInvalid) {
+                timingValidation.firstInvalid.focus();
+            }
+
+            return;
+        }
 
         const mobile = document.getElementById('mobile').value;
 
         if (!/^[6-9]\d{9}$/.test(mobile)) {
-            alert('Please enter a valid 10-digit mobile number.');
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Mobile Number',
+                text: 'Please enter a valid 10-digit mobile number.',
+                confirmButtonColor: '#0A0F1D'
+            });
+
             return;
         }
 
-        // Frontend demo only. No request is saved in the database yet.
-        this.style.display = 'none';
-        document.getElementById('successMessage').style.display = 'block';
+        const dailyTimings = getDailyTimings();
 
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+        const timingDetails = dailyTimings.map(function (item) {
+
+            return `
+                <div style="padding:8px 0;border-bottom:1px solid #E2E8F0;">
+                    <strong>${formatFullDate(item.date)}</strong><br>
+                    ${item.start} to ${item.end}
+                </div>
+            `;
+
+        }).join('');
+
+        const bookingDetails = `
+            <div style="text-align:left;font-size:14px;line-height:1.9;">
+
+                <strong>Hall:</strong> ${hallName.value}<br>
+                <strong>Type:</strong> ${hallType.value}<br>
+
+                <strong>Dates:</strong>
+                ${formatDate(fromDate.value)} to ${formatDate(toDate.value)}<br>
+
+                <strong>Duration:</strong> ${selectedDays} day(s)<br>
+
+                <strong>Estimated Total:</strong>
+                ${formatCurrency(currentPrice * selectedDays)}
+
+                <hr style="border-color:#E2E8F0;">
+
+                <strong>Daily Event Timings:</strong>
+
+                ${timingDetails}
+
+            </div>
+        `;
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Booking Request Submitted!',
+            html: `
+                <p style="font-size:14px;">
+                    Your booking request has been submitted successfully.
+                    The centre will review your request.
+                </p>
+
+                ${bookingDetails}
+
+                <p style="font-size:12px;color:#64748B;margin-top:12px;">
+                    Payment will be available only after approval.
+                </p>
+            `,
+            confirmButtonText: 'Done',
+            confirmButtonColor: '#0A0F1D',
+            allowOutsideClick: false
         });
+
     });
 
+    // INITIAL DISPLAY
+    updateDates();
     updatePrice();
+
+});
 </script>
 
 @endsection

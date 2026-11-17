@@ -87,6 +87,39 @@
     display: inline-block;
     margin-right: 6px;
 }
+
+/* Centre status toggle */
+.centre-status-control {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+.centre-status-control .form-check {
+    min-height: auto;
+    margin: 0;
+    padding-left: 2.5rem;
+}
+.centre-status-control .form-check-input {
+    width: 2.2rem;
+    height: 1.15rem;
+    margin-left: -2.5rem;
+    margin-top: 0;
+    cursor: pointer;
+}
+.centre-status-label {
+    min-width: 58px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+.centre-status-label.is-active {
+    color: #065f46;
+}
+.centre-status-label.is-inactive {
+    color: #991b1b;
+}
+
 </style>
 @endsection
 
@@ -237,8 +270,16 @@
                                         class="text-muted fw-normal small">/day</span></div>
                                 <div class="text-muted small">Dep: ₹25,000 | GST 18%</div>
                             </td>
-                            <td><span class="badge badge-soft-success rounded-pill"><span
-                                        class="status-dot bg-success"></span>Active</span></td>
+                            <td>
+                                <div class="centre-status-control">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input centre-status-toggle" type="checkbox"
+                                            role="switch" id="centreStatus1" checked
+                                            onchange="updateCentreStatus(this)">
+                                    </div>
+                                    <span class="centre-status-label is-active" aria-live="polite">Active</span>
+                                </div>
+                            </td>
                             <td class="text-end pe-3">
                                 <div class="d-inline-flex gap-1"><a href="/convention-centres/show"
                                         class="btn btn-info action-btn" title="View"><i class="bi bi-eye"></i></a><a
@@ -282,8 +323,16 @@
                                         class="text-muted fw-normal small">/day</span></div>
                                 <div class="text-muted small">Dep: ₹15,000 | GST 18%</div>
                             </td>
-                            <td><span class="badge badge-soft-success rounded-pill"><span
-                                        class="status-dot bg-success"></span>Active</span></td>
+                            <td>
+                                <div class="centre-status-control">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input centre-status-toggle" type="checkbox"
+                                            role="switch" id="centreStatus2" checked
+                                            onchange="updateCentreStatus(this)">
+                                    </div>
+                                    <span class="centre-status-label is-active" aria-live="polite">Active</span>
+                                </div>
+                            </td>
                             <td class="text-end pe-3">
                                 <div class="d-inline-flex gap-1"><a href="/admin/convention-centres/show"
                                         class="btn btn-sm btn-info action-btn" title="View"><i
@@ -328,8 +377,16 @@
                                         class="text-muted fw-normal small">/day</span></div>
                                 <div class="text-muted small">Dep: ₹10,000 | GST 12%</div>
                             </td>
-                            <td><span class="badge badge-soft-success rounded-pill"><span
-                                        class="status-dot bg-success"></span>Active</span></td>
+                            <td>
+                                <div class="centre-status-control">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input centre-status-toggle" type="checkbox"
+                                            role="switch" id="centreStatus3" checked
+                                            onchange="updateCentreStatus(this)">
+                                    </div>
+                                    <span class="centre-status-label is-active" aria-live="polite">Active</span>
+                                </div>
+                            </td>
                             <td class="text-end pe-3">
                                 <div class="d-inline-flex gap-1"><a href="/admin/convention-centres/show"
                                         class="btn btn-sm btn-info action-btn" title="View"><i
@@ -374,8 +431,16 @@
                                         class="text-muted fw-normal small">/day</span></div>
                                 <div class="text-muted small">Dep: ₹20,000 | GST 18%</div>
                             </td>
-                            <td><span class="badge badge-soft-danger rounded-pill"><span
-                                        class="status-dot bg-danger"></span>Inactive</span></td>
+                            <td>
+                                <div class="centre-status-control">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input centre-status-toggle" type="checkbox"
+                                            role="switch" id="centreStatus4" 
+                                            onchange="updateCentreStatus(this)">
+                                    </div>
+                                    <span class="centre-status-label is-inactive" aria-live="polite">Inactive</span>
+                                </div>
+                            </td>
                             <td class="text-end pe-3">
                                 <div class="d-inline-flex gap-1"><a href="/admin/convention-centres/show"
                                         class="btn btn-sm btn-info action-btn" title="View"><i
@@ -421,8 +486,16 @@
                                         class="text-muted fw-normal small">/day</span></div>
                                 <div class="text-muted small">Dep: ₹20,000 | GST 18%</div>
                             </td>
-                            <td><span class="badge badge-soft-success rounded-pill"><span
-                                        class="status-dot bg-success"></span>Active</span></td>
+                            <td>
+                                <div class="centre-status-control">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input centre-status-toggle" type="checkbox"
+                                            role="switch" id="centreStatus5" checked
+                                            onchange="updateCentreStatus(this)">
+                                    </div>
+                                    <span class="centre-status-label is-active" aria-live="polite">Active</span>
+                                </div>
+                            </td>
                             <td class="text-end pe-3">
                                 <div class="d-inline-flex gap-1"><a href="/admin/convention-centres/show"
                                         class="btn btn-sm btn-info action-btn" title="View"><i
@@ -450,5 +523,27 @@
         document.getElementById('adminOwnerVenuePhone').textContent = `+91 ${ownerVenueProfile.phone}`;
         document.getElementById('adminOwnerVenueEmail').textContent = ownerVenueProfile.email;
     }
+
+
+    // Update centre status immediately using the toggle switch.
+    function updateCentreStatus(toggle) {
+        const statusCell = toggle.closest('td');
+        const statusLabel = statusCell ? statusCell.querySelector('.centre-status-label') : null;
+
+        if (!statusLabel) return;
+
+        if (toggle.checked) {
+            statusLabel.textContent = 'Active';
+            statusLabel.classList.remove('is-inactive');
+            statusLabel.classList.add('is-active');
+            toggle.setAttribute('aria-label', 'Deactivate centre');
+        } else {
+            statusLabel.textContent = 'Inactive';
+            statusLabel.classList.remove('is-active');
+            statusLabel.classList.add('is-inactive');
+            toggle.setAttribute('aria-label', 'Activate centre');
+        }
+    }
+
 </script>
 @endsection

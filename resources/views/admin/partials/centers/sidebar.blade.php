@@ -7,7 +7,7 @@
                 </div>
                 <div class="d-flex flex-column">
                     <span class="fw-bold text-dark fs-6" style="letter-spacing: -0.5px;">Book Slots</span>
-                    <span style="font-size: 0.68rem; color: #2563EB; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Center Admin Portal</span>
+                    <span style="font-size: 0.68rem; color: #2563EB; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Convention Center Login</span>
                 </div>
             </a>
             <div class="back-btn ms-auto">
