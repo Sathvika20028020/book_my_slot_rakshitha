@@ -142,19 +142,27 @@
         </div>
 
         <div class="venue-summary">
-            <div>
-                <h4>Grand Palace Convention Hall</h4>
-                <p>
-                    A spacious venue designed for weddings, receptions,
-                    cultural events, conferences and celebrations.
-                </p>
-            </div>
+    <div>
+        <h4>Grand Palace Convention Hall</h4>
+        <p>
+            A spacious venue designed for weddings, receptions,
+            cultural events, conferences and celebrations.
+        </p>
+    </div>
 
-            <div class="hall-count">
-                <i class="fas fa-building"></i>
-                {{ count($halls) }} Halls Available
-            </div>
+    <div class="venue-summary-actions">
+        <div class="hall-count">
+            <i class="fas fa-building"></i>
+            {{ count($halls) }} Halls Available
         </div>
+
+        <a href="{{ route('user.center.booking') }}" class="summary-book-btn">
+            <i class="fas fa-calendar-check me-2"></i>
+            Book Now
+            <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+    </div>
+</div>
     </div>
 
     <div class="row g-4">
@@ -971,6 +979,61 @@
             grid-template-columns: 1fr;
         }
     }
+
+    /* VENUE SUMMARY ACTIONS */
+.venue-summary-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.summary-book-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border-radius: 9px;
+    background: #0A0F1D;
+    color: #F59E0B;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all .2s ease;
+}
+
+.summary-book-btn:hover {
+    background: #1E293B;
+    color: #FBBF24;
+    transform: translateY(-2px);
+}
+
+@media(max-width:767px) {
+    .venue-summary-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .summary-book-btn {
+        flex: 1;
+    }
+}
+
+@media(max-width:420px) {
+    .venue-summary-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .hall-count {
+        text-align: center;
+    }
+
+    .summary-book-btn {
+        width: 100%;
+    }
+}
 </style>
 
 <script>

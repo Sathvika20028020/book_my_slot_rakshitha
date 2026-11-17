@@ -7,8 +7,7 @@
 
 <div class="container-fluid px-3 px-md-4 py-4">
 
-    <a href="{{ route('user.center.details') }}"
-       class="booking-back">
+    <a href="{{ route('user.center.details') }}" class="booking-back">
         <i class="fas fa-arrow-left me-2"></i> Back to Centre Details
     </a>
 
@@ -57,7 +56,7 @@
                                     Grand Palace Convention Hall
                                 </option>
                                 <option value="Banquet Hall">Banquet Hall</option>
-<option value="Mini Hall">Mini Hall</option>
+                                <option value="Mini Hall">Mini Hall</option>
                             </select>
                         </div>
 
@@ -123,11 +122,6 @@
                     <!-- DATE SELECTION -->
                     <h6 class="form-section-title">Select Event Dates</h6>
 
-                    <div class="availability-note mb-3">
-                        <span><i class="date-dot available-dot"></i> Available</span>
-                        <span><i class="date-dot booked-dot"></i> Already Booked</span>
-                    </div>
-
                     <div class="row g-3">
 
                         <div class="col-md-6">
@@ -158,15 +152,44 @@
 
                     <hr class="my-4">
 
-<!-- EVENT TIMING FOR EACH SELECTED DATE -->
-<h6 class="form-section-title">Event Timing</h6>
+                    <!-- CHECK-IN AND CHECK-OUT TIME -->
+                    <h6 class="form-section-title">Check-in & Check-out Time</h6>
 
-<div id="eventTimingsContainer">
-    <div class="p-3 text-muted"
-         style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;">
-        Select the event dates to enter timings for each day.
-    </div>
-</div>
+                    <div class="timing-box mb-3">
+
+                        <p class="timing-info mb-3">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Select one check-in and check-out time for your entire booking period.
+                            These timings will apply to all selected event dates.
+                        </p>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    Check-in Time <span>*</span>
+                                </label>
+                                <input type="time"
+                                       id="checkInTime"
+                                       class="form-control"
+                                       required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    Check-out Time <span>*</span>
+                                </label>
+                                <input type="time"
+                                       id="checkOutTime"
+                                       class="form-control"
+                                       required>
+                            </div>
+
+                        </div>
+
+                        <div id="timingMessage" class="date-message"></div>
+
+                    </div>
 
                     <hr class="my-4">
 
@@ -286,7 +309,7 @@
 
                 <div class="approval-note mt-4">
                     <i class="fas fa-info-circle me-2"></i>
-                    Your booking is confirmed only after approval and payment.
+                    Your booking request will be reviewed by the centre. It is not confirmed until approval and payment are completed.
                 </div>
 
             </div>
@@ -407,30 +430,6 @@
     .booking-section .form-select:focus {
         border-color: #F59E0B;
         box-shadow: 0 0 0 3px rgba(245,158,11,.12);
-    }
-
-    .availability-note {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        color: #64748B;
-        font-size: 13px;
-    }
-
-    .date-dot {
-        width: 10px;
-        height: 10px;
-        display: inline-block;
-        border-radius: 50%;
-        margin-right: 5px;
-    }
-
-    .available-dot {
-        background: #16A34A;
-    }
-
-    .booked-dot {
-        background: #DC2626;
     }
 
     .date-message {
@@ -616,9 +615,7 @@
     }
 </style>
 
-<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -637,13 +634,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const hallName = document.getElementById('hallName');
     const hallType = document.getElementById('hallType');
 
+    const checkInTime = document.getElementById('checkInTime');
+    const checkOutTime = document.getElementById('checkOutTime');
+
     const dateMessage = document.getElementById('dateMessage');
+    const timingMessage = document.getElementById('timingMessage');
     const form = document.getElementById('bookingForm');
-    const eventTimingsContainer = document.getElementById('eventTimingsContainer');
 
     let selectedDays = 0;
-let currentPrice = 25000;
-let renderedDatesKey = '';
+    let currentPrice = 25000;
 
     function formatCurrency(amount) {
         return '₹' + amount.toLocaleString('en-IN');
@@ -655,15 +654,6 @@ let renderedDatesKey = '';
         return new Date(dateString + 'T00:00:00').toLocaleDateString('en-IN', {
             day: '2-digit',
             month: 'short',
-            year: 'numeric'
-        });
-    }
-
-    function formatFullDate(dateString) {
-        return new Date(dateString + 'T00:00:00').toLocaleDateString('en-IN', {
-            weekday: 'long',
-            day: '2-digit',
-            month: 'long',
             year: 'numeric'
         });
     }
@@ -680,6 +670,7 @@ let renderedDatesKey = '';
 
     // PRICE CALCULATION
     function updatePrice() {
+
         const selectedOption = hallType.options[hallType.selectedIndex];
 
         currentPrice = Number(selectedOption?.dataset.price || 0);
@@ -700,151 +691,87 @@ let renderedDatesKey = '';
         document.getElementById('summaryTotal').textContent = formatCurrency(total);
     }
 
-    // GENERATE SEPARATE TIMING FIELDS FOR EVERY DATE
-    function renderEventTimings(dates) {
+    // VALIDATE CHECK-IN AND CHECK-OUT TIME
+   
+// VALIDATE CHECK-IN AND CHECK-OUT TIME
+function validateBookingTimes() {
 
-        if (!eventTimingsContainer) return;
+    const startTime = checkInTime.value;
+    const endTime = checkOutTime.value;
 
-        eventTimingsContainer.innerHTML = '';
+    timingMessage.textContent = '';
+    timingMessage.style.color = '#64748B';
 
-        if (!dates.length) {
-            eventTimingsContainer.innerHTML = `
-                <div class="p-3 text-muted"
-                     style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;">
-                    Select your event dates to enter timings for each day.
-                </div>
-            `;
-            return;
-        }
+    if (!startTime || !endTime) {
 
-        dates.forEach(function (date) {
+        timingMessage.textContent =
+            'Please select both check-in and check-out times.';
 
-            const card = document.createElement('div');
-
-            card.className = 'p-3 mb-3';
-            card.style.cssText =
-                'background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;';
-
-            card.innerHTML = `
-                <h6 class="fw-bold mb-3" style="color:#0A0F1D;">
-                    <i class="fas fa-calendar-day me-2" style="color:#D97706;"></i>
-                    ${formatFullDate(date)}
-                </h6>
-
-                <div class="row g-3">
-
-                    <div class="col-md-6">
-                        <label class="form-label">
-                            Starting Time <span>*</span>
-                        </label>
-
-                        <input type="time"
-                               class="form-control daily-start-time"
-                               data-date="${date}"
-                               required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label">
-                            Ending Time <span>*</span>
-                        </label>
-
-                        <input type="time"
-                               class="form-control daily-end-time"
-                               data-date="${date}"
-                               required>
-                    </div>
-
-                </div>
-
-                <div class="daily-time-message mt-2"
-                     data-date="${date}"
-                     style="font-size:13px;font-weight:600;">
-                </div>
-            `;
-
-            eventTimingsContainer.appendChild(card);
-        });
-
-        eventTimingsContainer.querySelectorAll('input[type="time"]').forEach(function (input) {
-            input.addEventListener('change', checkAllEventTimings);
-        });
-    }
-
-    // VALIDATE EACH DATE'S TIMING
-    function checkAllEventTimings() {
-
-        const startInputs = eventTimingsContainer.querySelectorAll('.daily-start-time');
-        let allValid = true;
-        let firstInvalid = null;
-
-        startInputs.forEach(function (startInput) {
-
-            const date = startInput.dataset.date;
-
-            const endInput = eventTimingsContainer.querySelector(
-                `.daily-end-time[data-date="${date}"]`
-            );
-
-            const message = eventTimingsContainer.querySelector(
-                `.daily-time-message[data-date="${date}"]`
-            );
-
-            const start = startInput.value;
-            const end = endInput.value;
-
-            if (!start || !end) {
-
-                message.textContent = 'Please select both starting and ending times.';
-                message.style.color = '#DC2626';
-
-                allValid = false;
-                firstInvalid = firstInvalid || startInput;
-
-            } else if (end <= start) {
-
-                message.textContent = 'Ending time must be later than starting time.';
-                message.style.color = '#DC2626';
-
-                allValid = false;
-                firstInvalid = firstInvalid || endInput;
-
-            } else {
-
-                message.textContent = 'Timing looks good.';
-                message.style.color = '#16A34A';
-
-            }
-        });
+        timingMessage.style.color = '#DC2626';
 
         return {
-            valid: allValid,
-            firstInvalid: firstInvalid
+            valid: false,
+            firstInvalid: !startTime ? checkInTime : checkOutTime
         };
     }
 
-    // GET ALL DAILY TIMINGS FOR SUCCESS MESSAGE
-    function getDailyTimings() {
+    const startDateValue = fromDate.value;
+    const endDateValue = toDate.value;
 
-        const timings = [];
+    if (!startDateValue || !endDateValue) {
 
-        eventTimingsContainer.querySelectorAll('.daily-start-time').forEach(function (startInput) {
+        timingMessage.textContent =
+            'Please select your event dates first.';
 
-            const date = startInput.dataset.date;
+        timingMessage.style.color = '#DC2626';
 
-            const endInput = eventTimingsContainer.querySelector(
-                `.daily-end-time[data-date="${date}"]`
-            );
-
-            timings.push({
-                date: date,
-                start: startInput.value,
-                end: endInput.value
-            });
-        });
-
-        return timings;
+        return {
+            valid: false,
+            firstInvalid: fromDate
+        };
     }
+
+    // Build complete date-time values.
+    // Check-in uses the From Date.
+    // Check-out uses the To Date.
+    const checkInDateTime = new Date(
+        startDateValue + 'T' + startTime
+    );
+
+    const checkOutDateTime = new Date(
+        endDateValue + 'T' + endTime
+    );
+
+    // Compare complete date and time, not just the time.
+    if (checkOutDateTime <= checkInDateTime) {
+
+        timingMessage.textContent =
+            'Check-out must be after check-in. Please check your selected dates and times.';
+
+        timingMessage.style.color = '#DC2626';
+
+        return {
+            valid: false,
+            firstInvalid: checkOutTime
+        };
+    }
+
+    timingMessage.textContent =
+        'Your check-in and check-out timings are valid.';
+
+    timingMessage.style.color = '#16A34A';
+
+    return {
+        valid: true,
+        firstInvalid: null
+    };
+}
+
+checkInTime.addEventListener('change', validateBookingTimes);
+checkOutTime.addEventListener('change', validateBookingTimes);
+fromDate.addEventListener('change', validateBookingTimes);
+toDate.addEventListener('change', validateBookingTimes);
+
 
     // UPDATE DATE RANGE
     function updateDates() {
@@ -867,9 +794,6 @@ let renderedDatesKey = '';
             document.getElementById('selectedDatesList').textContent =
                 'Select your event dates to view them here.';
 
-                renderedDatesKey = '';
-
-            renderEventTimings([]);
             updatePrice();
 
             return false;
@@ -883,9 +807,6 @@ let renderedDatesKey = '';
             document.getElementById('selectedDatesList').textContent =
                 'Please select a valid date range.';
 
-                renderedDatesKey = '';
-
-            renderEventTimings([]);
             updatePrice();
 
             return false;
@@ -926,21 +847,12 @@ let renderedDatesKey = '';
                 `<span class="selected-date-chip">${formatDate(date)}</span>`
             ).join('');
 
-        // CREATE TIMING INPUTS FOR EVERY SELECTED DATE
-
-const datesKey = dates.join('|');
-
-if (datesKey !== renderedDatesKey) {
-    renderEventTimings(dates);
-    renderedDatesKey = datesKey;
-}
-
-updatePrice();
+        updatePrice();
 
         if (unavailableDates.length) {
 
             dateMessage.textContent =
-                'Unavailable date(s): ' +
+                'The following date(s) are already booked: ' +
                 unavailableDates.map(formatDate).join(', ') +
                 '. Please select another date range.';
 
@@ -950,7 +862,7 @@ updatePrice();
         }
 
         dateMessage.textContent =
-            'All selected dates are available in the demo schedule.';
+            'Your selected date range is available in the schedule.';
 
         dateMessage.style.color = '#16A34A';
 
@@ -989,19 +901,20 @@ updatePrice();
 
         e.preventDefault();
 
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
         if (!updateDates()) {
             fromDate.focus();
             return;
         }
 
-        const timingValidation = checkAllEventTimings();
+        const timeValidation = validateBookingTimes();
 
-        if (!timingValidation.valid) {
-
-            if (timingValidation.firstInvalid) {
-                timingValidation.firstInvalid.focus();
-            }
-
+        if (!timeValidation.valid) {
+            timeValidation.firstInvalid.focus();
             return;
         }
 
@@ -1019,38 +932,42 @@ updatePrice();
             return;
         }
 
-        const dailyTimings = getDailyTimings();
-
-        const timingDetails = dailyTimings.map(function (item) {
-
-            return `
-                <div style="padding:8px 0;border-bottom:1px solid #E2E8F0;">
-                    <strong>${formatFullDate(item.date)}</strong><br>
-                    ${item.start} to ${item.end}
-                </div>
-            `;
-
-        }).join('');
+        const applicantName = document.getElementById('applicantName').value;
+        const eventType = document.getElementById('eventType').value;
+        const guestCount = document.getElementById('guestCount').value;
 
         const bookingDetails = `
             <div style="text-align:left;font-size:14px;line-height:1.9;">
 
-                <strong>Hall:</strong> ${hallName.value}<br>
-                <strong>Type:</strong> ${hallType.value}<br>
+                <div style="padding:12px;background:#F8FAFC;border-radius:8px;margin-bottom:12px;">
+                    <strong>Applicant:</strong> ${applicantName}<br>
+                    <strong>Mobile:</strong> ${mobile}<br>
+                    <strong>Event:</strong> ${eventType}<br>
+                    <strong>Expected Guests:</strong> ${guestCount}
+                </div>
 
-                <strong>Dates:</strong>
+                <strong>Hall:</strong> ${hallName.value}<br>
+                <strong>Hall Type:</strong> ${hallType.value}<br>
+
+                <strong>Event Dates:</strong>
                 ${formatDate(fromDate.value)} to ${formatDate(toDate.value)}<br>
 
                 <strong>Duration:</strong> ${selectedDays} day(s)<br>
+
+                <strong>Check-in Time:</strong> ${checkInTime.value}<br>
+                <strong>Check-out Time:</strong> ${checkOutTime.value}<br>
 
                 <strong>Estimated Total:</strong>
                 ${formatCurrency(currentPrice * selectedDays)}
 
                 <hr style="border-color:#E2E8F0;">
 
-                <strong>Daily Event Timings:</strong>
-
-                ${timingDetails}
+                <div style="padding:12px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;color:#92400E;">
+                    <strong>Important:</strong><br>
+                    This is a booking request only. Your venue is not confirmed yet.
+                    The centre will review your request and notify you about approval
+                    and the next payment steps.
+                </div>
 
             </div>
         `;
@@ -1059,18 +976,20 @@ updatePrice();
             icon: 'success',
             title: 'Booking Request Submitted!',
             html: `
-                <p style="font-size:14px;">
-                    Your booking request has been submitted successfully.
-                    The centre will review your request.
+                <p style="font-size:14px;line-height:1.7;">
+                    Thank you! Your booking request details have been submitted
+                    for review.
                 </p>
 
                 ${bookingDetails}
 
-                <p style="font-size:12px;color:#64748B;margin-top:12px;">
-                    Payment will be available only after approval.
+                <p style="font-size:13px;color:#64748B;margin-top:14px;">
+                    <i class="fas fa-info-circle me-1"></i>
+                    No payment has been made at this stage. Please wait for
+                    the centre's approval before proceeding with payment.
                 </p>
             `,
-            confirmButtonText: 'Done',
+            confirmButtonText: 'Got It',
             confirmButtonColor: '#0A0F1D',
             allowOutsideClick: false
         });
