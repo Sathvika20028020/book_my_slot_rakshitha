@@ -178,7 +178,7 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                     <span class="text-muted small d-block mb-2 fw-semibold">Amenities & Services Included in Request:</span>
                     <div class="d-flex flex-wrap gap-2">
                         <span class="feature-chip"><i class="bi bi-snow text-info"></i> Central Air Conditioning</span>
@@ -189,7 +189,7 @@
                         <span class="feature-chip"><i class="bi bi-cup-hot text-danger"></i> Dedicated Catering Kitchen</span>
                         <span class="feature-chip"><i class="bi bi-lightning-charge text-warning"></i> 100% DG Generator Backup</span>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="p-3 bg-light rounded-3 mt-3">
                     <div class="d-flex align-items-center gap-2 mb-1">

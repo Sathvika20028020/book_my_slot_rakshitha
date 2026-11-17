@@ -259,39 +259,9 @@
                                 </div>
                                 <small class="text-muted" style="font-size:0.75rem;">Unique civic venue identifier.</small>
                             </div>
-                            <div class="col-12 col-md-4">
-                                <label class="form-label fw-semibold text-dark small">Operational Status <span class="text-danger">*</span></label>
-                                <div class="d-flex align-items-center gap-3 pt-1">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="operational_status" id="statusActive" value="Active" checked>
-                                        <label class="form-check-label text-success fw-semibold" for="statusActive"><i class="bi bi-check-circle-fill me-1"></i> Active</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="operational_status" id="statusInactive" value="Inactive">
-                                        <label class="form-check-label text-danger fw-semibold" for="statusInactive"><i class="bi bi-slash-circle-fill me-1"></i> Inactive</label>
-                                    </div>
-                                </div>
-                            </div>
+                            
 
-                            <!-- Operational Status -->
-                            <!-- <div class="col-12 col-md-4">
-                                <label class="form-label fw-semibold text-dark small">Operational Status <span class="text-danger">*</span></label>
-                                <div class="d-flex align-items-center gap-3 pt-1">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="operational_status" id="statusActive" value="Active" checked>
-                                        <label class="form-check-label text-success fw-semibold" for="statusActive">
-                                            <i class="bi bi-check-circle-fill me-1"></i> Active
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="operational_status" id="statusInactive" value="Inactive">
-                                        <label class="form-check-label text-danger fw-semibold" for="statusInactive">
-                                            <i class="bi bi-slash-circle-fill me-1"></i> Inactive
-                                        </label>
-                                    </div>
-                                </div>
-                            </div> -->
-
+                           
                             <!-- Centre Type -->
                             <div class="col-12 col-md-4">
                                 <label class="form-label fw-semibold text-dark small">Centre Type <span class="text-danger">*</span></label>

@@ -88,38 +88,43 @@
     margin-right: 6px;
 }
 
-/* Centre status toggle */
+
+/* Centre status ON/OFF switch */
 .centre-status-control {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    white-space: nowrap;
-}
-.centre-status-control .form-check {
-    min-height: auto;
-    margin: 0;
-    padding-left: 2.5rem;
-}
-.centre-status-control .form-check-input {
-    width: 2.2rem;
-    height: 1.15rem;
-    margin-left: -2.5rem;
-    margin-top: 0;
-    cursor: pointer;
-}
-.centre-status-label {
-    min-width: 58px;
-    font-size: 0.78rem;
-    font-weight: 700;
-}
-.centre-status-label.is-active {
-    color: #065f46;
-}
-.centre-status-label.is-inactive {
-    color: #991b1b;
+    min-width: 88px;
 }
 
+.centre-status-toggle {
+    width: 2.5rem !important;
+    height: 1.3rem !important;
+    margin: 0 !important;
+    cursor: pointer;
+    background-color: #cbd5e1;
+    border-color: #cbd5e1;
+}
+
+.centre-status-toggle:checked {
+    background-color: #16a34a;
+    border-color: #16a34a;
+}
+
+.centre-status-label {
+    min-width: 28px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.centre-status-label.is-on {
+    color: #15803d;
+}
+
+.centre-status-label.is-off {
+    color: #dc2626;
+}
 </style>
 @endsection
 
@@ -138,7 +143,7 @@
             <div
                 class="col-12 col-md-6 text-md-end mt-2 mt-md-0 d-flex align-items-center justify-content-md-end gap-2">
                 <ol class="breadcrumb justify-content-md-end mb-0 bg-transparent p-0 me-3 d-none d-lg-flex">
-                    <li class="breadcrumb-item"><a href="/admin/dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/center-admin/dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
                     <li class="breadcrumb-item active">Centre Masters</li>
                 </ol>
 
@@ -223,17 +228,15 @@
                         <tr>
                             <th class="ps-3" style="width: 110px;">Centre ID</th>
                             <th style="min-width: 250px;">Centre Name &amp; Photo</th>
+                            <th style="min-width: 170px;">Total Halls</th>
                             <th style="min-width: 170px;">Centre Type</th>
-                            <th style="min-width: 200px;">Location Details</th>
                             <th style="min-width: 180px;">In-Charge Contact</th>
-                            <th style="min-width: 150px;">Facilities</th>
-                            <th style="min-width: 140px;">Tariff &amp; Charges</th>
                             <th style="min-width: 110px;">Status</th>
                             <th class="text-end pe-3" style="width: 120px;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+<tr>
                             <td class="ps-3"><a href="/admin/convention-centres/show"
                                     class="badge bg-dark text-decoration-none fw-bold text-white px-2 py-1 font-monospace">CC-2026-001</a>
                                 <div class="text-muted small mt-1">15 Jan 2026</div>
@@ -249,35 +252,26 @@
                                             Main Road, HSR Layout</small></div>
                                 </div>
                             </td>
+                            <td><span class="badge bg-light text-dark border">3 Halls</span></td>
                             <td><span class="badge badge-soft-warning px-2 py-1 rounded-pill">Kalyana Mantapa / Marriage
                                     Hall</span></td>
-                            <td>
-                                <div class="fw-medium text-dark">South Zone</div>
-                                <div class="text-muted small">Ward 174 - HSR Layout</div>
-                                <div class="text-secondary font-monospace small">PIN: 560102</div>
-                            </td>
+                            
                             <td>
                                 <div class="fw-semibold text-dark">Rajeshwar Hegde</div>
                                 <div class="text-muted small"><i class="bi bi-telephone text-success me-1"></i>+91 98450
                                     12345</div>
                                 <div class="text-muted small">rajesh.hegde@bbmp.gov.in</div>
                             </td>
-                            <td><span class="badge bg-light text-dark border">4 Facilities</span>
-                                <div class="text-muted small mt-1">Max 1,500 Pax</div>
-                            </td>
-                            <td>
-                                <div class="fw-bold text-dark">₹75,000 <span
-                                        class="text-muted fw-normal small">/day</span></div>
-                                <div class="text-muted small">Dep: ₹25,000 | GST 18%</div>
-                            </td>
+                            
+                            
                             <td>
                                 <div class="centre-status-control">
-                                    <div class="form-check form-switch">
+                                    <div class="form-check form-switch m-0">
                                         <input class="form-check-input centre-status-toggle" type="checkbox"
-                                            role="switch" id="centreStatus1" checked
-                                            onchange="updateCentreStatus(this)">
+                                            role="switch" id="centreStatus1" data-centre-id="CC-2026-001"
+                                            aria-label="Toggle status for centre CC-2026-001" checked>
                                     </div>
-                                    <span class="centre-status-label is-active" aria-live="polite">Active</span>
+                                    <span class="centre-status-label is-on" data-status-label="centreStatus1">ON</span>
                                 </div>
                             </td>
                             <td class="text-end pe-3">
@@ -287,7 +281,7 @@
                                         title="Edit"><i class="bi bi-pencil"></i></a></div>
                             </td>
                         </tr>
-                        <tr>
+<tr>
                             <td class="ps-3"><a href="/convention-centres/show"
                                     class="badge bg-dark text-decoration-none fw-bold text-white px-2 py-1 font-monospace">CC-2026-002</a>
                                 <div class="text-muted small mt-1">10 Feb 2026</div>
@@ -303,45 +297,36 @@
                                             Miller Tank Bund Road, Vasanth Nagar</small></div>
                                 </div>
                             </td>
+                            <td><span class="badge bg-light text-dark border">2 Halls</span></td>
                             <td><span class="badge badge-soft-primary px-2 py-1 rounded-pill">Auditorium</span></td>
-                            <td>
-                                <div class="fw-medium text-dark">East Zone</div>
-                                <div class="text-muted small">Ward 93 - Vasanth Nagar</div>
-                                <div class="text-secondary font-monospace small">PIN: 560052</div>
-                            </td>
+                            
                             <td>
                                 <div class="fw-semibold text-dark">P. Ramesh Babu</div>
                                 <div class="text-muted small"><i class="bi bi-telephone text-success me-1"></i>+91 94480
                                     87654</div>
                                 <div class="text-muted small">ramesh.babu@bbmp.gov.in</div>
                             </td>
-                            <td><span class="badge bg-light text-dark border">3 Facilities</span>
-                                <div class="text-muted small mt-1">Max 1,200 Pax</div>
-                            </td>
-                            <td>
-                                <div class="fw-bold text-dark">₹45,000 <span
-                                        class="text-muted fw-normal small">/day</span></div>
-                                <div class="text-muted small">Dep: ₹15,000 | GST 18%</div>
-                            </td>
+                            
+                            
                             <td>
                                 <div class="centre-status-control">
-                                    <div class="form-check form-switch">
+                                    <div class="form-check form-switch m-0">
                                         <input class="form-check-input centre-status-toggle" type="checkbox"
-                                            role="switch" id="centreStatus2" checked
-                                            onchange="updateCentreStatus(this)">
+                                            role="switch" id="centreStatus2" data-centre-id="CC-2026-002"
+                                            aria-label="Toggle status for centre CC-2026-002" checked>
                                     </div>
-                                    <span class="centre-status-label is-active" aria-live="polite">Active</span>
+                                    <span class="centre-status-label is-on" data-status-label="centreStatus2">ON</span>
                                 </div>
                             </td>
                             <td class="text-end pe-3">
-                                <div class="d-inline-flex gap-1"><a href="/admin/convention-centres/show"
+                                <div class="d-inline-flex gap-1"><a href="/convention-centres/show"
                                         class="btn btn-sm btn-info action-btn" title="View"><i
-                                            class="bi bi-eye"></i></a><a href="/admin/convention-centres/edit"
+                                            class="bi bi-eye"></i></a><a href="/convention-centres/edit"
                                         class="btn btn-sm btn-primary action-btn" title="Edit"><i
                                             class="bi bi-pencil"></i></a></div>
                             </td>
                         </tr>
-                        <tr>
+<tr>
                             <td class="ps-3"><a href="/admin/convention-centres/show"
                                     class="badge bg-dark text-decoration-none fw-bold text-white px-2 py-1 font-monospace">CC-2026-003</a>
                                 <div class="text-muted small mt-1">01 Mar 2026</div>
@@ -357,34 +342,25 @@
                                             Koramangala</small></div>
                                 </div>
                             </td>
+                            <td><span class="badge bg-light text-dark border">1 Hall</span></td>
                             <td><span class="badge badge-soft-success px-2 py-1 rounded-pill">Community Hall</span></td>
-                            <td>
-                                <div class="fw-medium text-dark">South Zone</div>
-                                <div class="text-muted small">Ward 151 - Koramangala</div>
-                                <div class="text-secondary font-monospace small">PIN: 560034</div>
-                            </td>
+                            
                             <td>
                                 <div class="fw-semibold text-dark">Smt. Shailaja M.</div>
                                 <div class="text-muted small"><i class="bi bi-telephone text-success me-1"></i>+91 97312
                                     44332</div>
                                 <div class="text-muted small">shailaja.m@bbmp.gov.in</div>
                             </td>
-                            <td><span class="badge bg-light text-dark border">2 Facilities</span>
-                                <div class="text-muted small mt-1">Max 700 Pax</div>
-                            </td>
-                            <td>
-                                <div class="fw-bold text-dark">₹20,000 <span
-                                        class="text-muted fw-normal small">/day</span></div>
-                                <div class="text-muted small">Dep: ₹10,000 | GST 12%</div>
-                            </td>
+                            
+                            
                             <td>
                                 <div class="centre-status-control">
-                                    <div class="form-check form-switch">
+                                    <div class="form-check form-switch m-0">
                                         <input class="form-check-input centre-status-toggle" type="checkbox"
-                                            role="switch" id="centreStatus3" checked
-                                            onchange="updateCentreStatus(this)">
+                                            role="switch" id="centreStatus3" data-centre-id="CC-2026-003"
+                                            aria-label="Toggle status for centre CC-2026-003" checked>
                                     </div>
-                                    <span class="centre-status-label is-active" aria-live="polite">Active</span>
+                                    <span class="centre-status-label is-on" data-status-label="centreStatus3">ON</span>
                                 </div>
                             </td>
                             <td class="text-end pe-3">
@@ -395,7 +371,7 @@
                                             class="bi bi-pencil"></i></a></div>
                             </td>
                         </tr>
-                        <tr>
+<tr>
                             <td class="ps-3"><a href="/admin/convention-centres/show"
                                     class="badge bg-dark text-decoration-none fw-bold text-white px-2 py-1 font-monospace">CC-2026-004</a>
                                 <div class="text-muted small mt-1">12 Mar 2026</div>
@@ -411,34 +387,25 @@
                                             West</small></div>
                                 </div>
                             </td>
+                            <td><span class="badge bg-light text-dark border">2 Halls</span></td>
                             <td><span class="badge badge-soft-info px-2 py-1 rounded-pill">Convention Hall</span></td>
-                            <td>
-                                <div class="fw-medium text-dark">West Zone</div>
-                                <div class="text-muted small">Ward 65 - Malleshwaram</div>
-                                <div class="text-secondary font-monospace small">PIN: 560003</div>
-                            </td>
+                            
                             <td>
                                 <div class="fw-semibold text-dark">G. Manjunath</div>
                                 <div class="text-muted small"><i class="bi bi-telephone text-success me-1"></i>+91 99001
                                     55443</div>
                                 <div class="text-muted small">manjunath.g@bbmp.gov.in</div>
                             </td>
-                            <td><span class="badge bg-light text-dark border">1 Facility</span>
-                                <div class="text-muted small mt-1">Max 900 Pax</div>
-                            </td>
-                            <td>
-                                <div class="fw-bold text-dark">₹50,000 <span
-                                        class="text-muted fw-normal small">/day</span></div>
-                                <div class="text-muted small">Dep: ₹20,000 | GST 18%</div>
-                            </td>
+                            
+                            
                             <td>
                                 <div class="centre-status-control">
-                                    <div class="form-check form-switch">
+                                    <div class="form-check form-switch m-0">
                                         <input class="form-check-input centre-status-toggle" type="checkbox"
-                                            role="switch" id="centreStatus4" 
-                                            onchange="updateCentreStatus(this)">
+                                            role="switch" id="centreStatus4" data-centre-id="CC-2026-004"
+                                            aria-label="Toggle status for centre CC-2026-004">
                                     </div>
-                                    <span class="centre-status-label is-inactive" aria-live="polite">Inactive</span>
+                                    <span class="centre-status-label is-off" data-status-label="centreStatus4">OFF</span>
                                 </div>
                             </td>
                             <td class="text-end pe-3">
@@ -449,7 +416,7 @@
                                             class="bi bi-pencil"></i></a></div>
                             </td>
                         </tr>
-                        <tr>
+<tr>
                             <td class="ps-3"><a href="/admin/convention-centres/show"
                                     class="badge bg-dark text-decoration-none fw-bold text-white px-2 py-1 font-monospace">CC-2026-005</a>
                                 <div class="text-muted small mt-1">25 Mar 2026</div>
@@ -466,34 +433,25 @@
                                             Nagar, Opposite Metro Station, Majestic</small></div>
                                 </div>
                             </td>
+                            <td><span class="badge bg-light text-dark border">4 Halls</span></td>
                             <td><span class="badge badge-soft-primary px-2 py-1 rounded-pill">Banquet Hall</span></td>
-                            <td>
-                                <div class="fw-medium text-dark">Central Zone</div>
-                                <div class="text-muted small">Ward 109 - Chickpete</div>
-                                <div class="text-secondary font-monospace small">PIN: 560009</div>
-                            </td>
+                            
                             <td>
                                 <div class="fw-semibold text-dark">Venkatappa K.</div>
                                 <div class="text-muted small"><i class="bi bi-telephone text-success me-1"></i>+91 98801
                                     88776</div>
                                 <div class="text-muted small">venkatappa.k@bbmp.gov.in</div>
                             </td>
-                            <td><span class="badge bg-light text-dark border">3 Facilities</span>
-                                <div class="text-muted small mt-1">Max 1,250 Pax</div>
-                            </td>
-                            <td>
-                                <div class="fw-bold text-dark">₹60,000 <span
-                                        class="text-muted fw-normal small">/day</span></div>
-                                <div class="text-muted small">Dep: ₹20,000 | GST 18%</div>
-                            </td>
+                            
+                            
                             <td>
                                 <div class="centre-status-control">
-                                    <div class="form-check form-switch">
+                                    <div class="form-check form-switch m-0">
                                         <input class="form-check-input centre-status-toggle" type="checkbox"
-                                            role="switch" id="centreStatus5" checked
-                                            onchange="updateCentreStatus(this)">
+                                            role="switch" id="centreStatus5" data-centre-id="CC-2026-005"
+                                            aria-label="Toggle status for centre CC-2026-005" checked>
                                     </div>
-                                    <span class="centre-status-label is-active" aria-live="polite">Active</span>
+                                    <span class="centre-status-label is-on" data-status-label="centreStatus5">ON</span>
                                 </div>
                             </td>
                             <td class="text-end pe-3">
@@ -513,6 +471,19 @@
     </div>
 </div>
 <script>
+    // Frontend demo toggle: updates the visible ON/OFF state.
+    // Connect this event to a Laravel route/controller to save status in the database.
+    document.querySelectorAll('.centre-status-toggle').forEach(function (toggle) {
+        toggle.addEventListener('change', function () {
+            const label = document.querySelector('[data-status-label="' + this.id + '"]');
+            if (!label) return;
+
+            label.textContent = this.checked ? 'ON' : 'OFF';
+            label.classList.toggle('is-on', this.checked);
+            label.classList.toggle('is-off', !this.checked);
+        });
+    });
+
     const savedOwnerVenueProfile = localStorage.getItem('bookMySlotsOwnerProfile');
 
     if (savedOwnerVenueProfile) {
@@ -523,27 +494,5 @@
         document.getElementById('adminOwnerVenuePhone').textContent = `+91 ${ownerVenueProfile.phone}`;
         document.getElementById('adminOwnerVenueEmail').textContent = ownerVenueProfile.email;
     }
-
-
-    // Update centre status immediately using the toggle switch.
-    function updateCentreStatus(toggle) {
-        const statusCell = toggle.closest('td');
-        const statusLabel = statusCell ? statusCell.querySelector('.centre-status-label') : null;
-
-        if (!statusLabel) return;
-
-        if (toggle.checked) {
-            statusLabel.textContent = 'Active';
-            statusLabel.classList.remove('is-inactive');
-            statusLabel.classList.add('is-active');
-            toggle.setAttribute('aria-label', 'Deactivate centre');
-        } else {
-            statusLabel.textContent = 'Inactive';
-            statusLabel.classList.remove('is-active');
-            statusLabel.classList.add('is-inactive');
-            toggle.setAttribute('aria-label', 'Activate centre');
-        }
-    }
-
 </script>
 @endsection
