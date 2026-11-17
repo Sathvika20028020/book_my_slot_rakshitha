@@ -287,7 +287,8 @@
     <!-- PASSWORD LOGIN -->
     <div class="login-panel" id="passwordPanel">
 
-        <form id="passwordLoginForm">
+        <form id="passwordLoginForm" method="POST">
+           @csrf
 
             <label class="form-label" for="passwordMobile">
                 Mobile Number

@@ -42,6 +42,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+         'superadmin' => [
+            'driver' => 'session',
+            'provider' => 'superadmins',
+        ],
+         'convention' => [
+            'driver' => 'session',
+            'provider' => 'conventions',
+        ],
     ],
 
     /*
@@ -65,6 +73,14 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', User::class),
+        ],
+         'superadmins' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\Admin\SuperadminLogin::class,
+        ],
+         'conventions' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\ConventionAdmin\ConventionCenterLogin::class,
         ],
 
         // 'users' => [

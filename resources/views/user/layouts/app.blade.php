@@ -22,6 +22,9 @@
     <link rel="manifest" href="{{ asset('pwa/_manifest.json') }}">
     <link rel="apple-touch-icon" href="{{ asset('pwa/app/icons/icon-192x192.png') }}">
 
+    <!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+
     <style>
         :root {
             --bms-dark: #0A0F1D;
@@ -550,17 +553,17 @@ body {
 
     <div id="page">
 
-        @include('includes.header')
+        @include('user.layouts.header')
 
         <div class="page-content">
             @yield('content')
 
-            @include('includes.footer')
+            @include('user.layouts.footer')
         </div>
 
-        @include('includes.sidebar')
+        @include('user.layouts.sidebar')
 
-        @include('includes.bottom-nav')
+        @include('user.layouts.bottom-nav')
 
     </div>
 
@@ -568,6 +571,12 @@ body {
     <script src="{{ asset('pwa/scripts/bootstrap.min.js') }}"></script>
     <script src="{{ asset('pwa/scripts/custom.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- jQuery (include only if not already loaded in layouts.user) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @stack('scripts')
 

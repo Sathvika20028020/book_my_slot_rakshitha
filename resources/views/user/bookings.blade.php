@@ -1,5 +1,5 @@
 
-@extends('layouts.user')
+@extends('user.layouts.app')
 
 @section('title', 'My Bookings | Book My Slot')
 

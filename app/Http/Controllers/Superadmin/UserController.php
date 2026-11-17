@@ -12,11 +12,11 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $user = User::all();
+{
+    $users = User::orderBy('id', 'desc')->get();
 
-        
-    }
+    return view('superadmin.registered-users.index', compact('users'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -39,7 +39,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::where('id',$id)->first();
     }
 
     /**
