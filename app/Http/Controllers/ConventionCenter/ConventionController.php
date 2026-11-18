@@ -40,7 +40,7 @@ class ConventionController extends Controller
                 DB::raw('COALESCE(facility_summary.facilities_count, 0) as facilities_count'),
                 DB::raw('COALESCE(facility_summary.max_capacity, 0) as max_capacity')
             )
-            ->where('convention_center_logins.convention_user_id', $user->id);
+            ->where('convention_center_logins.id', $user->id);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -479,10 +479,10 @@ class ConventionController extends Controller
         $user = Auth::guard('convention')->user();
         abort_if(!$user, 401);
 
-        $convention = DB::table('convention_center_logins')
-            ->where('id', $id)
-            ->where('convention_user_id', $user->id)
-            ->first();
+       $convention = DB::table('convention_center_logins')
+    ->where('id', $id)
+    ->where('id', $user->id)
+    ->first();
 
         abort_if(!$convention, 404);
 
@@ -505,9 +505,9 @@ class ConventionController extends Controller
         abort_if(!$user, 401);
 
         $convention = DB::table('convention_center_logins')
-            ->where('id', $id)
-            ->where('convention_user_id', $user->id)
-            ->first();
+    ->where('id', $id)
+    ->where('id', $user->id)
+    ->first();
 
         abort_if(!$convention, 404);
 
@@ -593,9 +593,9 @@ class ConventionController extends Controller
             }
 
             DB::table('convention_center_logins')
-                ->where('id', $id)
-                ->where('convention_user_id', $user->id)
-                ->update([
+    ->where('id', $id)
+    ->where('id', $user->id)
+    ->update([
                     'incharge_name' => $request->incharge_name,
                     'convention_name' => $request->convention_name,
                     'convention_image' => $imagePath,

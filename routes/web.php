@@ -48,14 +48,6 @@ Route::prefix('conventions')->group(function () {
 
 
 
-
-
-
-
-
-
-
-
 // Convention Centre Owner Portal UI
 Route::prefix('owner')->name('owner.')->group(function () {
  
