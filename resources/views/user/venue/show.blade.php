@@ -125,7 +125,7 @@
 <div class="container-fluid px-3 px-md-4 py-4">
 
     <!-- BACK LINK -->
-    <a href="{{ route('user.center') }}" class="back-link">
+    <a href="{{ route('user.venue-lists') }}" class="back-link">
         <i class="fas fa-arrow-left"></i>
         Back to Convention Centres
     </a>

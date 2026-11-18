@@ -80,17 +80,7 @@
                 </div>
 
                 <!-- FACILITIES -->
-                <div class="col-12 col-md-4">
-                    <label class="form-label fw-semibold small">Facilities</label>
-
-                    <select id="facilityFilter" class="form-select" multiple>
-                        <option value="parking">Parking</option>
-                        <option value="kitchen">Kitchen</option>
-                        <option value="dining">Dining</option>
-                        <option value="generator">Generator</option>
-                        <option value="wifi">Wi-Fi</option>
-                    </select>
-                </div>
+              
 
                 <!-- PRICE -->
                 <div class="col-6 col-md-2">
@@ -118,17 +108,7 @@
                     </select>
                 </div>
 
-                <!-- PACKAGE -->
-                <div class="col-6 col-md-3">
-                    <label class="form-label fw-semibold small">Event Packages</label>
-
-                    <select id="packageFilter" class="form-select filter-input">
-                        <option value="">All Packages</option>
-                        <option value="wedding">Wedding</option>
-                        <option value="birthday">Birthday</option>
-                        <option value="conference">Conference</option>
-                    </select>
-                </div>
+               
 
                 <!-- EVENT FROM -->
                 <div class="col-6 col-md-3">

@@ -287,7 +287,7 @@
     <!-- PASSWORD LOGIN -->
     <div class="login-panel" id="passwordPanel">
 
-        <form id="passwordLoginForm" method="POST">
+        <form id="passwordLoginForm" method="POST" action="{{route('user.login.post')}}">
            @csrf
 
             <label class="form-label" for="passwordMobile">
@@ -297,6 +297,7 @@
             <div class="phone-field">
                 <span class="country-code">+91</span>
                 <input type="tel"
+                    name="phone"
                        id="passwordMobile"
                        placeholder="Enter 10-digit mobile number"
                        maxlength="10"
@@ -315,6 +316,7 @@
             <div class="password-field">
                 <input type="password"
                        id="loginPassword"
+                       name="password"
                        placeholder="Enter your password"
                        required>
 
@@ -345,6 +347,7 @@
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     function showLogin(type, button) {
 
@@ -374,67 +377,65 @@
     setupMobileInput('passwordMobile');
 
     // OTP LOGIN
-document.getElementById('otpLoginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+    document.getElementById('otpLoginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
 
-    const mobile = document.getElementById('otpMobile').value.trim();
-    const error = document.getElementById('otpMobileError');
+        const mobile = document.getElementById('otpMobile').value.trim();
+        const error = document.getElementById('otpMobileError');
 
-    if (!/^[6-9]\d{9}$/.test(mobile)) {
-        error.style.display = 'block';
-        return;
-    }
+        if (!/^[6-9]\d{9}$/.test(mobile)) {
+            error.style.display = 'block';
+            return;
+        }
 
-    error.style.display = 'none';
+        error.style.display = 'none';
 
-    Swal.fire({
-        icon: 'success',
-        title: 'OTP Sent Successfully!',
-        text: 'An OTP has been sent to your mobile number +91 ' + mobile + '. Please check your phone.',
-        confirmButtonText: 'Continue',
-        confirmButtonColor: '#0A0F1D'
-    }).then(() => {
-        window.location.href =
-            "{{ route('user.otp') }}" + "?mobile=" + encodeURIComponent(mobile);
-    });
-});
-
-
-// PASSWORD LOGIN
-document.getElementById('passwordLoginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const mobile = document.getElementById('passwordMobile').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    const error = document.getElementById('passwordMobileError');
-
-    if (!/^[6-9]\d{9}$/.test(mobile)) {
-        error.style.display = 'block';
-        return;
-    }
-
-    error.style.display = 'none';
-
-    if (!password.trim()) {
         Swal.fire({
-            icon: 'warning',
-            title: 'Password Required',
-            text: 'Please enter your password.',
+            icon: 'success',
+            title: 'OTP Sent Successfully!',
+            text: 'An OTP has been sent to your mobile number +91 ' + mobile + '. Please check your phone.',
+            confirmButtonText: 'Continue',
             confirmButtonColor: '#0A0F1D'
+        }).then(() => {
+            window.location.href =
+                "{{ route('user.otp') }}" + "?mobile=" + encodeURIComponent(mobile);
         });
-        return;
-    }
-
-    Swal.fire({
-        icon: 'success',
-        title: 'Login Successful!',
-        text: 'Welcome to Book My Slot.',
-        confirmButtonText: 'Go to Dashboard',
-        confirmButtonColor: '#0A0F1D'
-    }).then(() => {
-        window.location.href = "{{ route('user.dashboard') }}";
     });
-});
+
+
+    // PASSWORD LOGIN
+    document.getElementById('passwordLoginForm').addEventListener('submit', function(e) {
+
+        const mobile = document.getElementById('passwordMobile').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const error = document.getElementById('passwordMobileError');
+
+        if (!/^[6-9]\d{9}$/.test(mobile)) {
+            e.preventDefault();
+            error.style.display = 'block';
+            return;
+        }
+
+        error.style.display = 'none';
+
+        if (!password.trim()) {
+            e.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Password Required',
+                text: 'Please enter your password.',
+                confirmButtonColor: '#0A0F1D'
+            });
+
+            return;
+        }
+
+        // Allow Laravel form submission.
+    });
+
+
+    // SHOW / HIDE PASSWORD
     function togglePassword(id, button) {
         const input = document.getElementById(id);
         const icon = button.querySelector('i');
@@ -448,6 +449,7 @@ document.getElementById('passwordLoginForm').addEventListener('submit', function
         }
     }
 </script>
+
 
 </body>
 </html>

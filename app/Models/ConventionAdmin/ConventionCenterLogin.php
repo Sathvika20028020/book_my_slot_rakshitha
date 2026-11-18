@@ -39,6 +39,6 @@ class ConventionCenterLogin extends Authenticatable
 
     public function centreDetails()
     {
-        return $this->hasMany(ConventionCenterDetail::class, 'convention_user_id', 'id');
+        return $this->hasMany(ConventionCenterDetails::class, 'convention_user_id', 'id');
     }
 }

@@ -12,6 +12,12 @@ use App\Http\Controllers\ConventionCenter\auth\LoginController as ConventionCent
 use App\Http\Controllers\ConventionCenter\DashboardController as ConventionCenterDashboardController;
 use App\Http\Controllers\ConventionCenter\ConventionController as ConventionCenterController;
 
+
+use App\Http\Controllers\User\DashboardController as UserDashboardController;
+use App\Http\Controllers\User\ConventionController as UserConventionController;
+use App\Http\Controllers\User\auth\LoginController as UserLoginController;
+
+
 Route::resource('register', UserController::class)->names('register'); 
 
       
@@ -42,6 +48,23 @@ Route::prefix('conventions')->group(function () {
 
         Route::get('/dashboard', [ConventionCenterDashboardController::class, 'index'])->name('conventions.dashboard');
         Route::resource('venue-lists', ConventionCenterController::class)->names('conventions.venue-lists');
+
+    });
+});
+
+ Route::get('venue-lists', [UserConventionController::class,'conventions'])->name('user.venue-lists');
+ Route::get('venue-lists/{id}', [UserConventionController::class,'show'])->name('user.venue-lists.show');
+
+Route::prefix('user')->group(function () {
+
+    Route::get('/register', [UserLoginController::class, 'register'])->name('user.register');
+    Route::get('/login', [UserLoginController::class, 'login'])->name('user.login');
+    Route::post('/login', [UserLoginController::class, 'handleLogin'])->name('user.login.post');
+
+    Route::middleware('auth:user')->group(function () {
+
+        Route::get('/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
+       
 
     });
 });
@@ -173,9 +196,8 @@ Route::get('/login', function () {
 Route::view('/user/login', 'user.auth.login')->name('user.login');
 Route::view('/user/otp', 'user.auth.otp')->name('user.otp');
 Route::view('/user/dashboard', 'user.dashboard')->name('user.dashboard');
-Route::view('/user/center', 'user.center.index')->name('user.center');
-Route::view('/user/center/details', 'user.center.show')->name('user.center.details');
-Route::view('/user/center/booking', 'user.center.booking')->name('user.center.booking');
+Route::view('/user/center/details', 'user.venue.show')->name('user.center.details');
+Route::view('/user/center/booking', 'user.venue.booking')->name('user.center.booking');
 Route::view('/user/payments', 'user.payments.index')->name('user.payments');
 Route::view('/user/bookings', 'user.bookings')->name('user.bookings');
 Route::view('/user/forgot-password', 'user.auth.forgot-password')->name('user.forgot-password');

@@ -41,7 +41,7 @@
                         <i class="bi bi-person-plus me-1"></i> Register
                     </a>
 
-                    <!-- <a href="{{ route('owner.login') }}" class="btn btn-gold btn-sm rounded-pill px-3 py-2 fw-semibold">
+                    <!-- <a href="" class="btn btn-gold btn-sm rounded-pill px-3 py-2 fw-semibold">
                         <i class="bi bi-buildings me-1"></i> Owner Login
                     </a> -->
 
