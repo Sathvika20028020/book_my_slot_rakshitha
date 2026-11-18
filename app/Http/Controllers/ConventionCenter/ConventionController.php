@@ -34,8 +34,25 @@ class ConventionController extends Controller
         ])
         ->withMax('facilities', 'seating_capacity');
 
+<<<<<<< HEAD
+        $query = DB::table('convention_center_logins')
+            ->leftJoinSub($facilitySummary, 'facility_summary', function ($join) {
+                $join->on(
+                    'convention_center_logins.id',
+                    '=',
+                    'facility_summary.convention_center_login_id'
+                );
+            })
+            ->select(
+                'convention_center_logins.*',
+                DB::raw('COALESCE(facility_summary.facilities_count, 0) as facilities_count'),
+                DB::raw('COALESCE(facility_summary.max_capacity, 0) as max_capacity')
+            )
+            ->where('convention_center_logins.id', $user->id);
+=======
     if ($request->filled('search')) {
         $search = $request->search;
+>>>>>>> 34125b8eb56ec2bcdb9c7d4907b0e481d720f98c
 
         $query->where(function ($q) use ($search) {
             $q->where('venue_id', 'like', "%{$search}%")
@@ -510,10 +527,10 @@ public function store(Request $request)
         $user = Auth::guard('convention')->user();
         abort_if(!$user, 401);
 
-        $convention = DB::table('convention_center_logins')
-            ->where('id', $id)
-            ->where('convention_user_id', $user->id)
-            ->first();
+       $convention = DB::table('convention_center_logins')
+    ->where('id', $id)
+    ->where('id', $user->id)
+    ->first();
 
         abort_if(!$convention, 404);
 
@@ -536,9 +553,9 @@ public function store(Request $request)
         abort_if(!$user, 401);
 
         $convention = DB::table('convention_center_logins')
-            ->where('id', $id)
-            ->where('convention_user_id', $user->id)
-            ->first();
+    ->where('id', $id)
+    ->where('id', $user->id)
+    ->first();
 
         abort_if(!$convention, 404);
 
@@ -624,9 +641,9 @@ public function store(Request $request)
             }
 
             DB::table('convention_center_logins')
-                ->where('id', $id)
-                ->where('convention_user_id', $user->id)
-                ->update([
+    ->where('id', $id)
+    ->where('id', $user->id)
+    ->update([
                     'incharge_name' => $request->incharge_name,
                     'convention_name' => $request->convention_name,
                     'convention_image' => $imagePath,

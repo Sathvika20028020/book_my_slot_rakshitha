@@ -5,9 +5,7 @@
 
 @section('content')
 
-<!-- =========================================================================
-     1. HERO & COMPACT SEARCH BAR
-     ========================================================================= -->
+<!-- 1. HERO & COMPACT SEARCH BAR -->
 <section class="hero-wrap text-center" id="search-section">
     <div class="container-xl">
         <!-- Badge -->
@@ -38,9 +36,7 @@
     </div>
 </section>
 
-<!-- =========================================================================
-     2. VENUE CATEGORIES
-     ========================================================================= -->
+<!-- 2. VENUE CATEGORIES -->
 <section class="py-5 bg-white border-bottom">
     <div class="container-xl">
         <div class="d-flex justify-content-between align-items-center mb-4">
