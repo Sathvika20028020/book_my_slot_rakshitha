@@ -6,6 +6,21 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <style>
+    .status-toggle {
+    width: 42px !important;
+    height: 22px !important;
+    cursor: pointer;
+}
+
+.status-toggle:checked {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.status-toggle:not(:checked) {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
     .centre-avatar {
         width: 40px;
         height: 40px;
@@ -116,12 +131,14 @@
                         </span>
                     </td>
                     <td>
-                           @if ($item->status === 1)
-                                        <span class="badge bg-success">Active</span>
-                                    @else
-                                        <span class="badge bg-danger">Inactive</span>
-                                    @endif
-                                   
+                        <div class="form-check form-switch">
+                            <input class="form-check-input status-toggle"
+                                type="checkbox"
+                                role="switch"
+                                data-id="{{ $item->id }}"
+                                {{ $item->status == 'active' ? 'checked' : '' }}>
+                        </div>
+                      
                     </td>
 
                     <td class="text-end">
@@ -161,8 +178,9 @@
 </div>
 @endsection
 
-@section('scripts')
+@section('script')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Copy buttons
@@ -217,6 +235,78 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+});
+
+</script>
+
+<script>
+$(document).ready(function () {
+
+    $('.status-toggle').change(function () {
+
+        let toggle = $(this);
+        let userId = toggle.data('id');
+        let newStatus = toggle.is(':checked') ? 'active' : 'inactive';
+
+        // Temporarily disable toggle
+        toggle.prop('disabled', true);
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to change the status to ' + newStatus + '?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#198754',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, update it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: "{{ route('convention.user.status.update', ':status') }}".replace(':status', userId),
+                    type: "POST",
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: newStatus
+                    },
+
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Updated!',
+                            text: response.message,
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    },
+
+                    error: function () {
+                        toggle.prop('checked', !toggle.is(':checked'));
+
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Unable to update status!',
+                            icon: 'error'
+                        });
+                    },
+
+                    complete: function () {
+                        toggle.prop('disabled', false);
+                    }
+                });
+
+            } else {
+                // Restore previous status
+                toggle.prop('checked', !toggle.is(':checked'));
+                toggle.prop('disabled', false);
+            }
+
+        });
+
+    });
+
 });
 </script>
 @endsection

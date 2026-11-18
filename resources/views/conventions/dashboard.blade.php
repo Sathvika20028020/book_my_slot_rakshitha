@@ -147,7 +147,7 @@
                         <h6 class="fw-bold text-dark mb-1">Bookings Management</h6>
                         <p class="small text-muted mb-0">Approve or reject customer slot bookings</p>
                     </div>
-                    <a href="" class="btn btn-primary btn-sm rounded-pill px-3 fw-semibold">Open</a>
+                    <a href="{{ route('center_admin.booking.index') }}" class="btn btn-primary btn-sm rounded-pill px-3 fw-semibold">Open</a>
                 </div>
             </div>
         </div>
@@ -159,7 +159,7 @@
                         <h6 class="fw-bold text-dark mb-1">Slot Calendar</h6>
                         <p class="small text-muted mb-0">View monthly schedule & block specific dates</p>
                     </div>
-                    <a href="" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold">Open</a>
+                    <a href="{{ route('center_admin.calendar.index') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold">Open</a>
                 </div>
             </div>
         </div>
@@ -171,7 +171,7 @@
                         <h6 class="fw-bold text-dark mb-1">Payments & Settlements</h6>
                         <p class="small text-muted mb-0">Track customer payouts, escrow & bank deposits</p>
                     </div>
-                    <a href="" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-semibold">Open</a>
+                    <a href="{{ route('center_admin.payments.index') }}" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-semibold">Open</a>
                 </div>
             </div>
         </div>

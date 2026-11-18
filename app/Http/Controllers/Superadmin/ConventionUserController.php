@@ -178,4 +178,20 @@ class ConventionUserController extends Controller
             ->route('superadmin.conventionlogins.index')
             ->with('success', 'Convention Centre credentials deleted successfully.');
     }
+
+        public function status(Request $request, $id)
+    {
+        $user = ConventionCenterLogin::findOrFail($id);
+
+        $user->status = $request->status;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User status updated successfully!',
+            'status' => $user->status
+        ]);
+    }
+
+    
 }

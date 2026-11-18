@@ -384,8 +384,8 @@
                     </div>
 
 
-                    <!-- Status -->
-                    <div class="col-md-6">
+                   
+                 {{--    <div class="col-md-6">
 
                         <label class="form-label fw-semibold text-dark">
                             Account Status
@@ -408,10 +408,10 @@
                             Current account status.
                         </small>
 
-                    </div>
+                    </div>  --}}
 
 
-                    <!-- Buttons -->
+                  
                     <div class="col-12">
 
                         <hr class="my-2">
@@ -439,7 +439,7 @@
 
                     </div>
 
-                </div>
+                </div> 
 
             </form>
 
