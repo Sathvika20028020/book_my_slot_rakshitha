@@ -1,4 +1,4 @@
-@extends('superadmin.layout.admin.app')
+@extends('superadmin.layout.app')
 
 @section('title') Convention Centre Credentials @endsection
 
@@ -68,131 +68,93 @@
        
 <div class="row g-3 align-items-end">
     <div class="col-md-3 ms-auto">
-        <a href="{{ route('admin.centers.create') }}"
+        <a href="{{ route('superadmin.conventionlogins.create') }}"
            class="btn btn-primary d-flex align-items-center justify-content-center gap-2 shadow-sm">
             <i class="bi bi-plus-circle-fill"></i> Add Credentials
         </a>
     </div>
 </div>
         <!-- Table View -->
-        <div class="table-responsive">
-             <table class="table table-bordered table-striped  text-center align-middle" id="data-source-1"
-                    style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Sl.no</th>
-                        <th>Name</th>
-                        <th>Phone Number</th>
-                        <th>Email</th>
-                        
-                      
-                        <th >Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Row 1 -->
-                    <tr>
-                        <td class="text-muted fw-bold">1</td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                               
-                                <span class="fw-bold text-dark">Rajesh Kumar</span>
-                            </div>
-                        </td>
-                        <td>
-                           9876543210
-                        </td>
-                        <td>
-                            <span class="font-monospace text-dark">admin@grandpalace.com</span>
-                            
-                        </td>
-                        
-                        
-                        <td class="text-end">
-                            <div class="d-flex align-items-center justify-content-end gap-1">
-                                <a href="{{ route('admin.centers.show') }}" class="btn btn-primary btn-sm" title="View Details">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a href="{{ route('admin.centers.edit') }}" class="btn btn-warning btn-sm text-white" title="Edit Credentials">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                               
-                            </div>
-                        </td>
-                    </tr>
+      
+<div class="table-responsive">
+    <table class="table table-bordered table-striped text-center align-middle"
+           id="data-source-1" style="width:100%">
 
-                    <!-- Row 2 -->
-                    <tr>
-                        <td class="text-muted fw-bold">2</td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
+        <thead>
+            <tr>
+                <th>Sl.no</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                 <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
 
-                                <span class="fw-bold text-dark">Priya Sharma</span>
-                            </div>
-                        </td>
-                        <td>
-                            9440122334
-                        </td>
-                        <td>
-                            <span class="font-monospace text-dark">priya@royalsapphire.in</span>
-                           
-                        </td>
-                        <td>
-                            <span class="badge bg-warning text-dark ">
-                                <i class="bi bi-buildings me-1"></i>Royal Sapphire Banquet Hall
+        <tbody>
+            @forelse($user as $key => $item)
+                <tr>
+                    <td class="text-muted fw-bold">
+                        {{ $key + 1 }}
+                    </td>
+
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="fw-bold text-dark">
+                                {{ $item->incharge_name ?? '-' }}
                             </span>
-                        </td>
-                       
-                        <td class="text-end">
-                            <div class="d-flex align-items-center justify-content-end gap-1">
-                                <a href="{{ route('admin.centers.show') }}" class="btn btn-primary btn-sm" title="View Details">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a href="{{ route('admin.centers.edit') }}" class="btn btn-warning btn-sm text-white" title="Edit Credentials">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                               
-                            </div>
-                        </td>
-                    </tr>
+                        </div>
+                    </td>
 
-                    <!-- Row 3 -->
-                    <tr>
-                        <td class="text-muted fw-bold">3</td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                
-                                <span class="fw-bold text-dark">Venkatesh Rao</span>
-                            </div>
-                        </td>
-                        <td>
-                            9885099887
-                        </td>
-                        <td>
-                            <span class="font-monospace text-dark">venkat@krishnamandapam.com</span>
-                            
-                        </td>
-                        <td>
-                            <span class="badge bg-warning text-dark">
-                                <i class="bi bi-buildings me-1"></i>Krishna Mandapam &amp; Lawn
-                            </span>
-                        </td>
-                        
-                        <td class="text-end">
-                            <div class="d-flex align-items-center justify-content-end gap-1">
-                                <a href="{{ route('admin.centers.show') }}" class="btn btn-primary btn-sm" title="View Details">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a href="{{ route('admin.centers.edit') }}" class="btn btn-warning btn-sm text-white" title="Edit Credentials">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                    <td>
+                        {{ $item->phone ?? '-' }}
+                    </td>
+
+                    <td>
+                        <span class="font-monospace text-dark">
+                            {{ $item->email ?? '-' }}
+                        </span>
+                    </td>
+                    <td>
+                           @if ($item->status === 1)
+                                        <span class="badge bg-success">Active</span>
+                                    @else
+                                        <span class="badge bg-danger">Inactive</span>
+                                    @endif
+                                   
+                    </td>
+
+                    <td class="text-end">
+                        <div class="d-flex align-items-center justify-content-end gap-1">
+
+                            <a href="{{ route('superadmin.conventionlogins.show', $item->id) }}"
+                               class="btn btn-primary btn-sm"
+                               title="View Details">
+                                <i class="bi bi-eye"></i>
+                            </a>
+
+                            <a href="{{ route('superadmin.conventionlogins.edit', $item->id) }}"
+                               class="btn btn-warning btn-sm text-white"
+                               title="Edit Credentials">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+                        </div>
+                    </td>
+                </tr>
+
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center py-4">
+                        No convention centre login accounts found.
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+
+    </table>
+</div>
+
 
        
     </div>

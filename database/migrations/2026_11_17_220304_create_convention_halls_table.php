@@ -13,21 +13,23 @@ return new class extends Migration
     {
         Schema::create('convention_halls', function (Blueprint $table) {
             $table->id();
-              $table->id();
+         $table->foreignId('convention_center_login_id')
+                ->constrained('convention_center_logins')
+                ->cascadeOnDelete();
 
-        $table->foreignId('convention_center_login_id')
-            ->constrained('convention_center_logins')
-            ->cascadeOnDelete();
+            $table->unsignedBigInteger('hall_id')->nullable();
 
-        $table->string('venue_id')->nullable();
-        $table->string('hall_name');
-        $table->unsignedInteger('sort_order')->default(0);
-             $table->foreignId('hall_id')
-            ->nullable()
-            ->after('convention_center_login_id')
-            ->constrained('convention_halls')
-            ->nullOnDelete();
-        $table->timestamps();
+            $table->string('venue_id')->nullable();
+            $table->string('hall_name');
+            $table->unsignedInteger('sort_order')->default(0);
+
+            $table->timestamps();
+
+            $table->foreign('hall_id')
+                ->references('id')
+                ->on('convention_halls')
+                ->nullOnDelete();
+              
         });
     }
 

@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
+use App\Models\ConventionAdmin\ConventionCenterLogin;
+use App\Models\ConventionAdmin\ConventionCenterDetail;
+use App\Models\ConventionAdmin\ConventionFacility;
+use App\Models\ConventionAdmin\ConventionHall;
+use App\Models\ConventionAdmin\ConventionHallCharge;
+use App\Models\ConventionAdmin\ConventionHallMedia;
+use App\Models\ConventionAdmin\ConventionBookingPolicy;
 
 class ConventionController extends Controller
 {
@@ -15,63 +23,47 @@ class ConventionController extends Controller
      * Display only the logged-in user's convention centres.
      */
     public function index(Request $request)
-    {
-        $user = Auth::guard('convention')->user();
-        abort_if(!$user, 401);
+{
+    $user = Auth::guard('convention')->user();
+    abort_if(!$user, 401);
 
-        $facilitySummary = DB::table('convention_facilities')
-            ->select(
-                'convention_center_login_id',
-                DB::raw('COUNT(*) as facilities_count'),
-                DB::raw('COALESCE(MAX(seating_capacity), 0) as max_capacity')
-            )
-            ->groupBy('convention_center_login_id');
+    $query = ConventionCenterLogin::query()
+        ->withCount([
+            'halls',
+            'facilities',
+        ])
+        ->withMax('facilities', 'seating_capacity');
 
-        $query = DB::table('convention_center_logins')
-            ->leftJoinSub($facilitySummary, 'facility_summary', function ($join) {
-                $join->on(
-                    'convention_center_logins.id',
-                    '=',
-                    'facility_summary.convention_center_login_id'
-                );
-            })
-            ->select(
-                'convention_center_logins.*',
-                DB::raw('COALESCE(facility_summary.facilities_count, 0) as facilities_count'),
-                DB::raw('COALESCE(facility_summary.max_capacity, 0) as max_capacity')
-            )
-            ->where('convention_center_logins.convention_user_id', $user->id);
+    if ($request->filled('search')) {
+        $search = $request->search;
 
-        if ($request->filled('search')) {
-            $search = $request->search;
-
-            $query->where(function ($q) use ($search) {
-                $q->where('convention_center_logins.venue_id', 'like', "%{$search}%")
-                    ->orWhere('convention_center_logins.convention_name', 'like', "%{$search}%")
-                    ->orWhere('convention_center_logins.address', 'like', "%{$search}%")
-                    ->orWhere('convention_center_logins.phone', 'like', "%{$search}%")
-                    ->orWhere('convention_center_logins.email', 'like', "%{$search}%");
-            });
-        }
-
-        if ($request->filled('type')) {
-            $query->where('convention_center_logins.centre_type', $request->type);
-        }
-
-        if ($request->filled('status')) {
-            $query->whereRaw(
-                'LOWER(convention_center_logins.status) = ?',
-                [strtolower($request->status)]
-            );
-        }
-
-        $conventions = $query
-            ->orderByDesc('convention_center_logins.id')
-            ->paginate(15)
-            ->withQueryString();
-
-        return view('conventions.venues.index', compact('conventions'));
+        $query->where(function ($q) use ($search) {
+            $q->where('venue_id', 'like', "%{$search}%")
+                ->orWhere('convention_name', 'like', "%{$search}%")
+                ->orWhere('incharge_name', 'like', "%{$search}%")
+                ->orWhere('address', 'like', "%{$search}%")
+                ->orWhere('phone', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+        });
     }
+
+    if ($request->filled('type')) {
+        $query->where('centre_type', $request->type);
+    }
+
+    if ($request->filled('status')) {
+        $query->whereRaw('LOWER(status) = ?', [
+            strtolower($request->status)
+        ]);
+    }
+
+    $conventions = $query
+        ->latest('id')
+        ->paginate(15)
+        ->withQueryString();
+
+    return view('conventions.venues.index', compact('conventions'));
+}
 
     /**
      * Show create form.
@@ -87,7 +79,8 @@ class ConventionController extends Controller
     /**
      * Store a new convention centre for the logged-in user.
      */
-    public function store(Request $request)
+
+public function store(Request $request)
 {
     $user = Auth::guard('convention')->user();
 
@@ -128,17 +121,17 @@ class ConventionController extends Controller
         'halls' => 'required|array|min:1|max:30',
         'halls.*.name' => 'required|string|max:255',
 
-        // Hall-wise gallery
+        // Hall gallery images
         'halls.*.gallery_images' => 'nullable|array',
         'halls.*.gallery_images.*' =>
             'image|mimes:jpg,jpeg,png,webp|max:10240',
 
-        // Hall-wise video
+        // Hall videos
         'halls.*.video_url' => 'nullable|url',
         'halls.*.video_file' =>
             'nullable|file|mimes:mp4,webm|max:51200',
 
-        // Hall-wise charges
+        // Hall charges
         'halls.*.booking_fee' => 'required|numeric|min:0',
         'halls.*.security_deposit' => 'required|numeric|min:0',
         'halls.*.additional_charges' => 'required|numeric|min:0',
@@ -164,16 +157,17 @@ class ConventionController extends Controller
             'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:10240',
     ]);
 
-    // Summernote can submit HTML that looks non-empty but contains no text.
+    // Validate Summernote content.
     if (trim(strip_tags($request->input('cancellation_rules', ''))) === '') {
         return back()
             ->withInput()
             ->withErrors([
-                'cancellation_rules' => 'Please enter the cancellation rules and refund policy.'
+                'cancellation_rules' =>
+                    'Please enter the cancellation rules and refund policy.'
             ]);
     }
 
-    // Ensure every facility is assigned to a submitted hall.
+    // Ensure every facility belongs to a submitted hall.
     $hallIndexes = array_map('intval', array_keys($validated['halls']));
 
     foreach ($validated['facilities'] as $facility) {
@@ -186,15 +180,15 @@ class ConventionController extends Controller
         }
     }
 
-    DB::beginTransaction();
-
     $uploadedFiles = [];
+
+    DB::beginTransaction();
 
     try {
 
         /*
         |--------------------------------------------------------------------------
-        | 1. Generate / reuse venue ID from existing login
+        | 1. Generate / reuse venue ID
         |--------------------------------------------------------------------------
         */
 
@@ -214,28 +208,40 @@ class ConventionController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | 2. Save NOC / Supporting Document
+        | 2. Upload policy document
         |--------------------------------------------------------------------------
         */
 
         $documentPath = null;
 
         if ($request->hasFile('policy_document')) {
-            $documentPath = $request->file('policy_document')
-                ->store('convention-centres/documents', 'public');
 
-            $uploadedFiles[] = $documentPath;
+            $file = $request->file('policy_document');
+
+            $folder = public_path('conventions/policy_document');
+
+            if (!is_dir($folder)) {
+                mkdir($folder, 0755, true);
+            }
+
+            $filename = time() . '_' . uniqid() . '.' .
+                $file->getClientOriginalExtension();
+
+            $file->move($folder, $filename);
+
+            $documentPath = 'conventions/policy_document/' . $filename;
+
+            $uploadedFiles[] = public_path($documentPath);
         }
 
         /*
         |--------------------------------------------------------------------------
-        | 3. Create each hall, its media and its charges
+        | 3. Create halls, media and charges
         |--------------------------------------------------------------------------
         */
 
         $hallIds = [];
 
-        // These are the first available items for the centre summary columns.
         $centreImagePath = null;
         $centreVideoPath = null;
 
@@ -250,12 +256,11 @@ class ConventionController extends Controller
                 'updated_at' => now(),
             ]);
 
-            // Keep the mapping from Blade hall index to database hall ID.
             $hallIds[$hallIndex] = $hallId;
 
             /*
             |--------------------------------------------------------------------------
-            | 3A. Save all images for this hall
+            | 3A. Hall gallery images
             |--------------------------------------------------------------------------
             */
 
@@ -266,12 +271,20 @@ class ConventionController extends Controller
 
             foreach ($images as $image) {
 
-                $imagePath = $image->store(
-                    'convention-centres/halls/images',
-                    'public'
-                );
+                $folder = public_path('conventions/hall_images');
 
-                $uploadedFiles[] = $imagePath;
+                if (!is_dir($folder)) {
+                    mkdir($folder, 0755, true);
+                }
+
+                $filename = time() . '_' . uniqid() . '.' .
+                    $image->getClientOriginalExtension();
+
+                $image->move($folder, $filename);
+
+                $imagePath = 'conventions/hall_images/' . $filename;
+
+                $uploadedFiles[] = public_path($imagePath);
 
                 DB::table('convention_hall_media')->insert([
                     'convention_hall_id' => $hallId,
@@ -283,7 +296,6 @@ class ConventionController extends Controller
                     'updated_at' => now(),
                 ]);
 
-                // Keep the first image as the centre cover image too.
                 if (!$centreImagePath) {
                     $centreImagePath = $imagePath;
                 }
@@ -291,7 +303,7 @@ class ConventionController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | 3B. Save hall video file, if uploaded
+            | 3B. Hall video file
             |--------------------------------------------------------------------------
             */
 
@@ -301,12 +313,20 @@ class ConventionController extends Controller
 
             if ($videoFile) {
 
-                $videoPath = $videoFile->store(
-                    'convention-centres/halls/videos',
-                    'public'
-                );
+                $folder = public_path('conventions/hall_videos');
 
-                $uploadedFiles[] = $videoPath;
+                if (!is_dir($folder)) {
+                    mkdir($folder, 0755, true);
+                }
+
+                $filename = time() . '_' . uniqid() . '.' .
+                    $videoFile->getClientOriginalExtension();
+
+                $videoFile->move($folder, $filename);
+
+                $videoPath = 'conventions/hall_videos/' . $filename;
+
+                $uploadedFiles[] = public_path($videoPath);
 
                 DB::table('convention_hall_media')->insert([
                     'convention_hall_id' => $hallId,
@@ -325,7 +345,7 @@ class ConventionController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | 3C. Save hall video URL, if provided
+            | 3C. Hall video URL
             |--------------------------------------------------------------------------
             */
 
@@ -350,7 +370,7 @@ class ConventionController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | 3D. Save charges for this hall
+            | 3D. Hall charges
             |--------------------------------------------------------------------------
             */
 
@@ -367,7 +387,7 @@ class ConventionController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | 4. Save overall convention centre details
+        | 4. Save convention centre details
         |--------------------------------------------------------------------------
         */
 
@@ -379,7 +399,6 @@ class ConventionController extends Controller
             'convention_name' => $request->name,
             'incharge_name' => $request->contact_name,
 
-            // Summary image/video; full hall media is in convention_hall_media.
             'convention_image' => $centreImagePath,
             'convention_video' => $centreVideoPath,
 
@@ -402,7 +421,7 @@ class ConventionController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | 5. Save facilities and link each facility to its hall
+        | 5. Save facilities
         |--------------------------------------------------------------------------
         */
 
@@ -412,10 +431,7 @@ class ConventionController extends Controller
 
             DB::table('convention_facilities')->insert([
 
-                // Existing convention login
                 'convention_center_login_id' => $login->id,
-
-                // Specific hall selected in the form
                 'hall_id' => $hallId,
 
                 'facility_name' => $facility['name'],
@@ -431,18 +447,15 @@ class ConventionController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | 6. Save centre-level booking policy
+        | 6. Save booking policy
         |--------------------------------------------------------------------------
         */
 
         DB::table('convention_booking_policies')->insert([
 
             'convention_center_login_id' => $login->id,
-
             'min_advance_days' => $request->min_advance_days,
-
             'max_booking_duration' => $request->max_booking_duration,
-
             'cancellation_rules' => $request->cancellation_rules,
 
             'created_at' => now(),
@@ -453,23 +466,41 @@ class ConventionController extends Controller
 
         return redirect()
             ->route('conventions.venue-lists.index')
-            ->with('success', 'Convention centre, halls, facilities, media and charges saved successfully!');
+            ->with(
+                'success',
+                'Convention centre, halls, facilities, media and charges saved successfully!'
+            );
 
     } catch (\Throwable $e) {
 
         DB::rollBack();
 
-        if (!empty($uploadedFiles)) {
-            Storage::disk('public')->delete($uploadedFiles);
+        // Delete every file uploaded during this failed transaction.
+        foreach ($uploadedFiles as $uploadedFile) {
+            if (file_exists($uploadedFile)) {
+                @unlink($uploadedFile);
+            }
         }
 
-        report($e);
+        Log::error('Convention Centre Store Failed', [
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'user_id' => $login->id ?? null,
+            'trace' => $e->getTraceAsString(),
+        ]);
 
         return back()
             ->withInput()
-            ->with('error', 'Unable to save convention centre details. Please try again.');
+            ->with(
+                'error',
+                config('app.debug')
+                    ? $e->getMessage()
+                    : 'Unable to save convention centre details. Please try again.'
+            );
     }
 }
+
 
     /**
      * Edit only the logged-in user's convention centre.
