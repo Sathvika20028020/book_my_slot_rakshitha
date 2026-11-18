@@ -24,7 +24,8 @@ Route::prefix('superadmin')->group(function () {
     Route::middleware('auth:superadmin')->group(function () {
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('superadmin.dashboard');
-        Route::resource('Convention/logins', ConventionUserController::class)->names('superadmin.conventionlogins');
+        Route::resource('Convention/users', ConventionUserController::class)->names('superadmin.conventionlogins');
+        Route::post('convention/users/status/{status}', [ConventionUserController::class,'status'])->name('convention.user.status.update');
         Route::resource('conventions', ConventionController::class)->names('superadmin.conventions');
         Route::resource('registered-users', RegisteredUsers::class)->names('superadmin.registered-users');
 

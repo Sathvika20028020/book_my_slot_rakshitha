@@ -1,4 +1,4 @@
-@extends('superadmin.layout.admin.app')
+@extends('superadmin.layout.app')
 
 @section('title') Booking Details - BMS-4821 @endsection
 

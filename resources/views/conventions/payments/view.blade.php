@@ -1,4 +1,4 @@
-@extends('admin.layout.centers.app')
+@extends('conventions.layouts.app')
 
 @section('title') Payment Receipt #TXN-2026-9041 - Convention Centre Portal @endsection
 

@@ -1,4 +1,4 @@
-@extends('superadmin.layout.admin.app')
+@extends('superadmin.layout.app')
 
 @section('title') Dashboard – Book My Slot @endsection
 
@@ -78,7 +78,7 @@
     <div class="row g-3 mb-4">
         <!-- Metric 1: Total Registered Users / Applications -->
         <div class="col-sm-6 col-xl-3">
-            <a href="{{ route('admin.application.index') }}" class="text-decoration-none">
+            <a href="" class="text-decoration-none">
                 <div class="card kpi-card border-0 shadow-sm h-100">
                     <div class="card-body p-4 d-flex align-items-center justify-content-between">
                         <div>
@@ -155,7 +155,7 @@
                         <h5 class="fw-bold mb-0 text-dark">Recent Registered Applications</h5>
                         
                     </div>
-                    <a href="{{ route('admin.application.index') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold">
+                    <a href="" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold">
                         View All Applications <i class="bi bi-arrow-right ms-1"></i>
                     </a>
                 </div>
@@ -189,7 +189,7 @@
                                     <td><span class="badge bg-light text-dark border">Hyderabad</span></td>
                                     <td><span class="badge badge-soft-success px-2 py-1 rounded-pill">Approved</span></td>
                                     <td class="text-end pe-4">
-                                        <a href="{{ route('admin.application.index') }}" class="btn btn-sm btn-outline-secondary">View</a>
+                                        <a href="" class="btn btn-sm btn-outline-secondary">View</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -207,7 +207,7 @@
                                     <td><span class="badge bg-light text-dark border">Bengaluru</span></td>
                                     <td><span class="badge badge-soft-success px-2 py-1 rounded-pill">Approved</span></td>
                                     <td class="text-end pe-4">
-                                        <a href="{{ route('admin.application.index') }}" class="btn btn-sm btn-outline-secondary">View</a>
+                                        <a href="" class="btn btn-sm btn-outline-secondary">View</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -225,7 +225,7 @@
                                     <td><span class="badge bg-light text-dark border">Chennai</span></td>
                                     <td><span class="badge badge-soft-success px-2 py-1 rounded-pill">Approved</span></td>
                                     <td class="text-end pe-4">
-                                        <a href="{{ route('admin.application.index') }}" class="btn btn-sm btn-outline-secondary">View</a>
+                                        <a href="" class="btn btn-sm btn-outline-secondary">View</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -243,7 +243,7 @@
                                     <td><span class="badge bg-light text-dark border">Hyderabad</span></td>
                                     <td><span class="badge badge-soft-warning px-2 py-1 rounded-pill">Pending</span></td>
                                     <td class="text-end pe-4">
-                                        <a href="{{ route('admin.application.index') }}" class="btn btn-sm btn-outline-secondary">View</a>
+                                        <a href="" class="btn btn-sm btn-outline-secondary">View</a>
                                     </td>
                                 </tr>
                             </tbody>

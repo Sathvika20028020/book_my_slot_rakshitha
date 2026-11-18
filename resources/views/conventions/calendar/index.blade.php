@@ -1,4 +1,4 @@
-@extends('admin.layout.centers.app')
+@extends('conventions.layouts.app')
 
 @section('title') Convention Centre Slot Calendar @endsection
 

@@ -1,4 +1,4 @@
-@extends('superadmin.layout.admin.app')
+@extends('superadmin.layout.app')
 
 @section('title') Convention Centre Credentials @endsection
 
@@ -6,6 +6,21 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <style>
+    .status-toggle {
+    width: 42px !important;
+    height: 22px !important;
+    cursor: pointer;
+}
+
+.status-toggle:checked {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.status-toggle:not(:checked) {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
     .centre-avatar {
         width: 40px;
         height: 40px;
@@ -68,139 +83,104 @@
        
 <div class="row g-3 align-items-end">
     <div class="col-md-3 ms-auto">
-        <a href="{{ route('admin.centers.create') }}"
+        <a href="{{ route('superadmin.conventionlogins.create') }}"
            class="btn btn-primary d-flex align-items-center justify-content-center gap-2 shadow-sm">
             <i class="bi bi-plus-circle-fill"></i> Add Credentials
         </a>
     </div>
 </div>
         <!-- Table View -->
-        <div class="table-responsive">
-             <table class="table table-bordered table-striped  text-center align-middle" id="data-source-1"
-                    style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Sl.no</th>
-                        <th>Name</th>
-                        <th>Phone Number</th>
-                        <th>Email</th>
-                        
+      
+<div class="table-responsive">
+    <table class="table table-bordered table-striped text-center align-middle"
+           id="data-source-1" style="width:100%">
+
+        <thead>
+            <tr>
+                <th>Sl.no</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                 <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @forelse($user as $key => $item)
+                <tr>
+                    <td class="text-muted fw-bold">
+                        {{ $key + 1 }}
+                    </td>
+
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="fw-bold text-dark">
+                                {{ $item->incharge_name ?? '-' }}
+                            </span>
+                        </div>
+                    </td>
+
+                    <td>
+                        {{ $item->phone ?? '-' }}
+                    </td>
+
+                    <td>
+                        <span class="font-monospace text-dark">
+                            {{ $item->email ?? '-' }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input status-toggle"
+                                type="checkbox"
+                                role="switch"
+                                data-id="{{ $item->id }}"
+                                {{ $item->status == 'active' ? 'checked' : '' }}>
+                        </div>
                       
-                        <th >Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Row 1 -->
-                    <tr>
-                        <td class="text-muted fw-bold">1</td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                               
-                                <span class="fw-bold text-dark">Rajesh Kumar</span>
-                            </div>
-                        </td>
-                        <td>
-                           9876543210
-                        </td>
-                        <td>
-                            <span class="font-monospace text-dark">admin@grandpalace.com</span>
-                            
-                        </td>
-                        
-                        
-                        <td class="text-end">
-                            <div class="d-flex align-items-center justify-content-end gap-1">
-                                <a href="{{ route('admin.centers.show') }}" class="btn btn-primary btn-sm" title="View Details">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a href="{{ route('admin.centers.edit') }}" class="btn btn-warning btn-sm text-white" title="Edit Credentials">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                               
-                            </div>
-                        </td>
-                    </tr>
+                    </td>
 
-                    <!-- Row 2 -->
-                    <tr>
-                        <td class="text-muted fw-bold">2</td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
+                    <td class="text-end">
+                        <div class="d-flex align-items-center justify-content-end gap-1">
 
-                                <span class="fw-bold text-dark">Priya Sharma</span>
-                            </div>
-                        </td>
-                        <td>
-                            9440122334
-                        </td>
-                        <td>
-                            <span class="font-monospace text-dark">priya@royalsapphire.in</span>
-                           
-                        </td>
-                        <td>
-                            <span class="badge bg-warning text-dark ">
-                                <i class="bi bi-buildings me-1"></i>Royal Sapphire Banquet Hall
-                            </span>
-                        </td>
-                       
-                        <td class="text-end">
-                            <div class="d-flex align-items-center justify-content-end gap-1">
-                                <a href="{{ route('admin.centers.show') }}" class="btn btn-primary btn-sm" title="View Details">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a href="{{ route('admin.centers.edit') }}" class="btn btn-warning btn-sm text-white" title="Edit Credentials">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                               
-                            </div>
-                        </td>
-                    </tr>
+                            <a href="{{ route('superadmin.conventionlogins.show', $item->id) }}"
+                               class="btn btn-primary btn-sm"
+                               title="View Details">
+                                <i class="bi bi-eye"></i>
+                            </a>
 
-                    <!-- Row 3 -->
-                    <tr>
-                        <td class="text-muted fw-bold">3</td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                
-                                <span class="fw-bold text-dark">Venkatesh Rao</span>
-                            </div>
-                        </td>
-                        <td>
-                            9885099887
-                        </td>
-                        <td>
-                            <span class="font-monospace text-dark">venkat@krishnamandapam.com</span>
-                            
-                        </td>
-                        <td>
-                            <span class="badge bg-warning text-dark">
-                                <i class="bi bi-buildings me-1"></i>Krishna Mandapam &amp; Lawn
-                            </span>
-                        </td>
-                        
-                        <td class="text-end">
-                            <div class="d-flex align-items-center justify-content-end gap-1">
-                                <a href="{{ route('admin.centers.show') }}" class="btn btn-primary btn-sm" title="View Details">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a href="{{ route('admin.centers.edit') }}" class="btn btn-warning btn-sm text-white" title="Edit Credentials">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                            <a href="{{ route('superadmin.conventionlogins.edit', $item->id) }}"
+                               class="btn btn-warning btn-sm text-white"
+                               title="Edit Credentials">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+                        </div>
+                    </td>
+                </tr>
+
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center py-4">
+                        No convention centre login accounts found.
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+
+    </table>
+</div>
+
 
        
     </div>
 </div>
 @endsection
 
-@section('scripts')
+@section('script')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Copy buttons
@@ -255,6 +235,78 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+});
+
+</script>
+
+<script>
+$(document).ready(function () {
+
+    $('.status-toggle').change(function () {
+
+        let toggle = $(this);
+        let userId = toggle.data('id');
+        let newStatus = toggle.is(':checked') ? 'active' : 'inactive';
+
+        // Temporarily disable toggle
+        toggle.prop('disabled', true);
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to change the status to ' + newStatus + '?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#198754',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, update it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: "{{ route('convention.user.status.update', ':status') }}".replace(':status', userId),
+                    type: "POST",
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        status: newStatus
+                    },
+
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Updated!',
+                            text: response.message,
+                            icon: 'success',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    },
+
+                    error: function () {
+                        toggle.prop('checked', !toggle.is(':checked'));
+
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Unable to update status!',
+                            icon: 'error'
+                        });
+                    },
+
+                    complete: function () {
+                        toggle.prop('disabled', false);
+                    }
+                });
+
+            } else {
+                // Restore previous status
+                toggle.prop('checked', !toggle.is(':checked'));
+                toggle.prop('disabled', false);
+            }
+
+        });
+
+    });
+
 });
 </script>
 @endsection

@@ -1,31 +1,38 @@
-@extends('superadmin.layout.admin.app')
 
-@section('title') Edit Convention Centre Credentials @endsection
+@extends('superadmin.layout.app')
+
+@section('title')
+    Edit Convention Centre Credentials
+@endsection
 
 @section('style')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 <style>
-    .form-control:focus, .form-select:focus {
+    .form-control:focus,
+    .form-select:focus {
         border-color: #6366f1;
         box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
     }
+
     .input-group-text {
         background-color: #f8fafc;
         border-color: #e2e8f0;
         color: #64748b;
     }
 
-    /* Bootstrap Validation Styling */
     .form-control.is-invalid,
     .form-select.is-invalid {
         border-color: #dc3545 !important;
         background-color: #fff8f8 !important;
     }
+
     .form-control.is-valid,
     .form-select.is-valid {
         border-color: #198754 !important;
     }
+
     .invalid-feedback {
         display: none;
         width: 100%;
@@ -34,227 +41,686 @@
         font-weight: 500;
         color: #dc3545 !important;
     }
+
     .invalid-feedback.d-block {
         display: block !important;
+    }
+
+    .credential-card {
+        border: 0;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(30, 60, 120, 0.07);
+    }
+
+    .section-heading {
+        font-size: 15px;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    .required {
+        color: #dc3545;
     }
 </style>
 @endsection
 
 @section('content')
+
 <div class="container-fluid">
-    <!-- Breadcrumb & Top Bar -->
+
+    <!-- Breadcrumb -->
     <div class="page-title py-3">
         <div class="row align-items-center">
+
             <div class="col-12 col-md-6">
-                <h4 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
-                    Conventional Centre Masters
+                <h4 class="fw-bold mb-1 text-dark">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    Edit Convention Centre Credentials
                 </h4>
+                <small class="text-muted">
+                    Update the existing convention centre login details.
+                </small>
             </div>
-            <div class="col-12 col-md-6 text-md-end mt-2 mt-md-0 d-flex align-items-center justify-content-md-end gap-2">
-                <ol class="breadcrumb justify-content-md-end mb-0 bg-transparent p-0 me-3 d-none d-lg-flex">
-                    <li class="breadcrumb-item"><a href="/admin/dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('admin.centers.index') }}">Centre Masters</a></li>
-                    <li class="breadcrumb-item active">Edit Credentials</li>
+
+            <div class="col-12 col-md-6 text-md-end mt-2 mt-md-0">
+                <ol class="breadcrumb justify-content-md-end mb-0 bg-transparent p-0">
+                    <li class="breadcrumb-item">
+                        <a href="">
+                            <i class="fa fa-home"></i> Dashboard
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('superadmin.conventionlogins.index') }}">
+                            Centre Masters
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item active">
+                        Edit Credentials
+                    </li>
                 </ol>
             </div>
+
         </div>
     </div>
+
 </div>
+
 
 <div class="container-fluid py-4">
-    <div class="card shadow-sm border-0" style="border-radius: 12px;">
-       
+
+    <div class="card credential-card">
+
+        <div class="card-header bg-white border-bottom p-4">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+
+                <div>
+                    <h5 class="fw-bold mb-1">
+                        <i class="bi bi-person-gear me-2 text-primary"></i>
+                        Convention Centre Details
+                    </h5>
+
+                    <small class="text-muted">
+                        Editing existing credentials
+                    </small>
+                </div>
+
+                <span class="badge bg-primary-subtle text-primary px-3 py-2">
+                    ID: {{ $user->id }}
+                </span>
+
+            </div>
+        </div>
+
 
         <div class="card-body p-4">
-            <form id="editCredentialForm" novalidate>
+
+            <!-- Success Message -->
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    {{ session('success') }}
+
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+
+            <!-- Error Message -->
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {{ session('error') }}
+
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+
+            <!-- Validation Errors -->
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <strong>Please correct the following errors:</strong>
+
+                    <ul class="mb-0 mt-2">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+
+            <form
+                id="editCredentialForm"
+                action="{{ route('superadmin.conventionlogins.update', $user->id) }}"
+                method="POST"
+                novalidate
+            >
+
+                @csrf
+                @method('PUT')
+
                 <div class="row g-4">
-                    <!-- Row 1: Name & Phone Number -->
+
+                    <!-- Venue ID -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold text-dark">Name <span class="text-danger">*</span></label>
+
+                        <label class="form-label fw-semibold text-dark">
+                            Venue ID
+                        </label>
+
                         <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-person"></i></span>
-                            <input type="text" class="form-control" id="name" name="name" value="Rajesh Kumar" placeholder="Enter Full Name / Manager Name" required>
+                            <span class="input-group-text">
+                                <i class="bi bi-building"></i>
+                            </span>
+
+                            <input
+                                type="text"
+                                class="form-control bg-light"
+                                value="{{ $user->venue_id ?? 'Not Generated' }}"
+                                readonly
+                            >
                         </div>
-                        <div class="invalid-feedback">Please enter the name.</div>
+
+                        <small class="text-muted">
+                            Venue ID is system-generated and cannot be edited.
+                        </small>
+
                     </div>
 
+
+                    <!-- Name -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold text-dark">Phone Number <span class="text-danger">*</span></label>
+
+                        <label class="form-label fw-semibold text-dark">
+                            Name <span class="required">*</span>
+                        </label>
+
                         <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-telephone"></i> +91</span>
-                            <input type="tel" class="form-control" id="phone" name="phone" value="9876543210" placeholder="Enter 10-digit mobile number" pattern="[0-9]{10}" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/\\D/g, '').slice(0, 10)" required>
+                            <span class="input-group-text">
+                                <i class="bi bi-person"></i>
+                            </span>
+
+                            <input
+                                type="text"
+                                class="form-control @error('name') is-invalid @enderror"
+                                id="name"
+                                name="name"
+                                value="{{ old('name', $user->incharge_name) }}"
+                                placeholder="Enter Full Name / Manager Name"
+                                minlength="3"
+                                maxlength="255"
+                                required
+                            >
                         </div>
-                        <div class="invalid-feedback">Please enter a valid 10-digit mobile number.</div>
+
+                        <div class="invalid-feedback">
+                            Please enter a valid name (minimum 3 characters).
+                        </div>
+
+                        @error('name')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+
                     </div>
 
-                    <!-- Row 2: Email & Which Center -->
+
+                    <!-- Phone -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold text-dark">Email (Login ID) <span class="text-danger">*</span></label>
+
+                        <label class="form-label fw-semibold text-dark">
+                            Phone Number <span class="required">*</span>
+                        </label>
+
                         <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                            <input type="email" class="form-control" id="email" name="email" value="admin@grandpalace.com" placeholder="example@conventioncentre.com" required>
+                            <span class="input-group-text">
+                                <i class="bi bi-telephone"></i> +91
+                            </span>
+
+                            <input
+                                type="tel"
+                                class="form-control @error('phone') is-invalid @enderror"
+                                id="phone"
+                                name="phone"
+                                value="{{ old('phone', $user->phone) }}"
+                                placeholder="Enter 10-digit mobile number"
+                                pattern="[0-9]{10}"
+                                maxlength="10"
+                                minlength="10"
+                                inputmode="numeric"
+                                oninput="this.value = this.value.replace(/\D/g, '').slice(0, 10)"
+                                required
+                            >
                         </div>
-                        <div class="invalid-feedback">Please enter a valid email address.</div>
+
+                        <div class="invalid-feedback">
+                            Please enter a valid 10-digit mobile number.
+                        </div>
+
+                        @error('phone')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+
                     </div>
 
-                 
 
-                    <!-- Row 3: Password -->
+                    <!-- Email -->
                     <div class="col-md-6">
+
+                        <label class="form-label fw-semibold text-dark">
+                            Email (Login ID) <span class="required">*</span>
+                        </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+
+                            <input
+                                type="email"
+                                class="form-control @error('email') is-invalid @enderror"
+                                id="email"
+                                name="email"
+                                value="{{ old('email', $user->email) }}"
+                                placeholder="example@conventioncentre.com"
+                                maxlength="255"
+                                required
+                            >
+                        </div>
+
+                        <div class="invalid-feedback">
+                            Please enter a valid email address.
+                        </div>
+
+                        @error('email')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+
+                    </div>
+
+
+                    <!-- Password -->
+                    <div class="col-md-6">
+
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <label class="form-label fw-semibold text-dark mb-0">Password <span class="text-danger">*</span></label>
-                            <button type="button" class="btn btn-sm btn-link text-primary p-0 text-decoration-none fw-semibold" id="autoGenerateBtn">
-                                <i class="bi bi-magic me-1"></i>Generate New
+
+                            <label class="form-label fw-semibold text-dark mb-0">
+                                New Password
+                            </label>
+
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-link text-primary p-0 text-decoration-none fw-semibold"
+                                id="autoGenerateBtn"
+                            >
+                                <i class="bi bi-magic me-1"></i>
+                                Generate New
                             </button>
+
                         </div>
+
                         <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                            <input type="password" class="form-control" id="password" name="password" value="Grand@2026!" placeholder="Enter password" required minlength="6">
-                            <button class="btn btn-outline-secondary" type="button" id="togglePasswordBtn">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+
+                            <input
+                                type="password"
+                                class="form-control @error('password') is-invalid @enderror"
+                                id="password"
+                                name="password"
+                                placeholder="Enter new password (optional)"
+                                minlength="6"
+                                maxlength="255"
+                            >
+
+                            <button
+                                class="btn btn-outline-secondary"
+                                type="button"
+                                id="togglePasswordBtn"
+                            >
                                 <i class="bi bi-eye" id="togglePasswordIcon"></i>
                             </button>
+
                         </div>
-                        <div class="invalid-feedback">Please enter a valid password (min. 6 characters).</div>
-                        <small class="text-muted">You can edit the password or click "Generate New" to create a fresh one.</small>
+
+                        <div class="invalid-feedback">
+                            Password must contain at least 6 characters.
+                        </div>
+
+                        @error('password')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+
+                        <small class="text-muted d-block mt-2">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Leave blank to retain the existing password.
+                            Enter a new password only if you want to change it.
+                        </small>
+
                     </div>
 
-                    <!-- Submit Buttons -->
-                     <div class="d-flex justify-content-center">
-    <button type="submit" class="btn btn-primary d-flex align-items-center gap-2 shadow-sm" id="submitBtn">
-        <i class="bi bi-check-circle-fill"></i> Update Credentials
-    </button>
-</div>
-                </div>
+
+                   
+                 {{--    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold text-dark">
+                            Account Status
+                        </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-toggle-on"></i>
+                            </span>
+
+                            <input
+                                type="text"
+                                class="form-control bg-light"
+                                value="{{ $user->status }}"
+                                readonly
+                            >
+                        </div>
+
+                        <small class="text-muted">
+                            Current account status.
+                        </small>
+
+                    </div>  --}}
+
+
+                  
+                    <div class="col-12">
+
+                        <hr class="my-2">
+
+                        <div class="d-flex justify-content-end flex-wrap gap-2">
+
+                            <a
+                                href="{{ route('superadmin.conventionlogins.index') }}"
+                                class="btn btn-light border px-4"
+                            >
+                                <i class="bi bi-arrow-left me-1"></i>
+                                Cancel
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary px-4 d-flex align-items-center gap-2 shadow-sm"
+                                id="submitBtn"
+                            >
+                                <i class="bi bi-check-circle-fill"></i>
+                                Update Credentials
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div> 
+
             </form>
+
         </div>
+
     </div>
+
 </div>
+
 @endsection
 
-@section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('editCredentialForm');
-    const passwordInput = document.getElementById('password');
-    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
-    const togglePasswordIcon = document.getElementById('togglePasswordIcon');
-    const autoGenerateBtn = document.getElementById('autoGenerateBtn');
-    const inputs = form.querySelectorAll('input, select');
 
-    // Toggle password view
-    togglePasswordBtn.addEventListener('click', function() {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
+@section('scripts')
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('editCredentialForm');
+
+    const passwordInput = document.getElementById('password');
+
+    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+
+    const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+
+    const autoGenerateBtn = document.getElementById('autoGenerateBtn');
+
+    const submitBtn = document.getElementById('submitBtn');
+
+    let isSubmitting = false;
+
+
+    // Password visibility toggle
+    togglePasswordBtn.addEventListener('click', function () {
+
+        const type = passwordInput.type === 'password'
+            ? 'text'
+            : 'password';
+
+        passwordInput.type = type;
+
         togglePasswordIcon.classList.toggle('bi-eye');
+
         togglePasswordIcon.classList.toggle('bi-eye-slash');
+
     });
 
-    // Auto-generate password
-    autoGenerateBtn.addEventListener('click', function() {
+
+    // Generate new password
+    autoGenerateBtn.addEventListener('click', function () {
+
         const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%';
+
         let generated = '';
+
         for (let i = 0; i < 10; i++) {
-            generated += chars.charAt(Math.floor(Math.random() * chars.length));
+
+            generated += chars.charAt(
+                Math.floor(Math.random() * chars.length)
+            );
+
         }
+
         passwordInput.value = generated;
-        passwordInput.setAttribute('type', 'text');
+
+        passwordInput.type = 'text';
+
         togglePasswordIcon.classList.remove('bi-eye');
+
         togglePasswordIcon.classList.add('bi-eye-slash');
 
         passwordInput.classList.remove('is-invalid');
+
         passwordInput.classList.add('is-valid');
-        const parentCol = passwordInput.closest('.col-md-6');
-        if (parentCol) {
-            const feedback = parentCol.querySelector('.invalid-feedback');
-            if (feedback) feedback.classList.remove('d-block');
-        }
+
     });
 
-    // Validate single field
-    function validateField(input) {
-        const parentCol = input.closest('.col-md-6');
-        const feedback = parentCol ? parentCol.querySelector('.invalid-feedback') : null;
-        const val = input.value.trim();
 
-        let isValid = input.checkValidity() && val !== '';
+    // Validate individual fields
+    function validateField(input) {
+
+        const value = input.value.trim();
+
+        let isValid = true;
+
+        // Password is optional
+        if (input.id === 'password' && value === '') {
+
+            input.classList.remove('is-invalid');
+
+            input.classList.remove('is-valid');
+
+            return true;
+
+        }
+
+        isValid = input.checkValidity() && value !== '';
 
         if (!isValid) {
+
             input.classList.add('is-invalid');
+
             input.classList.remove('is-valid');
-            if (feedback) feedback.classList.add('d-block');
-            return false;
+
         } else {
+
             input.classList.remove('is-invalid');
+
             input.classList.add('is-valid');
-            if (feedback) feedback.classList.remove('d-block');
-            return true;
+
         }
+
+        return isValid;
+
     }
 
-    // Real-time validation feedback on typing / changing
-    inputs.forEach(function(input) {
-        input.addEventListener('input', function() {
-            if (form.classList.contains('was-submitted') || input.classList.contains('is-invalid')) {
+
+    // Real-time validation
+    const inputs = form.querySelectorAll('input:not([readonly])');
+
+    inputs.forEach(function (input) {
+
+        input.addEventListener('input', function () {
+
+            if (
+                form.classList.contains('was-submitted') ||
+                input.classList.contains('is-invalid')
+            ) {
                 validateField(input);
             }
+
         });
-        input.addEventListener('change', function() {
-            if (form.classList.contains('was-submitted') || input.classList.contains('is-invalid')) {
+
+        input.addEventListener('change', function () {
+
+            if (
+                form.classList.contains('was-submitted') ||
+                input.classList.contains('is-invalid')
+            ) {
                 validateField(input);
             }
+
         });
+
     });
 
-    // On Submit: Show Bootstrap validations if any required field is empty/invalid
-    form.addEventListener('submit', function(event) {
+
+    // Submit form with confirmation
+    form.addEventListener('submit', function (event) {
+
         event.preventDefault();
-        event.stopPropagation();
+
+        if (isSubmitting) {
+            return;
+        }
 
         form.classList.add('was-submitted');
 
         let isFormValid = true;
-        inputs.forEach(function(input) {
-            const valid = validateField(input);
-            if (!valid) {
+
+        inputs.forEach(function (input) {
+
+            if (!validateField(input)) {
+
                 isFormValid = false;
+
             }
+
         });
 
-        // If user cleared any required field or it is invalid, STOP and let Bootstrap show error states
+
         if (!isFormValid) {
+
             const firstInvalid = form.querySelector('.is-invalid');
+
             if (firstInvalid) {
                 firstInvalid.focus();
             }
+
             return;
+
         }
 
-        // All fields valid -> Show SweetAlert popup
-        const name = document.getElementById('name').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const whichCenter = document.getElementById('which_center').value;
-        const password = passwordInput.value;
 
+        const name = document.getElementById('name').value.trim();
+
+        const phone = document.getElementById('phone').value.trim();
+
+        const email = document.getElementById('email').value.trim();
+
+        const passwordChanged = passwordInput.value.trim() !== '';
+
+
+        // Confirmation popup
         Swal.fire({
-            icon: 'success',
-            title: 'Credentials Updated Successfully!',
+
+            icon: 'question',
+
+            title: 'Update Credentials?',
+
             html: `
-                <div class="text-start bg-light p-3 rounded border font-monospace small">
-                    <div><strong>Name:</strong> ${name}</div>
-                    <div><strong>Center:</strong> ${whichCenter}</div>
-                    <div><strong>Phone:</strong> +91 ${phone}</div>
-                    <div><strong>Login Email:</strong> ${email}</div>
-                    <div><strong>Password:</strong> ${password}</div>
+                <div class="text-start bg-light p-3 rounded border small">
+
+                    <div class="mb-2">
+                        <strong>Name:</strong> ${escapeHtml(name)}
+                    </div>
+
+                    <div class="mb-2">
+                        <strong>Phone:</strong> +91 ${escapeHtml(phone)}
+                    </div>
+
+                    <div class="mb-2">
+                        <strong>Login Email:</strong> ${escapeHtml(email)}
+                    </div>
+
+                    <div>
+                        <strong>Password:</strong>
+                        ${passwordChanged ? 'A new password will be saved' : 'Existing password will remain unchanged'}
+                    </div>
+
                 </div>
             `,
+
+            showCancelButton: true,
+
             confirmButtonColor: '#4338ca',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            window.location.href = "{{ route('admin.centers.index') }}";
+
+            cancelButtonColor: '#6c757d',
+
+            confirmButtonText: 'Yes, Update',
+
+            cancelButtonText: 'Cancel'
+
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                isSubmitting = true;
+
+                submitBtn.disabled = true;
+
+                submitBtn.innerHTML = `
+                    <span class="spinner-border spinner-border-sm"></span>
+                    Updating...
+                `;
+
+                // Actually submit the form to Laravel
+                form.submit();
+
+            }
+
         });
+
     });
+
+
+    // Safely display user-entered values in confirmation popup
+    function escapeHtml(value) {
+
+        return value.replace(/[&<>"']/g, function (char) {
+
+            const entities = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+
+            return entities[char];
+
+        });
+
+    }
+
+
 });
+
 </script>
+
 @endsection

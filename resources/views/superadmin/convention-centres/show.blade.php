@@ -1,4 +1,4 @@
-@extends('superadmin.layout.admin.app')
+@extends('superadmin.layout.app')
 
 @section('title') Sri Krishna Grand Convention Centre &amp; Kalyana Mantapa – Convention Centre Master @endsection
 

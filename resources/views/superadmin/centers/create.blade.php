@@ -1,4 +1,4 @@
-@extends('superadmin.layout.admin.app')
+@extends('superadmin.layout.app')
 
 @section('title') Create Convention Centre Credentials @endsection
 
@@ -49,8 +49,8 @@
             </div>
             <div class="col-12 col-md-6 text-md-end mt-2 mt-md-0 d-flex align-items-center justify-content-md-end gap-2">
                 <ol class="breadcrumb justify-content-md-end mb-0 bg-transparent p-0 me-3 d-none d-lg-flex">
-                    <li class="breadcrumb-item"><a href="/admin/dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('admin.centers.index') }}">Centre Masters</a></li>
+                    <li class="breadcrumb-item"><a href=""><i class="fa fa-home"></i> Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('superadmin.conventionlogins.index') }}">Centre Masters</a></li>
                     <li class="breadcrumb-item active">Create Credentials</li>
                 </ol>
             </div>
@@ -73,7 +73,7 @@
             @endif
 
             <form id="centerCredentialForm"
-                  action="{{ route('admin.centers.store') }}"
+                  action="{{ route('superadmin.conventionlogins.store') }}"
                   method="POST"
                   novalidate>
                 @csrf

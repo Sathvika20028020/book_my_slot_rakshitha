@@ -1,9 +1,13 @@
-@extends('admin.layout.centers.app')
 
-@section('title') Conventional Centre Masters @endsection
+@extends('conventions.layouts.app')
+
+@section('title')
+    Conventional Centre Masters
+@endsection
 
 @section('style')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <style>
 .kpi-card {
     border-radius: 14px;
@@ -75,7 +79,7 @@
     font-size: 0.85rem;
 }
 
-.table> :not(caption)>*>* {
+.table > :not(caption) > * > * {
     padding: 0.85rem 0.75rem;
     vertical-align: middle;
 }
@@ -87,412 +91,387 @@
     display: inline-block;
     margin-right: 6px;
 }
-
-
-/* Centre status ON/OFF switch */
-.centre-status-control {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-width: 88px;
-}
-
-.centre-status-toggle {
-    width: 2.5rem !important;
-    height: 1.3rem !important;
-    margin: 0 !important;
-    cursor: pointer;
-    background-color: #cbd5e1;
-    border-color: #cbd5e1;
-}
-
-.centre-status-toggle:checked {
-    background-color: #16a34a;
-    border-color: #16a34a;
-}
-
-.centre-status-label {
-    min-width: 28px;
-    font-size: 0.75rem;
-    font-weight: 700;
-}
-
-.centre-status-label.is-on {
-    color: #15803d;
-}
-
-.centre-status-label.is-off {
-    color: #dc2626;
-}
 </style>
 @endsection
 
 @section('content')
+
 <div class="container-fluid">
-    <!-- Breadcrumb & Top Bar -->
+
+    {{-- Breadcrumb & Top Bar --}}
     <div class="page-title py-3">
         <div class="row align-items-center">
+
             <div class="col-12 col-md-6">
                 <h4 class="fw-bold mb-1 text-dark d-flex align-items-center gap-2">
-
                     Conventional Centre Masters
                 </h4>
-
             </div>
-            <div
-                class="col-12 col-md-6 text-md-end mt-2 mt-md-0 d-flex align-items-center justify-content-md-end gap-2">
+
+            <div class="col-12 col-md-6 text-md-end mt-2 mt-md-0">
                 <ol class="breadcrumb justify-content-md-end mb-0 bg-transparent p-0 me-3 d-none d-lg-flex">
-                    <li class="breadcrumb-item"><a href="/center-admin/dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
-                    <li class="breadcrumb-item active">Centre Masters</li>
+                    <li class="breadcrumb-item">
+                        <a href="#">
+                            <i class="fa fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Centre Masters
+                    </li>
                 </ol>
-
             </div>
+
         </div>
     </div>
+
 </div>
 
 <div class="container-fluid">
 
+    {{-- Success / Error Messages --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-1"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
-    <!-- Filters & Search Toolbar -->
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle me-1"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    {{-- Filters & Search Toolbar --}}
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-3">
-            <form class="row g-2 align-items-center" onsubmit="return false;">
+
+            <form method="GET"
+                  action="{{ route('conventions.venue-lists.index') }}"
+                  class="row g-2 align-items-center">
+
                 <div class="col-12 col-md-4">
                     <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0 text-muted"><i
-                                class="bi bi-search"></i></span>
-                        <input type="text" class="form-control border-start-0 ps-0"
-                            placeholder="Search by Centre ID, Name, Ward, Zone...">
+                        <span class="input-group-text bg-white border-end-0 text-muted">
+                            <i class="bi bi-search"></i>
+                        </span>
+
+                        <input type="text"
+                               name="search"
+                               class="form-control border-start-0 ps-0"
+                               placeholder="Search by Centre ID, Name, Address..."
+                               value="{{ request('search') }}">
                     </div>
                 </div>
 
                 <div class="col-6 col-md-3">
                     <select name="type" class="form-select">
                         <option value="">-- All Centre Types --</option>
-                        <option value="Community Hall">Community Hall</option>
-                        <option value="Convention Hall">Convention Hall</option>
-                        <option value="Kalyana Mantapa / Marriage Hall">Kalyana Mantapa / Marriage Hall</option>
-                        <option value="Auditorium">Auditorium</option>
-                        <option value="Function Hall">Function Hall</option>
-                        <option value="Banquet Hall">Banquet Hall</option>
-                        <option value="Multipurpose Hall">Multipurpose Hall</option>
-                        <option value="Meeting / Conference Hall">Meeting / Conference Hall</option>
-                        <option value="Cultural Centre">Cultural Centre</option>
-                        <option value="Sports / Recreation Centre">Sports / Recreation Centre</option>
+
+                        @php
+                            $centreTypes = [
+                                'Community Hall',
+                                'Convention Hall',
+                                'Kalyana Mantapa / Marriage Hall',
+                                'Auditorium',
+                                'Function Hall',
+                                'Banquet Hall',
+                                'Multipurpose Hall',
+                                'Meeting / Conference Hall',
+                                'Cultural Centre',
+                                'Sports / Recreation Centre',
+                            ];
+                        @endphp
+
+                        @foreach($centreTypes as $type)
+                            <option value="{{ $type }}"
+                                {{ request('type') == $type ? 'selected' : '' }}>
+                                {{ $type }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
 
                 <div class="col-6 col-md-2">
                     <select name="status" class="form-select">
                         <option value="">-- Status (All) --</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>
+                            Active
+                        </option>
+                        <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>
+                            Inactive
+                        </option>
                     </select>
                 </div>
 
                 <div class="col-12 col-md-3 d-flex gap-2">
-                    <button type="button"
-                        class="btn btn-primary flex-grow-1 d-inline-flex align-items-center justify-content-center gap-1">
-                        <i class="bi bi-funnel"></i> Filter
-                    </button>
-                    <button type="reset" class="btn btn-outline-secondary" title="Reset Filters">
-                        <i class="bi bi-arrow-counterclockwise"></i>
+
+                    <button type="submit"
+                            class="btn btn-primary flex-grow-1 d-inline-flex align-items-center justify-content-center gap-1">
+                        <i class="bi bi-funnel"></i>
+                        Filter
                     </button>
 
+                    <a href="{{ route('conventions.venue-lists.index') }}"
+                       class="btn btn-outline-secondary"
+                       title="Reset Filters">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </a>
+
                 </div>
+
             </form>
+
         </div>
     </div>
 
-   
+    {{-- Master Convention Centres Table --}}
+    <div class="card">
 
-    <!-- Master Convention Centres Table Card -->
-    <div class="card ">
+        <div class="card-body">
 
+            <div class="d-flex align-items-center justify-content-between p-3">
 
-        <div class="card-body ">
-            <div class="d-flex align-items-center justify-content-between p-3  ">
-                <h6 class="mb-0 fw-bold text-dark">Convention Centre Masters</h6>
-                <a href="/convention-centres/create"
-                    class="btn btn-sm btn-primary d-inline-flex align-items-center gap-1">
-                    <i class="bi bi-plus-circle"></i> Create New Centre
+                <div>
+                    <h6 class="mb-0 fw-bold text-dark">
+                        Convention Centre Masters
+                    </h6>
+
+                    <small class="text-muted">
+                        Total centres: {{ $conventions->total() }}
+                    </small>
+                </div>
+
+                <a href="{{ route('conventions.venue-lists.create') }}"
+                   class="btn btn-sm btn-primary d-inline-flex align-items-center gap-1">
+                    <i class="bi bi-plus-circle"></i>
+                    Create New Centre
                 </a>
+
             </div>
+
             <div class="table-responsive">
-                <table class="table table-bordered table-striped  text-center align-middle" id="data-source-1"
-                    style="width:100%">
+
+                <table class="table table-bordered table-striped text-center align-middle"
+                       id="data-source-1"
+                       style="width:100%">
+
                     <thead class="table-light text-uppercase small text-muted"
-                        style="font-size: 0.76rem; letter-spacing: 0.5px;">
+                           style="font-size: 0.76rem; letter-spacing: 0.5px;">
+
                         <tr>
-                            <th class="ps-3" style="width: 110px;">Centre ID</th>
+                            <th class="ps-3" style="width: 130px;">Centre ID</th>
                             <th style="min-width: 250px;">Centre Name &amp; Photo</th>
-                            <th style="min-width: 170px;">Total Halls</th>
+                            <th style="min-width: 120px;">Total Halls</th>
                             <th style="min-width: 170px;">Centre Type</th>
                             <th style="min-width: 180px;">In-Charge Contact</th>
                             <th style="min-width: 110px;">Status</th>
                             <th class="text-end pe-3" style="width: 120px;">Actions</th>
                         </tr>
+
                     </thead>
+
                     <tbody>
-<tr>
-                            <td class="ps-3"><a href="/admin/convention-centres/show"
-                                    class="badge bg-dark text-decoration-none fw-bold text-white px-2 py-1 font-monospace">CC-2026-001</a>
-                                <div class="text-muted small mt-1">15 Jan 2026</div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center gap-2"><img
-                                        src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&amp;fit=crop&amp;w=400&amp;q=80"
-                                        alt="Sri Krishna Grand Convention Centre" class="centre-thumb shadow-xs">
-                                    <div><a href="/admin/convention-centres/show"
-                                            class="fw-bold text-dark text-decoration-none d-block mb-1">Sri Krishna
-                                            Grand Convention Centre &amp; Kalyana Mantapa</a><small
-                                            class="text-muted"><i class="bi bi-geo-alt text-danger me-1"></i>#45/2, 14th
-                                            Main Road, HSR Layout</small></div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-light text-dark border">3 Halls</span></td>
-                            <td><span class="badge badge-soft-warning px-2 py-1 rounded-pill">Kalyana Mantapa / Marriage
-                                    Hall</span></td>
-                            
-                            <td>
-                                <div class="fw-semibold text-dark">Rajeshwar Hegde</div>
-                                <div class="text-muted small"><i class="bi bi-telephone text-success me-1"></i>+91 98450
-                                    12345</div>
-                                <div class="text-muted small">rajesh.hegde@bbmp.gov.in</div>
-                            </td>
-                            
-                            
-                            <td>
-                                <div class="centre-status-control">
-                                    <div class="form-check form-switch m-0">
-                                        <input class="form-check-input centre-status-toggle" type="checkbox"
-                                            role="switch" id="centreStatus1" data-centre-id="CC-2026-001"
-                                            aria-label="Toggle status for centre CC-2026-001" checked>
+
+                        @forelse($conventions as $convention)
+
+                            @php
+                                $status = strtolower($convention->status ?? '');
+                                $isActive = $status === 'active';
+
+                                $imagePath = $convention->convention_image
+                                    ? asset($convention->convention_image)
+                                    : null;
+
+                                $typeClass = match($convention->centre_type) {
+                                    'Community Hall' => 'badge-soft-success',
+                                    'Convention Hall' => 'badge-soft-info',
+                                    'Auditorium' => 'badge-soft-primary',
+                                    'Kalyana Mantapa / Marriage Hall' => 'badge-soft-warning',
+                                    'Banquet Hall' => 'badge-soft-primary',
+                                    default => 'badge-soft-info',
+                                };
+                            @endphp
+
+                            <tr>
+
+                                {{-- Centre ID --}}
+                                <td class="ps-3">
+
+                                    <span class="badge bg-dark text-white px-2 py-1 font-monospace">
+                                        {{ $convention->venue_id ?? 'CC-' . str_pad($convention->id, 4, '0', STR_PAD_LEFT) }}
+                                    </span>
+
+                                    <div class="text-muted small mt-1">
+                                        {{ $convention->created_at
+                                            ? \Carbon\Carbon::parse($convention->created_at)->format('d M Y')
+                                            : '-' }}
                                     </div>
-                                    <span class="centre-status-label is-on" data-status-label="centreStatus1">ON</span>
-                                </div>
-                            </td>
-                            <td class="text-end pe-3">
-                                <div class="d-inline-flex gap-1"><a href="/convention-centres/show"
-                                        class="btn btn-info action-btn" title="View"><i class="bi bi-eye"></i></a><a
-                                        href="/convention-centres/edit" class="btn btn-sm btn-primary action-btn"
-                                        title="Edit"><i class="bi bi-pencil"></i></a></div>
-                            </td>
-                        </tr>
-<tr>
-                            <td class="ps-3"><a href="/convention-centres/show"
-                                    class="badge bg-dark text-decoration-none fw-bold text-white px-2 py-1 font-monospace">CC-2026-002</a>
-                                <div class="text-muted small mt-1">10 Feb 2026</div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center gap-2"><img
-                                        src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&amp;fit=crop&amp;w=400&amp;q=80"
-                                        alt="Dr. B.R. Ambedkar Memorial Cultural Centre" class="centre-thumb shadow-xs">
-                                    <div><a href="/convention-centres/show"
-                                            class="fw-bold text-dark text-decoration-none d-block mb-1">Dr. B.R.
-                                            Ambedkar Memorial Cultural Centre &amp; Auditorium</a><small
-                                            class="text-muted"><i class="bi bi-geo-alt text-danger me-1"></i>Plot 12,
-                                            Miller Tank Bund Road, Vasanth Nagar</small></div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-light text-dark border">2 Halls</span></td>
-                            <td><span class="badge badge-soft-primary px-2 py-1 rounded-pill">Auditorium</span></td>
-                            
-                            <td>
-                                <div class="fw-semibold text-dark">P. Ramesh Babu</div>
-                                <div class="text-muted small"><i class="bi bi-telephone text-success me-1"></i>+91 94480
-                                    87654</div>
-                                <div class="text-muted small">ramesh.babu@bbmp.gov.in</div>
-                            </td>
-                            
-                            
-                            <td>
-                                <div class="centre-status-control">
-                                    <div class="form-check form-switch m-0">
-                                        <input class="form-check-input centre-status-toggle" type="checkbox"
-                                            role="switch" id="centreStatus2" data-centre-id="CC-2026-002"
-                                            aria-label="Toggle status for centre CC-2026-002" checked>
+
+                                </td>
+
+                                {{-- Centre Name & Photo --}}
+                                <td class="text-start">
+
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        @if($imagePath)
+                                            <img src="{{ $imagePath }}"
+                                                 alt="{{ $convention->convention_name }}"
+                                                 class="centre-thumb shadow-xs">
+                                        @else
+                                            <div class="centre-thumb bg-light d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-building text-secondary fs-4"></i>
+                                            </div>
+                                        @endif
+
+                                        <div>
+
+                                            <span class="fw-bold text-dark d-block mb-1">
+                                                {{ $convention->convention_name }}
+                                            </span>
+
+                                            <small class="text-muted">
+                                                <i class="bi bi-geo-alt text-danger me-1"></i>
+                                                {{ \Illuminate\Support\Str::limit($convention->address, 65) }}
+                                            </small>
+
+                                        </div>
+
                                     </div>
-                                    <span class="centre-status-label is-on" data-status-label="centreStatus2">ON</span>
-                                </div>
-                            </td>
-                            <td class="text-end pe-3">
-                                <div class="d-inline-flex gap-1"><a href="/convention-centres/show"
-                                        class="btn btn-sm btn-info action-btn" title="View"><i
-                                            class="bi bi-eye"></i></a><a href="/convention-centres/edit"
-                                        class="btn btn-sm btn-primary action-btn" title="Edit"><i
-                                            class="bi bi-pencil"></i></a></div>
-                            </td>
-                        </tr>
-<tr>
-                            <td class="ps-3"><a href="/admin/convention-centres/show"
-                                    class="badge bg-dark text-decoration-none fw-bold text-white px-2 py-1 font-monospace">CC-2026-003</a>
-                                <div class="text-muted small mt-1">01 Mar 2026</div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center gap-2"><img
-                                        src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&amp;fit=crop&amp;w=400&amp;q=80"
-                                        alt="Kuvempu Samudaya Bhavana" class="centre-thumb shadow-xs">
-                                    <div><a href="/admin/convention-centres/show"
-                                            class="fw-bold text-dark text-decoration-none d-block mb-1">Kuvempu Samudaya
-                                            Bhavana (Community Hall)</a><small class="text-muted"><i
-                                                class="bi bi-geo-alt text-danger me-1"></i>Near BDA Complex, 3rd Block,
-                                            Koramangala</small></div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-light text-dark border">1 Hall</span></td>
-                            <td><span class="badge badge-soft-success px-2 py-1 rounded-pill">Community Hall</span></td>
-                            
-                            <td>
-                                <div class="fw-semibold text-dark">Smt. Shailaja M.</div>
-                                <div class="text-muted small"><i class="bi bi-telephone text-success me-1"></i>+91 97312
-                                    44332</div>
-                                <div class="text-muted small">shailaja.m@bbmp.gov.in</div>
-                            </td>
-                            
-                            
-                            <td>
-                                <div class="centre-status-control">
-                                    <div class="form-check form-switch m-0">
-                                        <input class="form-check-input centre-status-toggle" type="checkbox"
-                                            role="switch" id="centreStatus3" data-centre-id="CC-2026-003"
-                                            aria-label="Toggle status for centre CC-2026-003" checked>
+
+                                </td>
+
+                                {{-- Hall Count --}}
+                                <td>
+                                    <span class="badge bg-light text-dark border">
+                                        {{ $convention->halls_count }} Halls
+                                    </span>
+
+                                    <div class="small text-muted mt-1">
+                                        {{ $convention->facilities_count }} Facilities
                                     </div>
-                                    <span class="centre-status-label is-on" data-status-label="centreStatus3">ON</span>
-                                </div>
-                            </td>
-                            <td class="text-end pe-3">
-                                <div class="d-inline-flex gap-1"><a href="/admin/convention-centres/show"
-                                        class="btn btn-sm btn-info action-btn" title="View"><i
-                                            class="bi bi-eye"></i></a><a href="/admin/convention-centres/edit"
-                                        class="btn btn-sm btn-primary action-btn" title="Edit"><i
-                                            class="bi bi-pencil"></i></a></div>
-                            </td>
-                        </tr>
-<tr>
-                            <td class="ps-3"><a href="/admin/convention-centres/show"
-                                    class="badge bg-dark text-decoration-none fw-bold text-white px-2 py-1 font-monospace">CC-2026-004</a>
-                                <div class="text-muted small mt-1">12 Mar 2026</div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center gap-2"><img
-                                        src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&amp;fit=crop&amp;w=400&amp;q=80"
-                                        alt="Mahatma Gandhi Civic Convention Hall" class="centre-thumb shadow-xs">
-                                    <div><a href="/admin/convention-centres/show"
-                                            class="fw-bold text-dark text-decoration-none d-block mb-1">Mahatma Gandhi
-                                            Civic Convention Hall</a><small class="text-muted"><i
-                                                class="bi bi-geo-alt text-danger me-1"></i>8th Cross, Malleshwaram
-                                            West</small></div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-light text-dark border">2 Halls</span></td>
-                            <td><span class="badge badge-soft-info px-2 py-1 rounded-pill">Convention Hall</span></td>
-                            
-                            <td>
-                                <div class="fw-semibold text-dark">G. Manjunath</div>
-                                <div class="text-muted small"><i class="bi bi-telephone text-success me-1"></i>+91 99001
-                                    55443</div>
-                                <div class="text-muted small">manjunath.g@bbmp.gov.in</div>
-                            </td>
-                            
-                            
-                            <td>
-                                <div class="centre-status-control">
-                                    <div class="form-check form-switch m-0">
-                                        <input class="form-check-input centre-status-toggle" type="checkbox"
-                                            role="switch" id="centreStatus4" data-centre-id="CC-2026-004"
-                                            aria-label="Toggle status for centre CC-2026-004">
+                                </td>
+
+                                {{-- Centre Type --}}
+                                <td>
+                                    <span class="badge {{ $typeClass }} px-2 py-1 rounded-pill">
+                                        {{ $convention->centre_type ?? '-' }}
+                                    </span>
+                                </td>
+
+                                {{-- Contact --}}
+                                <td>
+
+                                    <div class="fw-semibold text-dark">
+                                        {{ $convention->incharge_name ?? '-' }}
                                     </div>
-                                    <span class="centre-status-label is-off" data-status-label="centreStatus4">OFF</span>
-                                </div>
-                            </td>
-                            <td class="text-end pe-3">
-                                <div class="d-inline-flex gap-1"><a href="/admin/convention-centres/show"
-                                        class="btn btn-sm btn-info action-btn" title="View"><i
-                                            class="bi bi-eye"></i></a><a href="/admin/convention-centres/edit"
-                                        class="btn btn-sm btn-primary action-btn" title="Edit"><i
-                                            class="bi bi-pencil"></i></a></div>
-                            </td>
-                        </tr>
-<tr>
-                            <td class="ps-3"><a href="/admin/convention-centres/show"
-                                    class="badge bg-dark text-decoration-none fw-bold text-white px-2 py-1 font-monospace">CC-2026-005</a>
-                                <div class="text-muted small mt-1">25 Mar 2026</div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center gap-2"><img
-                                        src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&amp;fit=crop&amp;w=400&amp;q=80"
-                                        alt="Sir M. Visvesvaraya Conference and Banquet Complex"
-                                        class="centre-thumb shadow-xs">
-                                    <div><a href="/admin/convention-centres/show"
-                                            class="fw-bold text-dark text-decoration-none d-block mb-1">Sir M.
-                                            Visvesvaraya Conference &amp; Banquet Complex</a><small
-                                            class="text-muted"><i class="bi bi-geo-alt text-danger me-1"></i>Subhash
-                                            Nagar, Opposite Metro Station, Majestic</small></div>
-                                </div>
-                            </td>
-                            <td><span class="badge bg-light text-dark border">4 Halls</span></td>
-                            <td><span class="badge badge-soft-primary px-2 py-1 rounded-pill">Banquet Hall</span></td>
-                            
-                            <td>
-                                <div class="fw-semibold text-dark">Venkatappa K.</div>
-                                <div class="text-muted small"><i class="bi bi-telephone text-success me-1"></i>+91 98801
-                                    88776</div>
-                                <div class="text-muted small">venkatappa.k@bbmp.gov.in</div>
-                            </td>
-                            
-                            
-                            <td>
-                                <div class="centre-status-control">
-                                    <div class="form-check form-switch m-0">
-                                        <input class="form-check-input centre-status-toggle" type="checkbox"
-                                            role="switch" id="centreStatus5" data-centre-id="CC-2026-005"
-                                            aria-label="Toggle status for centre CC-2026-005" checked>
+
+                                    <div class="text-muted small">
+                                        <i class="bi bi-telephone text-success me-1"></i>
+                                        {{ $convention->phone ?? '-' }}
                                     </div>
-                                    <span class="centre-status-label is-on" data-status-label="centreStatus5">ON</span>
-                                </div>
-                            </td>
-                            <td class="text-end pe-3">
-                                <div class="d-inline-flex gap-1"><a href="/admin/convention-centres/show"
-                                        class="btn btn-sm btn-info action-btn" title="View"><i
-                                            class="bi bi-eye"></i></a><a href="/admin/convention-centres/edit"
-                                        class="btn btn-sm btn-primary action-btn" title="Edit"><i
-                                            class="bi bi-pencil"></i></a></div>
-                            </td>
-                        </tr>
+
+                                    <div class="text-muted small">
+                                        {{ $convention->email ?? '-' }}
+                                    </div>
+
+                                </td>
+
+                                {{-- Status --}}
+                                <td>
+
+                                    @if($isActive)
+                                        <span class="badge badge-soft-success px-3 py-2 rounded-pill">
+                                            <span class="status-dot bg-success"></span>
+                                            Active
+                                        </span>
+                                    @else
+                                        <span class="badge badge-soft-danger px-3 py-2 rounded-pill">
+                                            <span class="status-dot bg-danger"></span>
+                                            {{ $convention->status ?: 'Inactive' }}
+                                        </span>
+                                    @endif
+
+                                </td>
+
+                                {{-- Actions --}}
+                                <td class="text-end pe-3">
+
+                                    <div class="d-inline-flex gap-1">
+
+                                        <a href="{{ route('conventions.venue-lists.show', $convention->id) }}"
+                                           class="btn btn-info action-btn"
+                                           title="View">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+
+                                        <a href="{{ route('conventions.venue-lists.edit', $convention->id) }}"
+                                           class="btn btn-primary action-btn"
+                                           title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+                                <td colspan="7" class="text-center py-5">
+
+                                    <div class="mb-2">
+                                        <i class="bi bi-building text-muted" style="font-size: 2.5rem;"></i>
+                                    </div>
+
+                                    <h6 class="text-muted mb-1">
+                                        No convention centres found
+                                    </h6>
+
+                                    <p class="text-muted small mb-0">
+                                        Add a new convention centre or change your search filters.
+                                    </p>
+
+                                </td>
+                            </tr>
+
+                        @endforelse
+
                     </tbody>
+
                 </table>
+
             </div>
+
+            {{-- Pagination --}}
+            <div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
+
+                <div class="text-muted small mb-2">
+                    Showing
+                    {{ $conventions->firstItem() ?? 0 }}
+                    to
+                    {{ $conventions->lastItem() ?? 0 }}
+                    of
+                    {{ $conventions->total() }}
+                    centres
+                </div>
+
+                <div>
+                    {{ $conventions->links() }}
+                </div>
+
+            </div>
+
         </div>
 
-        
     </div>
+
 </div>
-<script>
-    // Frontend demo toggle: updates the visible ON/OFF state.
-    // Connect this event to a Laravel route/controller to save status in the database.
-    document.querySelectorAll('.centre-status-toggle').forEach(function (toggle) {
-        toggle.addEventListener('change', function () {
-            const label = document.querySelector('[data-status-label="' + this.id + '"]');
-            if (!label) return;
 
-            label.textContent = this.checked ? 'ON' : 'OFF';
-            label.classList.toggle('is-on', this.checked);
-            label.classList.toggle('is-off', !this.checked);
-        });
-    });
-
-    const savedOwnerVenueProfile = localStorage.getItem('bookMySlotsOwnerProfile');
-
-    if (savedOwnerVenueProfile) {
-        const ownerVenueProfile = JSON.parse(savedOwnerVenueProfile);
-        document.getElementById('adminOwnerVenueName').textContent = ownerVenueProfile.name;
-        document.getElementById('adminOwnerVenueLocation').textContent = `${ownerVenueProfile.area}, ${ownerVenueProfile.city}`;
-        document.getElementById('adminOwnerVenueCapacity').textContent = `${Number(ownerVenueProfile.capacity).toLocaleString()} guests`;
-        document.getElementById('adminOwnerVenuePhone').textContent = `+91 ${ownerVenueProfile.phone}`;
-        document.getElementById('adminOwnerVenueEmail').textContent = ownerVenueProfile.email;
-    }
-</script>
 @endsection

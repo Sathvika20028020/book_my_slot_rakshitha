@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Superadmin;
 use App\Http\Controllers\Controller;
 use App\Models\ConventionAdmin\ConventionCenterLogin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -19,7 +20,7 @@ class ConventionUserController extends Controller
     {
         $user = ConventionCenterLogin::orderByDesc('id')->get();
 
-        return view('admin.centers.index', compact('user'));
+        return view('superadmin.centers.index', compact('user'));
     }
 
     /**
@@ -27,54 +28,76 @@ class ConventionUserController extends Controller
      */
     public function create()
     {
-        return view('admin.centers.create');
+        return view('superadmin.centers.create');
     }
 
     /**
      * Store newly created convention centre credentials.
      * Form field "name" is stored in the existing incharge_name column.
      */
-    public function store(Request $request)
+   public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:255'],
-            'phone' => [
-                'required',
-                'digits:10',
-                Rule::unique('convention_center_logins', 'phone'),
-            ],
-            'email' => [
-                'required',
-                'email',
-                'max:255',
-                Rule::unique('convention_center_logins', 'email'),
-            ],
-            'password' => ['required', 'string', 'min:6', 'max:255'],
-        ]);
+    $validated = $request->validate([
+        'name' => ['required', 'string', 'min:3', 'max:255'],
+        'phone' => [
+            'required',
+            'digits:10',
+            Rule::unique('convention_center_logins', 'phone'),
+        ],
+        'email' => [
+            'required',
+            'email',
+            'max:255',
+            Rule::unique('convention_center_logins', 'email'),
+        ],
+        'password' => ['required', 'string', 'min:6', 'max:255'],
+    ]);
 
-        try {
-            $user = new ConventionCenterLogin();
-            $user->incharge_name = $validated['name'];
-            $user->phone = $validated['phone'];
-            $user->email = $validated['email'];
-            $user->password = Hash::make($validated['password']);
+    try {
 
-            // The credential is enabled by default. Change this only if your
-            // login table uses a different status convention.
-            $user->status = 'Active';
-            $user->save();
+        DB::beginTransaction();
 
-            return redirect()
-                ->route('admin.centers.index')
-                ->with('success', 'Convention Centre credentials created successfully.');
-        } catch (Throwable $e) {
-            report($e);
+        $user = new ConventionCenterLogin();
 
-            return back()
-                ->withInput($request->except('password'))
-                ->with('error', 'Unable to create convention centre credentials. Please check the database fields and try again.');
-        }
+        $user->incharge_name = $validated['name'];
+        $user->phone = $validated['phone'];
+        $user->email = $validated['email'];
+        $user->password = Hash::make($validated['password']);
+        $user->status = 'Active';
+
+        $user->save();
+
+        // Get the newly created convention centre ID
+        $conventionId = $user->id;
+
+        // Generate venue ID
+        $venueId = 'CC-' . date('Y') . '-' .
+            str_pad($conventionId, 4, '0', STR_PAD_LEFT);
+
+        // Update venue ID
+        DB::table('convention_center_logins')
+            ->where('id', $conventionId)
+            ->update([
+                'venue_id' => $venueId
+            ]);
+
+        DB::commit();
+
+        return redirect()
+            ->route('superadmin.conventionlogins.index')
+            ->with('success', 'Convention Centre credentials created successfully.');
+
+    } catch (\Throwable $e) {
+
+        DB::rollBack();
+
+        report($e);
+
+        return back()
+            ->withInput($request->except('password'))
+            ->with('error', 'Unable to create convention centre credentials: ' . $e->getMessage());
     }
+}
 
     /**
      * Display a specific convention centre credential record.
@@ -83,7 +106,7 @@ class ConventionUserController extends Controller
     {
         $user = ConventionCenterLogin::findOrFail($id);
 
-        return view('admin.centers.show', compact('user'));
+        return view('superadmin.centers.show', compact('user'));
     }
 
     /**
@@ -93,7 +116,7 @@ class ConventionUserController extends Controller
     {
         $user = ConventionCenterLogin::findOrFail($id);
 
-        return view('admin.centers.edit', compact('user'));
+        return view('superadmin.centers.edit', compact('user'));
     }
 
     /**
@@ -132,7 +155,7 @@ class ConventionUserController extends Controller
             $user->save();
 
             return redirect()
-                ->route('admin.centers.index')
+                ->route('superadmin.conventionlogins.index')
                 ->with('success', 'Convention Centre credentials updated successfully.');
         } catch (Throwable $e) {
             report($e);
@@ -152,7 +175,23 @@ class ConventionUserController extends Controller
         $user->delete();
 
         return redirect()
-            ->route('admin.centers.index')
+            ->route('superadmin.conventionlogins.index')
             ->with('success', 'Convention Centre credentials deleted successfully.');
     }
+
+        public function status(Request $request, $id)
+    {
+        $user = ConventionCenterLogin::findOrFail($id);
+
+        $user->status = $request->status;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User status updated successfully!',
+            'status' => $user->status
+        ]);
+    }
+
+    
 }

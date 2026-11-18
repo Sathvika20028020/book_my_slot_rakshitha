@@ -1,4 +1,4 @@
-@extends('superadmin.layout.admin.app')
+@extends('superadmin.layout.app')
 
 @section('title') Convention Centre Credential Details @endsection
 
@@ -38,8 +38,8 @@
             </div>
             <div class="col-12 col-md-6 text-md-end mt-2 mt-md-0 d-flex align-items-center justify-content-md-end gap-2">
                 <ol class="breadcrumb justify-content-md-end mb-0 bg-transparent p-0 me-3 d-none d-lg-flex">
-                    <li class="breadcrumb-item"><a href="/admin/dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('admin.centers.index') }}">Centre Masters</a></li>
+                    <li class="breadcrumb-item"><a href=""><i class="fa fa-home"></i> Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('superadmin.conventionlogins.index') }}">Centre Masters</a></li>
                     <li class="breadcrumb-item active">View Details</li>
                 </ol>
             </div>
@@ -62,7 +62,7 @@
                                 Name
                             </th>
                             <td class="fw-bold text-dark fs-6">
-                                Rajesh Kumar
+                               {{$user->incharge_name ?? '-'}}
                             </td>
                         </tr>
 
@@ -73,7 +73,7 @@
                                 Phone Number
                             </th>
                             <td class="fw-semibold text-dark">
-                                +91 98765 43210
+                               {{$user->phone ?? '-'}}
                             </td>
                         </tr>
 
@@ -84,13 +84,15 @@
                                 Email
                             </th>
                             <td>
-                                <span class="font-monospace text-primary fw-semibold">admin@grandpalace.com</span>
+                                <span class="font-monospace text-primary fw-semibold"> {{$user->email ?? '-'}}</span>
                             </td>
                         </tr>
 
                         
 
                         <!-- 5. Password -->
+                        
+
                         <tr>
                             <th>
                                 <i class="bi bi-lock text-primary fs-5 me-2 align-middle"></i>
@@ -98,11 +100,16 @@
                             </th>
                             <td>
                                 <div class="d-flex align-items-center gap-2">
-                                    <span class="font-monospace fs-6" id="passwordDisplay">••••••••••••</span>
-                                    <button class="btn btn-sm btn-outline-warning py-1 px-2" id="togglePasswordShow" title="Show/Hide Password">
-                                        <i class="bi bi-eye" id="eyeIcon"></i>
-                                    </button>
-                                </div>
+    <span class="font-monospace fs-6" id="passwordDisplay">
+        ••••••••••••
+    </span>
+
+    <button type="button"
+            class="btn btn-sm btn-outline-warning py-1 px-2"
+            id="togglePasswordShow">
+        <i class="bi bi-eye" id="eyeIcon"></i>
+    </button>
+</div>
                             </td>
                         </tr>
                     </tbody>
@@ -115,6 +122,21 @@
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const password = @json($createdPassword ?? '');
+    let visible = false;
+
+    document.getElementById('togglePasswordShow').addEventListener('click', function () {
+        visible = !visible;
+
+        document.getElementById('passwordDisplay').textContent =
+            visible ? password : '••••••••••••';
+
+        document.getElementById('eyeIcon').className =
+            visible ? 'bi bi-eye-slash' : 'bi bi-eye';
+    });
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const passwordDisplay = document.getElementById('passwordDisplay');
