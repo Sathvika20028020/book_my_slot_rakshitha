@@ -18,15 +18,18 @@
         display: inline-block;
         cursor: pointer;
     }
+
     .booking-filter-btn:hover {
         background-color: #e5e7eb;
         color: #1f2937;
     }
+
     .booking-filter-btn.active {
         background-color: #7044f2;
         color: #ffffff;
         box-shadow: 0 4px 12px rgba(112, 68, 242, 0.28);
     }
+
     .dropdown-filter-pill {
         background-color: #f3f4f6;
         border-radius: 12px;
@@ -37,6 +40,7 @@
         align-items: center;
         gap: 0.6rem;
     }
+
     .dropdown-filter-pill select {
         background: transparent;
         border: none;
@@ -46,9 +50,11 @@
         outline: none;
         cursor: pointer;
     }
+
     .bookings-table {
         margin-bottom: 0;
     }
+
     .bookings-table thead th {
         font-size: 0.76rem;
         text-transform: uppercase;
@@ -60,13 +66,16 @@
         background-color: #ffffff;
         white-space: nowrap;
     }
+
     .bookings-table tbody tr {
         transition: background-color 0.15s ease;
         border-bottom: 1px solid #f3f4f6;
     }
+
     .bookings-table tbody tr:hover {
         background-color: #f9fafb;
     }
+
     .bookings-table tbody td {
         padding: 1.15rem 1.25rem;
         vertical-align: middle;
@@ -74,16 +83,19 @@
         color: #374151;
         white-space: nowrap;
     }
+
     .booking-id-link {
         font-weight: 700;
         color: #111827;
         text-decoration: none;
         transition: color 0.15s;
     }
+
     .booking-id-link:hover {
         color: #7044f2;
         text-decoration: underline;
     }
+
     .badge-status {
         display: inline-block;
         padding: 0.35rem 0.95rem;
@@ -93,26 +105,32 @@
         line-height: 1.2;
         text-align: center;
     }
+
     .badge-status-confirmed {
         background-color: #e6f9ed;
         color: #10b981;
     }
+
     .badge-status-pending {
         background-color: #fef3c7;
         color: #b45309;
     }
+
     .badge-status-cancelled {
         background-color: #fde8e8;
         color: #e02424;
     }
+
     .badge-status-disputed {
         background-color: #fde8e8;
         color: #e02424;
     }
+
     .badge-status-completed {
         background-color: #e6f9ed;
         color: #10b981;
     }
+
     .booking-card {
         border-radius: 16px;
         border: 1px solid #e5e7eb;
@@ -120,6 +138,7 @@
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         overflow: hidden;
     }
+
     .quick-stat-pill {
         background: #f9fafb;
         border: 1px solid #e5e7eb;
@@ -134,7 +153,7 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-sm-6">
-                <h3 style="color: #1e2f65;font-family: sans-serif;">Application</h3>
+                <h3 style="color: #1e2f65;font-family: sans-serif;">Bookings</h3>
             </div>
             <div class="col-12 col-sm-6">
                 <ol class="breadcrumb">
@@ -148,8 +167,8 @@
     </div>
 </div>
 <div class="container-fluid py-4">
-  
-  
+
+
 
     <!-- Quick Stats Cards -->
     <div class="row g-3 mb-4">
@@ -157,7 +176,7 @@
             <div class="quick-stat-pill d-flex align-items-center justify-content-between">
                 <div>
                     <span class="text-muted d-block small fw-semibold">Total Bookings</span>
-                    <h4 class="fw-bold mb-0 text-dark">1,482</h4>
+                    <h4 class="fw-bold mb-0 text-dark" id="totalBookingsCount">1,482</h4>
                 </div>
                 <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; background: #ede9fe; color: #7c3aed;">
                     <i class="bi bi-calendar-event fs-5"></i>
@@ -168,7 +187,7 @@
             <div class="quick-stat-pill d-flex align-items-center justify-content-between">
                 <div>
                     <span class="text-muted d-block small fw-semibold">Confirmed</span>
-                    <h4 class="fw-bold mb-0 text-success">1,210</h4>
+                    <h4 class="fw-bold mb-0 text-success" id="confirmedBookingsCount">1,210</h4>
                 </div>
                 <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; background: #e6f9ed; color: #10b981;">
                     <i class="bi bi-check2-circle fs-5"></i>
@@ -179,7 +198,7 @@
             <div class="quick-stat-pill d-flex align-items-center justify-content-between">
                 <div>
                     <span class="text-muted d-block small fw-semibold">Pending Approval</span>
-                    <h4 class="fw-bold mb-0 text-warning">184</h4>
+                    <h4 class="fw-bold mb-0 text-warning" id="pendingBookingsCount">184</h4>
                 </div>
                 <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; background: #fef3c7; color: #d97706;">
                     <i class="bi bi-clock-history fs-5"></i>
@@ -190,7 +209,7 @@
             <div class="quick-stat-pill d-flex align-items-center justify-content-between">
                 <div>
                     <span class="text-muted d-block small fw-semibold">Revenue (MTD)</span>
-                    <h4 class="fw-bold mb-0 text-dark">₹42.8 L</h4>
+                    <h4 class="fw-bold mb-0 text-dark" id="totalRevenueCount">₹42.8 L</h4>
                 </div>
                 <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; background: #e0f2fe; color: #0284c7;">
                     <i class="bi bi-currency-rupee fs-5"></i>
@@ -209,38 +228,50 @@
                 <button class="booking-filter-btn" data-filter="Confirmed">Confirmed</button>
                 <button class="booking-filter-btn" data-filter="Pending">Pending</button>
                 <button class="booking-filter-btn" data-filter="Cancelled">Cancelled</button>
-                
+
             </div>
 
             <!-- City & Month Filter Pill (Exact matching reference image) -->
-            <div class="dropdown-filter-pill">
-                <div class="d-flex align-items-center gap-1">
-                    <span class="text-secondary fw-normal">City:</span>
-                    <select id="cityFilterSelect">
-                        <option value="all" selected>All</option>
-                        <option value="Bengaluru">Bengaluru</option>
-                        <option value="Hyderabad">Hyderabad</option>
-                        <option value="Mumbai">Mumbai</option>
-                        <option value="Chennai">Chennai</option>
-                        <option value="Pune">Pune</option>
-                        <option value="Kochi">Kochi</option>
-                        <option value="Ahmedabad">Ahmedabad</option>
-                    </select>
+            <!-- Venue Owner & Month Filter -->
+            <div class="d-flex flex-wrap align-items-center gap-3">
+
+                <div class="dropdown-filter-pill">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-person-badge text-secondary"></i>
+                        <span class="text-secondary fw-normal">Owner:</span>
+
+                        <select id="ownerFilterSelect">
+                            <option value="all" selected>All Owners</option>
+                            <option value="Owner 1">Owner 1</option>
+                            <option value="Owner 2">Owner 2</option>
+                            <option value="Owner 3">Owner 3</option>
+                            <option value="Owner 4">Owner 4</option>
+                            <option value="Owner 5">Owner 5</option>
+                            <option value="Owner 6">Owner 6</option>
+                            <option value="Owner 7">Owner 7</option>
+                            <option value="Owner 8">Owner 8</option>
+                        </select>
+                    </div>
+
+                    <span class="text-muted">|</span>
+
+                    <div class="d-flex align-items-center gap-1">
+                        <i class="bi bi-calendar3 text-secondary"></i>
+
+                        <select id="monthFilterSelect">
+                            <option value="all">All Months</option>
+                            <option value="Nov 2026" selected>Nov 2026</option>
+                            <option value="Dec 2026">Dec 2026</option>
+                        </select>
+                    </div>
                 </div>
-                <span class="text-muted">|</span>
-                <div class="d-flex align-items-center gap-1">
-                    <select id="monthFilterSelect">
-                        <option value="Nov 2026" selected>Nov 2026</option>
-                        <option value="Dec 2026">Dec 2026</option>
-                        <option value="all">All Months</option>
-                    </select>
-                </div>
+
             </div>
         </div>
 
         <!-- Bookings Table matching User Reference Image -->
-     <div class="table-responsive">
-    <table class="display" id="data-source-1" style="width:100%">
+        <div class="table-responsive">
+            <table class="display" id="data-source-1" style="width:100%">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -255,7 +286,11 @@
                 </thead>
                 <tbody id="bookingsTableBody">
                     <!-- Row 1 -->
-                    <tr data-status="Confirmed" data-city="Bengaluru" data-date="12 Dec 2026">
+                    <tr data-status="Confirmed"
+                        data-city="Bengaluru"
+                        data-owner="Owner 1"
+                        data-date="12 Dec 2026"
+                        data-amount="5.86">
                         <td>
                             <a href="{{ route('admin.bookings.show') }}" class="booking-id-link">BMS-4821</a>
                         </td>
@@ -277,7 +312,11 @@
                     </tr>
 
                     <!-- Row 2 -->
-                    <tr data-status="Pending" data-city="Hyderabad" data-date="10 Dec 2026">
+                    <tr data-status="Pending"
+                        data-city="Hyderabad"
+                        data-owner="Owner 2"
+                        data-date="10 Dec 2026"
+                        data-amount="3.20">
                         <td>
                             <a href="{{ route('admin.bookings.show') }}" class="booking-id-link">BMS-4820</a>
                         </td>
@@ -305,7 +344,11 @@
                     </tr>
 
                     <!-- Row 3 -->
-                    <tr data-status="Confirmed" data-city="Bengaluru" data-date="08 Dec 2026">
+                    <tr data-status="Confirmed"
+                        data-city="Bengaluru"
+                        data-owner="Owner 3"
+                        data-date="08 Dec 2026"
+                        data-amount="0.95">
                         <td>
                             <a href="{{ route('admin.bookings.show') }}" class="booking-id-link">BMS-4819</a>
                         </td>
@@ -325,7 +368,11 @@
                     </tr>
 
                     <!-- Row 4 -->
-                    <tr data-status="Confirmed" data-city="Mumbai" data-date="05 Dec 2026">
+                    <tr data-status="Confirmed"
+                        data-city="Mumbai"
+                        data-owner="Owner 4"
+                        data-date="05 Dec 2026"
+                        data-amount="2.40">
                         <td>
                             <a href="{{ route('admin.bookings.show') }}" class="booking-id-link">BMS-4818</a>
                         </td>
@@ -345,7 +392,11 @@
                     </tr>
 
                     <!-- Row 5 -->
-                    <tr data-status="Disputed" data-city="Chennai" data-date="03 Dec 2026">
+                    <tr data-status="Disputed"
+                        data-city="Chennai"
+                        data-owner="Owner 5"
+                        data-date="03 Dec 2026"
+                        data-amount="1.80">
                         <td>
                             <a href="{{ route('admin.bookings.show') }}" class="booking-id-link">BMS-4817</a>
                         </td>
@@ -365,7 +416,11 @@
                     </tr>
 
                     <!-- Row 6 -->
-                    <tr data-status="Completed" data-city="Pune" data-date="30 Nov 2026">
+                    <tr data-status="Completed"
+                        data-city="Pune"
+                        data-owner="Owner 6"
+                        data-date="30 Nov 2026"
+                        data-amount="6.10">
                         <td>
                             <a href="{{ route('admin.bookings.show') }}" class="booking-id-link">BMS-4816</a>
                         </td>
@@ -385,7 +440,11 @@
                     </tr>
 
                     <!-- Row 7 -->
-                    <tr data-status="Cancelled" data-city="Kochi" data-date="28 Nov 2026">
+                    <tr data-status="Cancelled"
+                        data-city="Kochi"
+                        data-owner="Owner 7"
+                        data-date="28 Nov 2026"
+                        data-amount="2.75">
                         <td>
                             <a href="{{ route('admin.bookings.show') }}" class="booking-id-link">BMS-4815</a>
                         </td>
@@ -405,7 +464,11 @@
                     </tr>
 
                     <!-- Row 8 -->
-                    <tr data-status="Pending" data-city="Ahmedabad" data-date="26 Nov 2026">
+                    <tr data-status="Pending"
+                        data-city="Ahmedabad"
+                        data-owner="Owner 8"
+                        data-date="26 Nov 2026"
+                        data-amount="4.90">
                         <td>
                             <a href="{{ route('admin.bookings.show') }}" class="booking-id-link">BMS-4814</a>
                         </td>
@@ -427,66 +490,182 @@
             </table>
         </div>
 
-    
+
     </div>
 </div>
 @endsection
 
 @section('script')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const filterButtons = document.querySelectorAll('.booking-filter-btn');
-    const cityFilterSelect = document.getElementById('cityFilterSelect');
-    const searchInput = document.getElementById('bookingSearchInput');
-    const rows = document.querySelectorAll('#bookingsTableBody tr');
+    document.addEventListener('DOMContentLoaded', function() {
 
-    let currentStatus = 'all';
-    let currentCity = 'all';
-    let searchKeyword = '';
+        const filterButtons = document.querySelectorAll('.booking-filter-btn');
+        const ownerFilterSelect = document.getElementById('ownerFilterSelect');
+        const monthFilterSelect = document.getElementById('monthFilterSelect');
+        const searchInput = document.getElementById('bookingSearchInput');
 
-    function filterRows() {
-        rows.forEach(row => {
-            const rowStatus = row.getAttribute('data-status');
-            const rowCity = row.getAttribute('data-city');
-            const rowText = row.innerText.toLowerCase();
+        const rows = Array.from(
+            document.querySelectorAll('#bookingsTableBody tr')
+        );
 
-            const statusMatch = (currentStatus === 'all') || (rowStatus === currentStatus);
-            const cityMatch = (currentCity === 'all') || (rowCity === currentCity);
-            const searchMatch = !searchKeyword || rowText.includes(searchKeyword);
+        const totalBookingsCount = document.getElementById('totalBookingsCount');
+        const confirmedBookingsCount = document.getElementById('confirmedBookingsCount');
+        const pendingBookingsCount = document.getElementById('pendingBookingsCount');
+        const totalRevenueCount = document.getElementById('totalRevenueCount');
 
-            if (statusMatch && cityMatch && searchMatch) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
+        let currentStatus = 'all';
+        let currentOwner = 'all';
+        let currentMonth = monthFilterSelect ? monthFilterSelect.value : 'all';
+        let searchKeyword = '';
+
+        function getMonthYear(dateString) {
+            const date = new Date(dateString);
+
+            if (isNaN(date.getTime())) {
+                return '';
             }
-        });
-    }
 
-    // Filter Buttons
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-            filterButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            currentStatus = this.getAttribute('data-filter');
-            filterRows();
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        function updateKpis(filteredRows) {
+
+            let total = filteredRows.length;
+            let confirmed = 0;
+            let pending = 0;
+            let revenue = 0;
+
+            filteredRows.forEach(row => {
+
+                const status = row.getAttribute('data-status');
+
+                if (status === 'Confirmed') {
+                    confirmed++;
+                }
+
+                if (status === 'Pending') {
+                    pending++;
+                }
+
+                revenue += parseFloat(row.getAttribute('data-amount')) || 0;
+
+            });
+
+            if (totalBookingsCount) {
+                totalBookingsCount.textContent = total.toLocaleString('en-IN');
+            }
+
+            if (confirmedBookingsCount) {
+                confirmedBookingsCount.textContent = confirmed.toLocaleString('en-IN');
+            }
+
+            if (pendingBookingsCount) {
+                pendingBookingsCount.textContent = pending.toLocaleString('en-IN');
+            }
+
+            if (totalRevenueCount) {
+                totalRevenueCount.textContent =
+                    '₹' + revenue.toFixed(2) + ' L';
+            }
+        }
+
+        function filterRows() {
+
+            const filteredRows = [];
+
+            rows.forEach(row => {
+
+                const rowStatus = row.getAttribute('data-status');
+                const rowOwner = row.getAttribute('data-owner');
+                const rowDate = row.getAttribute('data-date');
+                const rowText = row.innerText.toLowerCase();
+
+                const statusMatch =
+                    currentStatus === 'all' || rowStatus === currentStatus;
+
+                const ownerMatch =
+                    currentOwner === 'all' || rowOwner === currentOwner;
+
+                const monthMatch =
+                    currentMonth === 'all' ||
+                    getMonthYear(rowDate) === currentMonth;
+
+                const searchMatch = !searchKeyword || rowText.includes(searchKeyword);
+
+                const isVisible =
+                    statusMatch && ownerMatch && monthMatch && searchMatch;
+
+                row.style.display = isVisible ? '' : 'none';
+
+                if (isVisible) {
+                    filteredRows.push(row);
+                }
+
+            });
+
+            updateKpis(filteredRows);
+        }
+
+        // STATUS FILTER
+        filterButtons.forEach(btn => {
+
+            btn.addEventListener('click', function() {
+
+                filterButtons.forEach(button => {
+                    button.classList.remove('active');
+                });
+
+                this.classList.add('active');
+
+                currentStatus = this.getAttribute('data-filter');
+
+                filterRows();
+            });
+
         });
+
+        // OWNER FILTER
+        if (ownerFilterSelect) {
+
+            ownerFilterSelect.addEventListener('change', function() {
+
+                currentOwner = this.value;
+
+                filterRows();
+            });
+
+        }
+
+        // MONTH FILTER
+        if (monthFilterSelect) {
+
+            monthFilterSelect.addEventListener('change', function() {
+
+                currentMonth = this.value;
+
+                filterRows();
+            });
+
+        }
+
+        // SEARCH FILTER
+        if (searchInput) {
+
+            searchInput.addEventListener('input', function() {
+
+                searchKeyword = this.value.trim().toLowerCase();
+
+                filterRows();
+            });
+
+        }
+
+        // INITIAL COUNTS
+        filterRows();
+
     });
-
-    // City Dropdown
-    if (cityFilterSelect) {
-        cityFilterSelect.addEventListener('change', function () {
-            currentCity = this.value;
-            filterRows();
-        });
-    }
-
-    // Search input
-    if (searchInput) {
-        searchInput.addEventListener('input', function () {
-            searchKeyword = this.value.trim().toLowerCase();
-            filterRows();
-        });
-    }
-});
 </script>
 @endsection

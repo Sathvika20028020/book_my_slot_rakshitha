@@ -203,3 +203,39 @@ Route::get('/invoice-preview', function () {
         'bookingId' => 'BMS-2026-001'
     ]);
 })->name('user.invoice.preview');
+
+
+// SUPERADMIN BOOKINGS
+Route::prefix('bookings')->name('bookings.')->group(function () {
+    Route::view('/', 'superadmin.bookings.index')->name('index');
+    Route::view('/show', 'superadmin.bookings.show')->name('show');
+});
+
+// SUPERADMIN CENTERS
+Route::prefix('centers')->name('centers.')->group(function () {
+    Route::view('/', 'superadmin.centers.index')->name('index');
+    Route::view('/create', 'superadmin.centers.create')->name('create');
+    Route::view('/edit', 'superadmin.centers.edit')->name('edit');
+    Route::view('/show', 'superadmin.centers.show')->name('show');
+});
+
+// SUPERADMIN CONVENTION CENTRES
+Route::prefix('convention-centres')->name('convention-centres.')->group(function () {
+    Route::view('/', 'superadmin.convention-centres.index')->name('index');
+    Route::view('/create', 'superadmin.convention-centres.create')->name('create');
+    Route::view('/edit', 'superadmin.convention-centres.edit')->name('edit');
+    Route::view('/show', 'superadmin.convention-centres.show')->name('show');
+});
+
+Route::view('/calendar', 'superadmin.calendar.index')
+    ->name('superadmin.calendar');
+
+Route::get('/payments', function () {
+    return view('superadmin.payments.index');
+})->name('superadmin.payments.index');
+
+Route::get('/payments/{id}', function ($id) {
+    return view('superadmin.payments.view', [
+        'transactionId' => $id
+    ]);
+})->name('superadmin.payments.view');

@@ -58,20 +58,22 @@
 
                     <!-- Calendar -->
                     <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title link-nav {{ request()->is('*calendar*') ? 'active' : '' }}"
-                            href="{{ route('center_admin.calendar.index') }}">
-                            <span><i class="bi bi-calendar3 me-2"></i></span>
-                            <span>Calendar</span>
-                        </a>
-                    </li>
+    <a class="sidebar-link sidebar-title link-nav
+        {{ request()->routeIs('superadmin.calendar') ? 'active' : '' }}"
+       href="{{ route('superadmin.calendar') }}">
+
+        <span><i class="bi bi-calendar3 me-2"></i></span>
+        <span>Calendar</span>
+    </a>
+</li>
 
                     <!-- Payments -->
                     <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title link-nav {{ request()->is('admin/payment*') ? 'active' : '' }}"
-                            href="">
-                            <span><i class="bi bi-credit-card-2-front-fill me-2"></i></span>
-                            <span>Payments</span>
-                        </a>
+                        <a href="{{ route('superadmin.payments.index') }}"
+   class="sidebar-link sidebar-title link-nav {{ request()->routeIs('superadmin.payments') ? 'active' : '' }}">
+    <i class="bi bi-wallet2"></i>
+    <span>Payments</span>
+</a>
                     </li>
 
                     <!-- Convention Centres (Vendors & Credentials) -->
