@@ -34,25 +34,8 @@ class ConventionController extends Controller
         ])
         ->withMax('facilities', 'seating_capacity');
 
-<<<<<<< HEAD
-        $query = DB::table('convention_center_logins')
-            ->leftJoinSub($facilitySummary, 'facility_summary', function ($join) {
-                $join->on(
-                    'convention_center_logins.id',
-                    '=',
-                    'facility_summary.convention_center_login_id'
-                );
-            })
-            ->select(
-                'convention_center_logins.*',
-                DB::raw('COALESCE(facility_summary.facilities_count, 0) as facilities_count'),
-                DB::raw('COALESCE(facility_summary.max_capacity, 0) as max_capacity')
-            )
-            ->where('convention_center_logins.id', $user->id);
-=======
     if ($request->filled('search')) {
         $search = $request->search;
->>>>>>> 34125b8eb56ec2bcdb9c7d4907b0e481d720f98c
 
         $query->where(function ($q) use ($search) {
             $q->where('venue_id', 'like', "%{$search}%")
@@ -81,6 +64,7 @@ class ConventionController extends Controller
 
     return view('conventions.venues.index', compact('conventions'));
 }
+
 
     /**
      * Show create form.

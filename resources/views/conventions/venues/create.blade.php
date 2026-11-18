@@ -203,6 +203,22 @@
     }
     .facility-hall-select { min-width: 140px; }
 
+    .hall-detail-card {
+        border-color: #dbe3ef !important;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.045);
+        overflow: hidden;
+    }
+    .hall-detail-card > .card-header {
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .hall-detail-card .facility-row {
+        background: #f8fafc;
+    }
+    .hall-detail-card .hall-media-panel,
+    .hall-detail-card .hall-charges-panel {
+        display: block;
+    }
+
 </style>
 @endsection
 
@@ -416,19 +432,16 @@
                     </div>
                 </div>
 
-                <!-- 4. Halls & Facility Details -->
+                <!-- 4. Hall Management: each hall contains its own facilities, media and charges -->
                 <div class="card section-card">
                     <div class="section-header d-flex align-items-center justify-content-between flex-wrap gap-2">
                         <div class="d-flex align-items-center">
                             <span class="step-badge">4</span>
                             <div>
-                                <h6 class="fw-bold mb-0 text-dark">Halls &amp; Facility Details</h6>
-                                <small class="text-muted">Create separately bookable halls and assign each facility to its hall</small>
+                                <h6 class="fw-bold mb-0 text-dark">Hall Details, Facilities, Media &amp; Charges</h6>
+                                <small class="text-muted">Each hall has its own facilities, gallery, video and pricing in one card.</small>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1 shadow-sm" id="btnAddFacility">
-                            <i class="bi bi-plus-circle"></i> Add Facility
-                        </button>
                     </div>
                     <div class="card-body p-4">
                         <div class="hall-setup-box">
@@ -450,63 +463,32 @@
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold text-dark small">Additional Facilities / Sub-units</label>
-                            <small class="text-muted d-block mb-2">Add dining rooms, kitchens, dressing rooms, parking areas, auditoriums, etc., and assign each to a hall.</small>
-                        </div>
-                        <div id="facilitiesContainer"></div>
-
-                        <div class="mt-3 text-center">
-                            <button type="button" class="btn btn-outline-primary btn-sm px-4" id="btnAddFacilityBottom">
-                                <i class="bi bi-plus-lg me-1"></i> Add Another Facility Sub-unit
-                            </button>
-                        </div>
+                        <div id="hallCardsContainer" class="mt-4"></div>
                     </div>
                 </div>
 
-                <!-- 5. Hall-wise Media Gallery -->
-                <div class="card section-card">
-                    <div class="section-header d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <span class="step-badge">5</span>
-                            <h6 class="fw-bold mb-0 text-dark">Hall-wise Media Gallery (Images &amp; Video)</h6>
-                        </div>
-                        <span class="badge bg-light text-muted border">Separate media for each hall</span>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="hall-selector-wrap">
-                            <label class="form-label fw-semibold text-dark small mb-1">Select Hall</label>
-                            <select id="mediaHallSelect" class="form-select"></select>
-                            <small class="text-muted">Upload photographs and add the walkthrough video for the selected hall only.</small>
-                        </div>
-                        <div id="mediaHallPanels"></div>
-                    </div>
-                </div>
-
-                <!-- 6. Hall-wise Charges & Tariffs -->
-                <div class="card section-card">
-                    <div class="section-header d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <span class="step-badge">6</span>
-                            <h6 class="fw-bold mb-0 text-dark">Hall-wise Charges</h6>
-                        </div>
-                        <span class="badge bg-light text-success border"><i class="bi bi-currency-rupee"></i> INR Pricing</span>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="hall-selector-wrap">
-                            <label class="form-label fw-semibold text-dark small mb-1">Select Hall</label>
-                            <select id="chargesHallSelect" class="form-select"></select>
-                            <small class="text-muted">Enter booking fee, deposit and additional charges for each hall.</small>
-                        </div>
-                        <div id="chargesHallPanels"></div>
-                    </div>
-                </div>
-
-                <!-- 7. Booking Rules & Policies -->
-                <div class="card section-card">
-                    <div class="section-header d-flex align-items-center justify-content-between">
+                <!-- 7. Hall Preview Cards -->
+                <div class="card section-card" id="hallReviewSection">
+                    <div class="section-header d-flex align-items-center justify-content-between flex-wrap gap-2">
                         <div class="d-flex align-items-center">
                             <span class="step-badge">7</span>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark">Hall Preview</h6>
+                                <small class="text-muted">Review facilities, gallery, video and charges for every hall before setting the policy.</small>
+                            </div>
+                        </div>
+                        <span class="badge bg-success-subtle text-success border">Live Preview</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div id="hallReviewContent" aria-live="polite"></div>
+                    </div>
+                </div>
+
+                <!-- 8. Booking Rules & Policies -->
+                <div class="card section-card">
+                    <div class="section-header d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <span class="step-badge">8</span>
                             <h6 class="fw-bold mb-0 text-dark">Booking Rules &amp; Cancellation Policy</h6>
                         </div>
                         <span class="badge bg-light text-dark border"><i class="bi bi-shield-lock me-1"></i> Governance</span>
@@ -601,27 +583,6 @@
                         </div>
                     </div>
                     
-                </div>
-
-                <!-- 8. Hall-wise Review Before Submit -->
-                <div class="card section-card" id="hallReviewSection">
-                    <div class="section-header d-flex align-items-center justify-content-between flex-wrap gap-2">
-                        <div class="d-flex align-items-center">
-                            <span class="step-badge">8</span>
-                            <div>
-                                <h6 class="fw-bold mb-0 text-dark">Review Hall Details Before Submit</h6>
-                                <small class="text-muted">Select each hall to verify its facilities, gallery and charges.</small>
-                            </div>
-                        </div>
-                        <span class="badge bg-success-subtle text-success border">Live Preview</span>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="hall-selector-wrap">
-                            <label class="form-label fw-semibold text-dark small mb-1">View Details For Hall</label>
-                            <select id="reviewHallSelect" class="form-select"></select>
-                        </div>
-                        <div id="hallReviewContent" class="mt-3" aria-live="polite"></div>
-                    </div>
                 </div>
 
                 <!-- Bottom Action: Only Submit Button (Small & Centered in the middle) -->
@@ -796,11 +757,11 @@
         if (!previousNames.length) previousNames = getInitialHallNames();
 
         const namesContainer = document.getElementById('hallNamesContainer');
+        const oldNameValues = previousNames.slice();
         namesContainer.innerHTML = '';
 
         for (let i = 0; i < count; i++) {
-            const oldName = oldHallValues?.[i]?.name || '';
-            const name = previousNames[i] || oldName || (i === 0 ? 'Main Hall' : '');
+            const name = oldNameValues[i] || oldHallValues?.[i]?.name || (i === 0 ? 'Main Hall' : '');
             const row = document.createElement('div');
             row.className = 'hall-name-row';
             row.innerHTML = `
@@ -814,57 +775,141 @@
         }
 
         document.getElementById('hallCountBadge').textContent = `${count} ${count === 1 ? 'Hall' : 'Halls'}`;
-
-        const names = getHallNames();
-        renderHallSelectors(names);
-        renderHallPanels(names);
+        renderHallCards(getHallNames());
         renderHallReview();
     }
 
-    function renderHallSelectors(names) {
-        ['mediaHallSelect', 'chargesHallSelect', 'reviewHallSelect'].forEach(id => {
-            const select = document.getElementById(id);
-            if (!select) return;
-            const previous = select.value;
-            select.innerHTML = names.map((name, index) =>
-                `<option value="${index}">Hall ${index + 1} - ${escapeHtml(name)}</option>`
-            ).join('');
-            select.value = previous && Number(previous) < names.length ? previous : '0';
+    function renderHallCards(names) {
+        const container = document.getElementById('hallCardsContainer');
+        const oldCards = new Map();
+
+        container.querySelectorAll('.hall-detail-card').forEach(card => {
+            oldCards.set(String(card.dataset.hall), card);
         });
 
-        document.querySelectorAll('.facility-hall-select').forEach(select => {
-            const previous = select.value;
-            select.innerHTML = names.map((name, index) =>
-                `<option value="${index}">Hall ${index + 1} - ${escapeHtml(name)}</option>`
-            ).join('');
-            if (previous !== '' && Number(previous) < names.length) select.value = previous;
-        });
-    }
-
-    function renderHallPanels(names) {
-        const mediaContainer = document.getElementById('mediaHallPanels');
-        const chargesContainer = document.getElementById('chargesHallPanels');
-        const oldMedia = new Map();
-        const oldCharges = new Map();
-
-        mediaContainer.querySelectorAll('.hall-wise-panel').forEach(panel => oldMedia.set(panel.dataset.hall, panel));
-        chargesContainer.querySelectorAll('.hall-wise-panel').forEach(panel => oldCharges.set(panel.dataset.hall, panel));
-
-        mediaContainer.innerHTML = '';
-        chargesContainer.innerHTML = '';
+        container.innerHTML = '';
 
         names.forEach((name, index) => {
-            const mediaPanel = oldMedia.get(String(index)) || createMediaPanel(index);
-            mediaPanel.querySelector('.hall-panel-title').textContent = `Media for ${name}`;
-            mediaContainer.appendChild(mediaPanel);
+            let card = oldCards.get(String(index));
+            const isNewCard = !card;
 
-            const chargesPanel = oldCharges.get(String(index)) || createChargesPanel(index);
-            chargesPanel.querySelector('.hall-panel-title').textContent = `Charges for ${name}`;
-            chargesContainer.appendChild(chargesPanel);
+            if (!card) card = createHallCard(index, name);
+
+            card.dataset.hall = index;
+            card.querySelector('.hall-card-title').textContent = `Hall ${index + 1} - ${name || `Hall ${index + 1}`}`;
+            card.querySelector('.hall-media-title').textContent = `Media Gallery - ${name || `Hall ${index + 1}`}`;
+            card.querySelector('.hall-charges-title').textContent = `Charges & Tariffs - ${name || `Hall ${index + 1}`}`;
+            container.appendChild(card);
+
+            if (isNewCard) {
+                const oldRows = Object.keys(oldFacilityValues || {})
+                    .sort((a, b) => Number(a) - Number(b))
+                    .filter(key => Number(oldFacilityValues[key]?.hall_index ?? 0) === index);
+
+                if (oldRows.length) {
+                    oldRows.forEach(key => addFacilityRow(index, oldFacilityValues[key] || {}));
+                } else {
+                    addFacilityRow(index, {});
+                }
+            }
         });
 
-        showHallPanel('mediaHallPanels', document.getElementById('mediaHallSelect').value || '0');
-        showHallPanel('chargesHallPanels', document.getElementById('chargesHallSelect').value || '0');
+        renumberFacilityRows();
+    }
+
+    function createHallCard(index, name) {
+        const card = document.createElement('div');
+        card.className = 'card border rounded-3 mb-4 hall-detail-card';
+        card.dataset.hall = index;
+        card.innerHTML = `
+            <div class="card-header bg-light d-flex align-items-center justify-content-between flex-wrap gap-2 py-3">
+                <div>
+                    <span class="badge bg-primary me-2">Hall ${index + 1}</span>
+                    <strong class="hall-card-title text-dark">${escapeHtml(name || `Hall ${index + 1}`)}</strong>
+                </div>
+                <span class="small text-muted">Hall-specific details</span>
+            </div>
+            <div class="card-body p-3 p-md-4">
+                <section class="mb-4">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                        <div>
+                            <h6 class="fw-bold text-dark mb-1"><i class="bi bi-building text-primary me-2"></i>Facilities / Sub-units</h6>
+                            <small class="text-muted">Add facilities that belong to this hall only.</small>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm btn-add-hall-facility" data-hall="${index}">
+                            <i class="bi bi-plus-lg me-1"></i> Add Facility
+                        </button>
+                    </div>
+                    <div class="hall-facilities-container" id="hallFacilities-${index}"></div>
+                </section>
+                <hr class="my-4">
+                <section class="mb-4 hall-media-panel hall-wise-panel active" data-hall="${index}">
+                    <h6 class="fw-bold text-dark mb-3 hall-media-title"><i class="bi bi-images text-primary me-2"></i>Media Gallery</h6>
+                    <label class="form-label fw-semibold text-dark small mb-2">Hall Photographs / Gallery Images</label>
+                    <div class="upload-zone mb-3" onclick="this.querySelector('input').click()">
+                        <i class="bi bi-cloud-arrow-up display-6 text-primary mb-2 d-block"></i>
+                        <h6 class="fw-bold mb-1">Drag &amp; Drop Images or <span class="text-primary text-decoration-underline">Browse Files</span></h6>
+                        <p class="text-muted small mb-0">Supports JPG, PNG, WEBP up to 10MB each (Multiple photos allowed)</p>
+                        <input type="file" id="hallImages_${index}" name="halls[${index}][gallery_images][]"
+                               class="d-none hall-gallery-input" data-hall="${index}"
+                               multiple accept="image/jpeg,image/png,image/webp" onchange="previewImages(event)">
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 mb-3 images-preview-container">
+                        <div class="text-muted small py-2 no-images-notice"><i class="bi bi-images me-1"></i> No images uploaded for this hall yet.</div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-12 col-md-7">
+                            <label class="form-label small text-muted">Video Embed Link (YouTube / Vimeo / CDN Stream)</label>
+                            <input type="url" name="halls[${index}][video_url]" class="form-control hall-video-url"
+                                   value="${escapeHtml(oldHallValues?.[index]?.video_url || '')}"
+                                   placeholder="https://www.youtube.com/watch?v=...">
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <label class="form-label small text-muted">Or Upload Video File (MP4, Max 50MB)</label>
+                            <input type="file" name="halls[${index}][video_file]" class="form-control hall-video-file"
+                                   accept="video/mp4,video/webm">
+                        </div>
+                    </div>
+                </section>
+                <hr class="my-4">
+                <section class="hall-charges-panel hall-wise-panel active" data-hall="${index}">
+                    <h6 class="fw-bold text-dark mb-3 hall-charges-title"><i class="bi bi-currency-rupee text-primary me-2"></i>Charges &amp; Tariffs</h6>
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold text-dark small">Base Booking Fee (₹ / per slot or day) <span class="text-danger">*</span></label>
+                            <div class="input-group"><span class="input-group-text">₹</span>
+                                <input type="number" name="halls[${index}][booking_fee]" class="form-control hall-booking-fee"
+                                       placeholder="e.g. 50000" min="0" step="0.01" value="${escapeHtml(oldHallValues?.[index]?.booking_fee ?? '0')}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold text-dark small">Security Deposit (₹ Refundable) <span class="text-danger">*</span></label>
+                            <div class="input-group"><span class="input-group-text">₹</span>
+                                <input type="number" name="halls[${index}][security_deposit]" class="form-control hall-security-deposit"
+                                       placeholder="e.g. 20000" min="0" step="0.01" value="${escapeHtml(oldHallValues?.[index]?.security_deposit ?? '0')}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold text-dark small">Additional Charges (₹ Cleaning, AC, Generator, Sound) <span class="text-danger">*</span></label>
+                            <div class="input-group"><span class="input-group-text">₹</span>
+                                <input type="number" name="halls[${index}][additional_charges]" class="form-control hall-additional-charges"
+                                       placeholder="e.g. 5000" min="0" step="0.01" value="${escapeHtml(oldHallValues?.[index]?.additional_charges ?? '0')}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold text-dark small">GST Rate (%) <span class="text-danger">*</span></label>
+                            <select name="halls[${index}][gst_percentage]" class="form-select hall-gst-select">
+                                <option value="18" ${String(oldHallValues?.[index]?.gst_percentage ?? '18') === '18' ? 'selected' : ''}>18% (Standard GST)</option>
+                                <option value="12" ${String(oldHallValues?.[index]?.gst_percentage ?? '') === '12' ? 'selected' : ''}>12% (Concessional)</option>
+                                <option value="5" ${String(oldHallValues?.[index]?.gst_percentage ?? '') === '5' ? 'selected' : ''}>5% (Minimal)</option>
+                                <option value="0" ${String(oldHallValues?.[index]?.gst_percentage ?? '') === '0' ? 'selected' : ''}>0% (Exempted / Non-Commercial)</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        `;
+        return card;
     }
 
     function createMediaPanel(index) {
@@ -947,7 +992,7 @@
         return panel;
     }
 
-    function createFacilityRow(index, data = {}) {
+    function createFacilityRow(index, hallIndex, data = {}) {
         const row = document.createElement('div');
         row.className = 'facility-row';
         row.id = `facilityRow${index}`;
@@ -956,11 +1001,12 @@
             `<option value="${escapeHtml(type)}" ${String(data.type || (optionIndex === 0 ? facilityTypes[0] : '')) === type ? 'selected' : ''}>${escapeHtml(type)}</option>`
         ).join('');
 
-        const statusOptions = facilityStatuses.map((status, optionIndex) =>
+        const statusOptions = facilityStatuses.map(status =>
             `<option value="${escapeHtml(status)}" ${String(data.status || 'Available') === status ? 'selected' : ''}>${escapeHtml(status)}</option>`
         ).join('');
 
         row.innerHTML = `
+            <input type="hidden" name="facilities[${index}][hall_index]" value="${hallIndex}">
             <div class="d-flex align-items-center justify-content-between mb-2">
                 <span class="badge bg-primary facility-index-badge">Facility #${index + 1}</span>
                 <button type="button" class="btn btn-sm btn-outline-danger btn-remove-facility" title="Remove Facility" style="padding: 2px 8px;">
@@ -968,26 +1014,20 @@
                 </button>
             </div>
             <div class="row g-2">
-                <div class="col-12 col-md-2">
-                    <label class="form-label small text-muted mb-1">Belongs to Hall <span class="text-danger">*</span></label>
-                    <select name="facilities[${index}][hall_index]" class="form-select form-select-sm facility-hall-select">
-                        <option value="0">Hall 1</option>
-                    </select>
-                </div>
                 <div class="col-12 col-md-3">
                     <label class="form-label small text-muted mb-1">Facility Name <span class="text-danger">*</span></label>
                     <input type="text" name="facilities[${index}][name]" class="form-control form-control-sm"
-                           placeholder="e.g. Main Auditorium / Plenary Hall" value="${escapeHtml(data.name || '')}">
+                           placeholder="e.g. Main Auditorium / Plenary Hall" value="${escapeHtml(data.name || '')}" required>
                     <div class="invalid-feedback">Facility name required.</div>
                 </div>
-                <div class="col-6 col-md-3">
+                <div class="col-12 col-md-3">
                     <label class="form-label small text-muted mb-1">Facility Type <span class="text-danger">*</span></label>
-                    <select name="facilities[${index}][type]" class="form-select form-select-sm">${typeOptions}</select>
+                    <select name="facilities[${index}][type]" class="form-select form-select-sm" required>${typeOptions}</select>
                 </div>
                 <div class="col-6 col-md-2">
                     <label class="form-label small text-muted mb-1">Seating Capacity <span class="text-danger">*</span></label>
                     <input type="number" name="facilities[${index}][capacity]" class="form-control form-control-sm"
-                           placeholder="e.g. 1000" min="1" value="${escapeHtml(data.capacity || '')}">
+                           placeholder="e.g. 1000" min="1" value="${escapeHtml(data.capacity || '')}" required>
                     <div class="invalid-feedback">Min 1 seat required.</div>
                 </div>
                 <div class="col-6 col-md-2">
@@ -995,23 +1035,21 @@
                     <input type="number" step="0.01" min="0" name="facilities[${index}][area]"
                            class="form-control form-control-sm" placeholder="e.g. 10000" value="${escapeHtml(data.area || '')}">
                 </div>
-                <div class="col-6 col-md-2">
+                <div class="col-12 col-md-2">
                     <label class="form-label small text-muted mb-1">Availability Status <span class="text-danger">*</span></label>
-                    <select name="facilities[${index}][status]" class="form-select form-select-sm">${statusOptions}</select>
+                    <select name="facilities[${index}][status]" class="form-select form-select-sm" required>${statusOptions}</select>
                 </div>
             </div>
         `;
-
-        row.querySelector('.facility-hall-select').value = String(data.hall_index ?? '0');
         return row;
     }
 
-    function addFacilityRow(data = {}) {
-        const container = document.getElementById('facilitiesContainer');
-        const row = createFacilityRow(facilityIndex, data);
+    function addFacilityRow(hallIndex, data = {}) {
+        const container = document.getElementById(`hallFacilities-${hallIndex}`);
+        if (!container) return;
+
+        const row = createFacilityRow(facilityIndex, hallIndex, data);
         container.appendChild(row);
-        renderHallSelectors(getHallNames());
-        row.querySelector('.facility-hall-select').value = String(data.hall_index ?? '0');
         facilityIndex++;
         renumberFacilityRows();
     }
@@ -1117,84 +1155,88 @@
     }
 
     function renderHallReview() {
-        const select = document.getElementById('reviewHallSelect');
         const output = document.getElementById('hallReviewContent');
-        if (!select || !output) return;
+        if (!output) return;
 
-        const hallIndex = Number(select.value || 0);
         const names = getHallNames();
-        const hallName = names[hallIndex] || `Hall ${hallIndex + 1}`;
-        const money = value => value !== '' && value != null ? '₹' + Number(value || 0).toLocaleString('en-IN') : 'Not entered';
-        const textValue = (panel, selector) => panel?.querySelector(selector)?.value?.trim() || '';
+        const money = value => value !== '' && value != null
+            ? '₹' + Number(value || 0).toLocaleString('en-IN')
+            : 'Not entered';
 
-        const facilityRows = Array.from(document.querySelectorAll('#facilitiesContainer .facility-row')).filter(row =>
-            Number(row.querySelector('.facility-hall-select')?.value) === hallIndex
-        );
+        output.innerHTML = names.map((hallName, hallIndex) => {
+            const hallCard = document.querySelector(`#hallCardsContainer .hall-detail-card[data-hall="${hallIndex}"]`);
+            const facilityRows = Array.from(hallCard?.querySelectorAll('.facility-row') || []);
+            let facilitiesHtml = '<p class="text-muted small mb-0">No facilities added for this hall.</p>';
 
-        let facilitiesHtml = '<p class="text-muted small mb-0">No facilities assigned to this hall.</p>';
-        if (facilityRows.length) {
-            facilitiesHtml = `
-                <div class="table-responsive">
-                    <table class="table table-sm table-bordered align-middle mb-0">
-                        <thead class="table-light"><tr><th>Facility Name</th><th>Type</th><th>Capacity</th><th>Area</th><th>Status</th></tr></thead>
-                        <tbody>${facilityRows.map(row => {
-                            const name = row.querySelector('input[name$="[name]"]')?.value || '—';
-                            const type = row.querySelector('select[name$="[type]"]')?.selectedOptions[0]?.textContent || '—';
-                            const capacity = row.querySelector('input[name$="[capacity]"]')?.value || '—';
-                            const area = row.querySelector('input[name$="[area]"]')?.value || '—';
-                            const status = row.querySelector('select[name$="[status]"]')?.value || '—';
-                            return `<tr><td>${escapeHtml(name)}</td><td>${escapeHtml(type)}</td><td>${escapeHtml(capacity)}</td><td>${escapeHtml(area)}</td><td>${escapeHtml(status)}</td></tr>`;
-                        }).join('')}</tbody>
-                    </table>
+            if (facilityRows.length) {
+                facilitiesHtml = `
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered align-middle mb-0">
+                            <thead class="table-light"><tr><th>Facility Name</th><th>Type</th><th>Capacity</th><th>Area</th><th>Status</th></tr></thead>
+                            <tbody>${facilityRows.map(row => {
+                                const name = row.querySelector('input[name$="[name]"]')?.value || '—';
+                                const type = row.querySelector('select[name$="[type]"]')?.selectedOptions[0]?.textContent || '—';
+                                const capacity = row.querySelector('input[name$="[capacity]"]')?.value || '—';
+                                const area = row.querySelector('input[name$="[area]"]')?.value || '—';
+                                const status = row.querySelector('select[name$="[status]"]')?.value || '—';
+                                return `<tr><td>${escapeHtml(name)}</td><td>${escapeHtml(type)}</td><td>${escapeHtml(capacity)}</td><td>${escapeHtml(area)}</td><td>${escapeHtml(status)}</td></tr>`;
+                            }).join('')}</tbody>
+                        </table>
+                    </div>`;
+            }
+
+            const mediaPanel = hallCard?.querySelector('.hall-media-panel');
+            const imageNames = Array.from(mediaPanel?.querySelector('.hall-gallery-input')?.files || []).map(file => file.name);
+            const videoUrl = mediaPanel?.querySelector('.hall-video-url')?.value?.trim() || '';
+            const videoFile = mediaPanel?.querySelector('.hall-video-file')?.files?.[0]?.name || '';
+            const imageHtml = imageNames.length
+                ? `<ul class="mb-0 ps-3">${imageNames.map(name => `<li>${escapeHtml(name)}</li>`).join('')}</ul>`
+                : '<span class="text-muted">No images selected</span>';
+
+            const chargesPanel = hallCard?.querySelector('.hall-charges-panel');
+            const booking = chargesPanel?.querySelector('.hall-booking-fee')?.value || '';
+            const deposit = chargesPanel?.querySelector('.hall-security-deposit')?.value || '';
+            const additional = chargesPanel?.querySelector('.hall-additional-charges')?.value || '';
+            const gstSelect = chargesPanel?.querySelector('.hall-gst-select');
+            const gst = gstSelect?.selectedOptions[0]?.textContent || 'Not selected';
+            const subtotal = (parseFloat(booking) || 0) + (parseFloat(additional) || 0);
+            const gstRate = parseFloat(gstSelect?.value || 0);
+            const grandTotal = money(subtotal + (subtotal * gstRate / 100) + (parseFloat(deposit) || 0));
+
+            return `
+                <div class="card border rounded-3 mb-3">
+                    <div class="card-header bg-light d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <h6 class="fw-bold text-primary mb-0">${escapeHtml(hallName || `Hall ${hallIndex + 1}`)}</h6>
+                        <span class="badge bg-primary">Hall ${hallIndex + 1} of ${names.length}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h6 class="fw-bold mb-2"><i class="bi bi-building me-2 text-primary"></i>Facilities / Sub-units</h6>
+                            ${facilitiesHtml}
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-12 col-lg-6">
+                                <div class="border rounded-3 p-3 h-100">
+                                    <h6 class="fw-bold mb-3"><i class="bi bi-images me-2 text-primary"></i>Media Gallery</h6>
+                                    <div class="small mb-2"><strong>Images:</strong><div class="mt-1">${imageHtml}</div></div>
+                                    <div class="small mb-2"><strong>Video URL:</strong> ${videoUrl ? `<a href="${escapeHtml(videoUrl)}" target="_blank" rel="noopener">${escapeHtml(videoUrl)}</a>` : '<span class="text-muted">Not entered</span>'}</div>
+                                    <div class="small"><strong>Video file:</strong> ${videoFile ? escapeHtml(videoFile) : '<span class="text-muted">No file selected</span>'}</div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="border rounded-3 p-3 h-100">
+                                    <h6 class="fw-bold mb-3"><i class="bi bi-currency-rupee me-2 text-primary"></i>Charges &amp; Tariffs</h6>
+                                    <div class="d-flex justify-content-between small mb-2"><span>Booking Fee</span><strong>${money(booking)}</strong></div>
+                                    <div class="d-flex justify-content-between small mb-2"><span>Security Deposit</span><strong>${money(deposit)}</strong></div>
+                                    <div class="d-flex justify-content-between small mb-2"><span>Additional Charges</span><strong>${money(additional)}</strong></div>
+                                    <div class="d-flex justify-content-between small mb-2"><span>GST</span><strong>${escapeHtml(gst)}</strong></div>
+                                    <hr class="my-2"><div class="d-flex justify-content-between"><strong>Estimated Total (incl. deposit)</strong><strong class="text-success">${grandTotal}</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>`;
-        }
-
-        const mediaPanel = document.querySelector(`#mediaHallPanels .hall-wise-panel[data-hall="${hallIndex}"]`);
-        const imageInput = mediaPanel?.querySelector('.hall-gallery-input');
-        const imageNames = Array.from(imageInput?.files || []).map(file => file.name);
-        const videoUrl = textValue(mediaPanel, '.hall-video-url');
-        const videoFile = mediaPanel?.querySelector('.hall-video-file')?.files?.[0]?.name || '';
-        const imageHtml = imageNames.length
-            ? `<ul class="mb-0 ps-3">${imageNames.map(name => `<li>${escapeHtml(name)}</li>`).join('')}</ul>`
-            : '<span class="text-muted">No images selected</span>';
-
-        const chargesPanel = document.querySelector(`#chargesHallPanels .hall-wise-panel[data-hall="${hallIndex}"]`);
-        const booking = textValue(chargesPanel, '.hall-booking-fee');
-        const deposit = textValue(chargesPanel, '.hall-security-deposit');
-        const additional = textValue(chargesPanel, '.hall-additional-charges');
-        const gst = chargesPanel?.querySelector('.hall-gst-select')?.selectedOptions[0]?.textContent || 'Not selected';
-        const subtotal = (parseFloat(booking) || 0) + (parseFloat(additional) || 0);
-        const gstRate = parseFloat(chargesPanel?.querySelector('.hall-gst-select')?.value || 0);
-        const grandTotal = money(subtotal + (subtotal * gstRate / 100) + (parseFloat(deposit) || 0));
-
-        output.innerHTML = `
-            <div class="border rounded-3 p-3 mb-3 bg-light">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <div><small class="text-muted d-block">Selected Hall</small><h5 class="fw-bold text-primary mb-0">${escapeHtml(hallName)}</h5></div>
-                    <span class="badge bg-primary">Hall ${hallIndex + 1} of ${names.length}</span>
-                </div>
-            </div>
-            <div class="row g-3">
-                <div class="col-12">
-                    <div class="border rounded-3 p-3 h-100"><h6 class="fw-bold mb-3"><i class="bi bi-building me-2 text-primary"></i>Facilities / Sub-units</h6>${facilitiesHtml}</div>
-                </div>
-                <div class="col-12 col-lg-6">
-                    <div class="border rounded-3 p-3 h-100"><h6 class="fw-bold mb-3"><i class="bi bi-images me-2 text-primary"></i>Media Gallery</h6>
-                        <div class="small mb-2"><strong>Images:</strong><div class="mt-1">${imageHtml}</div></div>
-                        <div class="small mb-2"><strong>Video URL:</strong> ${videoUrl ? `<a href="${escapeHtml(videoUrl)}" target="_blank" rel="noopener">${escapeHtml(videoUrl)}</a>` : '<span class="text-muted">Not entered</span>'}</div>
-                        <div class="small"><strong>Video file:</strong> ${videoFile ? escapeHtml(videoFile) : '<span class="text-muted">No file selected</span>'}</div>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-6">
-                    <div class="border rounded-3 p-3 h-100"><h6 class="fw-bold mb-3"><i class="bi bi-currency-rupee me-2 text-primary"></i>Charges &amp; Tariffs</h6>
-                        <div class="d-flex justify-content-between small mb-2"><span>Booking Fee</span><strong>${money(booking)}</strong></div>
-                        <div class="d-flex justify-content-between small mb-2"><span>Security Deposit</span><strong>${money(deposit)}</strong></div>
-                        <div class="d-flex justify-content-between small mb-2"><span>Additional Charges</span><strong>${money(additional)}</strong></div>
-                        <div class="d-flex justify-content-between small mb-2"><span>GST</span><strong>${escapeHtml(gst)}</strong></div>
-                        <hr class="my-2"><div class="d-flex justify-content-between"><strong>Estimated Total (incl. deposit)</strong><strong class="text-success">${grandTotal}</strong></div>
-                    </div>
-                </div>
-            </div>`;
+        }).join('');
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -1226,15 +1268,7 @@
 
         renderHallManagement();
 
-        // Restore old facilities after a validation failure, or show one clean row.
-        const oldFacilityKeys = Object.keys(oldFacilityValues || {}).sort((a, b) => Number(a) - Number(b));
-        if (oldFacilityKeys.length) {
-            oldFacilityKeys.forEach(key => addFacilityRow(oldFacilityValues[key] || {}));
-        } else {
-            addFacilityRow({});
-        }
-
-        // Changes to hall count rebuild hall name inputs and the hall-specific panels.
+        // Changes to hall count create/remove complete hall cards.
         document.getElementById('hallCountInput').addEventListener('change', renderHallManagement);
         document.getElementById('hallCountInput').addEventListener('input', function () {
             if (this.value !== '') renderHallManagement();
@@ -1242,44 +1276,42 @@
 
         document.getElementById('hallNamesContainer').addEventListener('input', function () {
             const names = getHallNames();
-            renderHallSelectors(names);
-            document.querySelectorAll('.hall-wise-panel').forEach(panel => {
-                const index = Number(panel.dataset.hall);
-                const title = panel.querySelector('.hall-panel-title');
-                if (title) title.textContent = `${panel.closest('#mediaHallPanels') ? 'Media for' : 'Charges for'} ${names[index] || `Hall ${index + 1}`}`;
+            document.querySelectorAll('.hall-detail-card').forEach((card, index) => {
+                const label = names[index] || `Hall ${index + 1}`;
+                const title = card.querySelector('.hall-card-title');
+                const mediaTitle = card.querySelector('.hall-media-title');
+                const chargesTitle = card.querySelector('.hall-charges-title');
+                if (title) title.textContent = `Hall ${index + 1} - ${label}`;
+                if (mediaTitle) mediaTitle.innerHTML = `<i class="bi bi-images text-primary me-2"></i>Media Gallery - ${escapeHtml(label)}`;
+                if (chargesTitle) chargesTitle.innerHTML = `<i class="bi bi-currency-rupee text-primary me-2"></i>Charges &amp; Tariffs - ${escapeHtml(label)}`;
             });
             renderHallReview();
         });
 
-        document.getElementById('mediaHallSelect').addEventListener('change', function () {
-            showHallPanel('mediaHallPanels', this.value);
-        });
-        document.getElementById('chargesHallSelect').addEventListener('change', function () {
-            showHallPanel('chargesHallPanels', this.value);
-        });
-        document.getElementById('reviewHallSelect').addEventListener('change', renderHallReview);
-
-        document.getElementById('btnAddFacility').addEventListener('click', () => addFacilityRow({}));
-        document.getElementById('btnAddFacilityBottom').addEventListener('click', () => addFacilityRow({}));
-
-        document.getElementById('facilitiesContainer').addEventListener('click', function (event) {
-            const removeButton = event.target.closest('.btn-remove-facility');
-            if (!removeButton) return;
-
-            const rows = document.querySelectorAll('.facility-row');
-            if (rows.length <= 1) {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Facility Required',
-                    text: 'At least one facility unit must be recorded for this Convention Centre.',
-                    confirmButtonColor: '#4338ca'
-                });
+        document.getElementById('hallCardsContainer').addEventListener('click', function (event) {
+            const addButton = event.target.closest('.btn-add-hall-facility');
+            if (addButton) {
+                addFacilityRow(Number(addButton.dataset.hall), {});
+                renderHallReview();
                 return;
             }
 
-            removeButton.closest('.facility-row').remove();
-            renumberFacilityRows();
-            renderHallReview();
+            const removeButton = event.target.closest('.btn-remove-facility');
+            if (removeButton) {
+                const currentHall = removeButton.closest('.hall-detail-card');
+                if (currentHall.querySelectorAll('.facility-row').length <= 1) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Facility Required',
+                        text: 'Keep at least one facility unit for each hall.',
+                        confirmButtonColor: '#4338ca'
+                    });
+                    return;
+                }
+                removeButton.closest('.facility-row').remove();
+                renumberFacilityRows();
+                renderHallReview();
+            }
         });
 
         // Update the hall review as fields change.
@@ -1358,7 +1390,7 @@
 
             // Validate charge fields in every hall panel, including currently hidden panels.
             let missingChargePanel = null;
-            document.querySelectorAll('#chargesHallPanels .hall-wise-panel').forEach(panel => {
+            document.querySelectorAll('#hallCardsContainer .hall-charges-panel').forEach(panel => {
                 const fields = panel.querySelectorAll(
                     '.hall-booking-fee, .hall-security-deposit, .hall-additional-charges, .hall-gst-select'
                 );
@@ -1369,13 +1401,12 @@
 
             if (missingChargePanel) {
                 event.preventDefault();
-                const hallIndex = missingChargePanel.dataset.hall;
-                document.getElementById('chargesHallSelect').value = hallIndex;
-                showHallPanel('chargesHallPanels', hallIndex);
+                const hallIndex = missingChargePanel.closest('.hall-detail-card')?.dataset.hall ?? missingChargePanel.dataset.hall;
+                missingChargePanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 Swal.fire({
                     icon: 'warning',
                     title: 'Hall Charges Required',
-                    text: `Please complete all charge details for ${missingChargePanel.querySelector('.hall-panel-title').textContent}.`,
+                    text: `Please complete all charge details for ${missingChargePanel.querySelector('.hall-charges-title').textContent}.`,
                     confirmButtonColor: '#4338ca'
                 });
                 return;
@@ -1393,10 +1424,11 @@
                 return;
             }
 
+            // Keep the submit button appearance unchanged. The universal page
+            // loader in the main layout handles the loading indicator.
             const submitButton = document.getElementById('btnSubmitBottom');
             if (submitButton) {
                 submitButton.disabled = true;
-                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
             }
         });
 
