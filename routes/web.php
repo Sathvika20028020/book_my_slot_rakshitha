@@ -239,3 +239,8 @@ Route::get('/payments/{id}', function ($id) {
         'transactionId' => $id
     ]);
 })->name('superadmin.payments.view');
+
+
+Route::get('/venue-details/{slug}', function ($slug) {
+    return view('venue-details');
+})->name('venue.details');

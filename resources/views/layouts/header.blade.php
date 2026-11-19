@@ -27,9 +27,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#how-it-works">How It Works</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="#for-owners">For Venue Owners</a>
-                    </li>
+                    </li> -->
                 </ul>
 
                 <!-- Right Side Actions -->
