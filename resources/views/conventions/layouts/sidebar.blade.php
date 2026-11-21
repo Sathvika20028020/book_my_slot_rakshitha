@@ -47,7 +47,7 @@
                     <!-- Bookings (with Approve / Reject option for CC) -->
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav {{ request()->is('*booking*') ? 'active' : '' }}"
-                            href="{{ route('center_admin.bookings.index') }}">
+                            href="{{ route('conventions.bookings.index') }}">
                             <span><i class="bi bi-calendar2-check-fill me-2"></i></span>
                             <span>Bookings</span>
                             <span class="badge rounded-pill bg-warning text-dark ms-auto py-1 px-2" style="font-size: 0.68rem; font-weight: 700;">3 New</span>
@@ -57,7 +57,7 @@
                     <!-- Calendar (Slot Availability & Block Dates) -->
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav {{ request()->is('*calendar*') ? 'active' : '' }}"
-                            href="{{ route('center_admin.calendar.index') }}">
+                            href="{{ route('conventions.calendar.index') }}">
                             <span><i class="bi bi-calendar3 me-2"></i></span>
                             <span>Calendar</span>
                         </a>
@@ -66,7 +66,7 @@
                     <!-- Payments & Settlements (Index & View) -->
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav {{ request()->is('*payment*') ? 'active' : '' }}"
-                            href="{{ route('center_admin.payments.index') }}">
+                            href="{{ route('conventions.payments.index') }}">
                             <span><i class="bi bi-credit-card-2-front-fill me-2"></i></span>
                             <span>Payments</span>
                         </a>

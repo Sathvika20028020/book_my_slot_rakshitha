@@ -84,8 +84,9 @@
 
     .booking-id {
         font-size: 12px;
-        color: #94a3b8;
+        color: #0A0F1D;
         margin-bottom: 14px;
+        font-weight: 600 !important;
     }
 
     .status {
@@ -125,7 +126,7 @@
     }
 
     .detail-row span {
-        color: #64748b;
+        color: #0A0F1D;
     }
 
     .detail-row strong {
@@ -277,7 +278,16 @@
             </div>
         </div>
 
-        <a href="#" class="booking-button">View Booking Details</a>
+        <a href="javascript:void(0)" class="booking-button view-booking-btn"
+   data-id="BMS-1001"
+   data-venue="Sri Convention Centre"
+   data-status="confirmed"
+   data-date="25 December 2026"
+   data-event="Wedding"
+   data-amount="₹25,000"
+   data-payment="Paid">
+   <i class="fas fa-eye me-1"></i> View Booking Details
+</a>
 
     </div>
 
@@ -313,7 +323,16 @@
             </div>
         </div>
 
-        <a href="#" class="booking-button">View Booking Details</a>
+       <a href="javascript:void(0)" class="booking-button view-booking-btn"
+   data-id="BMS-1002"
+   data-venue="Royal Palace Convention Hall"
+   data-status="pending"
+   data-date="10 January 2027"
+   data-event="Engagement"
+   data-amount="₹18,000"
+   data-payment="Awaiting Approval">
+   <i class="fas fa-eye me-1"></i> View Booking Details
+</a>
 
     </div>
 
@@ -349,7 +368,16 @@
             </div>
         </div>
 
-        <a href="#" class="booking-button">View Booking Details</a>
+        <a href="javascript:void(0)" class="booking-button view-booking-btn"
+   data-id="BMS-1003"
+   data-venue="Green Garden Convention Centre"
+   data-status="confirmed"
+   data-date="15 February 2027"
+   data-event="Reception"
+   data-amount="₹30,000"
+   data-payment="Paid">
+   <i class="fas fa-eye me-1"></i> View Booking Details
+</a>
 
     </div>
 
@@ -385,7 +413,16 @@
             </div>
         </div>
 
-        <a href="#" class="booking-button">View Booking Details</a>
+       <a href="javascript:void(0)" class="booking-button view-booking-btn"
+   data-id="BMS-1004"
+   data-venue="Royal Star Convention Hall"
+   data-status="cancelled"
+   data-date="05 November 2026"
+   data-event="Birthday"
+   data-amount="₹12,000"
+   data-payment="Refund Pending">
+   <i class="fas fa-eye me-1"></i> View Booking Details
+</a>
 
     </div>
 
@@ -453,6 +490,323 @@
 
         });
     }
+
+
+// OPEN BOOKING DETAILS
+document.querySelectorAll('.view-booking-btn').forEach(function(button) {
+
+    button.addEventListener('click', function() {
+
+        const status = this.dataset.status;
+
+        document.getElementById('modalVenue').textContent =
+            this.dataset.venue;
+
+        document.getElementById('modalBookingId').textContent =
+            'Booking ID: ' + this.dataset.id;
+
+        document.getElementById('modalDate').textContent =
+            this.dataset.date;
+
+        document.getElementById('modalEvent').textContent =
+            this.dataset.event;
+
+        document.getElementById('modalAmount').textContent =
+            this.dataset.amount;
+
+        document.getElementById('modalPayment').textContent =
+            this.dataset.payment;
+
+        const statusBadge = document.getElementById('modalStatus');
+
+        statusBadge.className = 'status status-' + status;
+        statusBadge.textContent =
+            status.charAt(0).toUpperCase() + status.slice(1);
+
+        const message = document.getElementById('modalStatusMessage');
+
+        message.className = 'modal-status-message ' + status;
+
+        const messages = {
+            confirmed:
+                'Your booking has been confirmed by the convention centre. Please refer to the event information and payment details above.',
+
+            pending:
+                'Your booking request has been submitted and is awaiting approval from the convention centre. Payment instructions will be available after approval.',
+
+            cancelled:
+                'This booking has been cancelled. The refund status shown above is Refund Pending. Please contact the convention centre for further assistance.'
+        };
+
+        message.textContent = messages[status] || 'Booking information.';
+
+        document.getElementById('bookingDetailsModal')
+            .classList.add('active');
+
+        document.body.style.overflow = 'hidden';
+
+    });
+
+});
+
+function closeBookingDetails() {
+
+    document.getElementById('bookingDetailsModal')
+        .classList.remove('active');
+
+    document.body.style.overflow = '';
+
+}
+
+// CLOSE WHEN CLICKING OUTSIDE
+document.getElementById('bookingDetailsModal')
+    .addEventListener('click', function(event) {
+
+        if (event.target === this) {
+            closeBookingDetails();
+        }
+
+    });
+
+// CLOSE WITH ESCAPE KEY
+document.addEventListener('keydown', function(event) {
+
+    if (event.key === 'Escape') {
+        closeBookingDetails();
+    }
+
+});
+
 </script>
+
+
+<!-- BOOKING DETAILS MODAL -->
+<div id="bookingDetailsModal" class="booking-details-modal">
+
+    <div class="booking-modal-content">
+
+        <div class="booking-modal-header">
+            <div>
+                <span class="modal-label">BOOKING INFORMATION</span>
+                <h4>Booking Details</h4>
+            </div>
+
+            <button type="button" class="modal-close"
+                    onclick="closeBookingDetails()">
+                &times;
+            </button>
+        </div>
+
+        <div class="booking-modal-body">
+
+            <div class="modal-booking-heading">
+                <div>
+                    <h5 id="modalVenue"></h5>
+                    <p id="modalBookingId"></p>
+                </div>
+
+                <span id="modalStatus" class="status"></span>
+            </div>
+
+            <h6 class="modal-section-title">Event Information</h6>
+
+            <div class="modal-info-grid">
+                <div class="modal-info-item">
+                    <span>Event Date</span>
+                    <strong id="modalDate"></strong>
+                </div>
+
+                <div class="modal-info-item">
+                    <span>Event Type</span>
+                    <strong id="modalEvent"></strong>
+                </div>
+            </div>
+
+            <h6 class="modal-section-title">Payment Information</h6>
+
+            <div class="modal-info-grid">
+                <div class="modal-info-item">
+                    <span>Booking Amount</span>
+                    <strong id="modalAmount"></strong>
+                </div>
+
+                <div class="modal-info-item">
+                    <span>Payment Status</span>
+                    <strong id="modalPayment"></strong>
+                </div>
+            </div>
+
+            <div id="modalStatusMessage" class="modal-status-message"></div>
+
+            <button type="button" class="booking-button"
+                    onclick="closeBookingDetails()">
+                Close Details
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+<style>
+.booking-details-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(10,15,29,.65);
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.booking-details-modal.active {
+    display: flex;
+}
+
+.booking-modal-content {
+    width: 100%;
+    max-width: 550px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 15px 50px rgba(0,0,0,.2);
+}
+
+.booking-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.booking-modal-header h4 {
+    margin: 5px 0 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #0A0F1D;
+}
+
+.modal-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: #D97706;
+    letter-spacing: 1px;
+}
+
+.modal-close {
+    width: 35px;
+    height: 35px;
+    border: 0;
+    border-radius: 50%;
+    background: #F1F5F9;
+    font-size: 25px;
+    color: #334155;
+    cursor: pointer;
+}
+
+.booking-modal-body {
+    padding: 22px;
+}
+
+.modal-booking-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.modal-booking-heading h5 {
+    margin: 0 0 5px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #0A0F1D;
+}
+
+.modal-booking-heading p {
+    margin: 0;
+    color: #0A0F1D;
+    font-size: 13px;
+}
+
+.modal-section-title {
+    margin: 22px 0 12px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #0A0F1D;
+}
+
+.modal-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.modal-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 14px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    min-width: 0;
+}
+
+.modal-info-item span {
+    font-size: 12px;
+    color: #0A0F1D;
+}
+
+.modal-info-item strong {
+    font-size: 13px;
+    color: #0A0F1D;
+    overflow-wrap: anywhere;
+}
+
+.modal-status-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.modal-status-message.confirmed {
+    background: #DCFCE7;
+    color: #166534;
+}
+
+.modal-status-message.pending {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.modal-status-message.cancelled {
+    background: #FEE2E2;
+    color: #991B1B;
+}
+
+@media(max-width:450px) {
+    .booking-details-modal {
+        padding: 12px;
+    }
+
+    .booking-modal-header,
+    .booking-modal-body {
+        padding: 16px;
+    }
+
+    .modal-booking-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+</style>
+
 
 @endsection

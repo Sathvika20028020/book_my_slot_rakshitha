@@ -399,7 +399,7 @@
                                 </td>
 
                                 {{-- Actions --}}
-                                <td class="text-end pe-3">
+                                <!-- <td class="text-end pe-3">
 
                                     <div class="d-inline-flex gap-1">
 
@@ -417,8 +417,30 @@
 
                                     </div>
 
-                                </td>
+                                </td> -->
 
+                                {{-- Actions --}}
+<td class="text-end pe-3">
+
+    <div class="d-inline-flex gap-1">
+
+        {{-- View Centre Preview --}}
+        <a href="{{ route('conventions.preview.venues.show', $convention->id) }}"
+           class="btn btn-info action-btn"
+           title="View Centre">
+            <i class="bi bi-eye"></i>
+        </a>
+
+        {{-- Edit Centre Preview --}}
+        <a href="{{ route('conventions.preview.venues.edit', $convention->id) }}"
+           class="btn btn-primary action-btn"
+           title="Edit Centre">
+            <i class="bi bi-pencil"></i>
+        </a>
+
+    </div>
+
+</td>
                             </tr>
 
                         @empty

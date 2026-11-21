@@ -1,269 +1,343 @@
 
 @extends('user.layouts.app')
 
-@section('title', 'Payment | Book My Slot')
+@section('title', 'My Payments | Book My Slot')
 
 @section('content')
 
 <style>
-    .bms-payment-page {
+    .payments-page {
         padding: 20px 15px 35px;
+        font-family: 'Plus Jakarta Sans', sans-serif;
         color: #0A0F1D;
     }
 
-    .bms-payment-page .payment-heading {
-        font-size: 22px;
+    .payments-title {
+        font-size: 23px;
         font-weight: 800;
         margin-bottom: 5px;
     }
 
-    .bms-payment-page .payment-subtitle {
-        color: #64748B;
+    .payments-subtitle {
         font-size: 13px;
+        color: #64748B;
         margin-bottom: 22px;
     }
 
-    .bms-payment-card {
+    .payment-summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+
+    .payment-summary-card {
+        padding: 16px;
         background: #fff;
         border: 1px solid #E2E8F0;
         border-radius: 13px;
-        padding: 18px;
-        margin-bottom: 16px;
     }
 
-    .bms-payment-card h5 {
-        font-size: 16px;
+    .payment-summary-card h3 {
+        font-size: 23px;
         font-weight: 800;
-        margin-bottom: 16px;
+        margin: 0 0 5px;
     }
 
-    .bms-approved {
-        display: inline-block;
-        background: #DCFCE7;
-        color: #15803D;
+    .payment-summary-card p {
+        margin: 0;
         font-size: 11px;
+        color: #64748B;
+        font-weight: 600;
+    }
+
+    .payments-section-title {
+        font-size: 17px;
         font-weight: 800;
-        padding: 6px 11px;
+        margin-bottom: 15px;
+    }
+
+    .payment-list-card {
+        background: #fff;
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+        padding: 18px;
+        margin-bottom: 15px;
+    }
+
+    .payment-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 7px;
+    }
+
+    .payment-card-header h5 {
+        font-size: 15px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .payment-booking-id {
+        color: #0A0F1D;
+        font-size: 12px;
+        margin-bottom: 14px;
+        font-weight: 600;
+    }
+
+    .payment-status {
+        display: inline-block;
+        padding: 6px 10px;
         border-radius: 20px;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .payment-approved {
+        background: #DCFCE7;
+        color: #166534;
+    }
+
+    .payment-paid {
+        background: #DBEAFE;
+        color: #1D4ED8;
+    }
+
+    .payment-pending {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    .payment-detail-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 9px 0;
+        border-top: 1px solid #F1F5F9;
+        font-size: 13px;
+    }
+
+    .payment-detail-row span {
+        color: #0A0F1D;
+    }
+
+    .payment-detail-row strong {
+        text-align: right;
+        font-weight: 700;
+    }
+
+    .payment-amount {
+        color: #0A0F1D;
+        font-size: 17px;
+        font-weight: 800;
+    }
+.payment-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 9px;
+    background: #0A0F1D;
+    color: #F59E0B !important;
+    text-decoration: none !important;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 800;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.payment-action:hover {
+    background: #1E293B;
+    color: #FBBF24 !important;
+    transform: translateY(-1px);
+}
+
+    .payment-empty {
+        padding: 35px 20px;
+        text-align: center;
+        background: #fff;
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+    }
+
+    .payment-empty i {
+        font-size: 35px;
+        color: #94A3B8;
         margin-bottom: 12px;
     }
 
-    .bms-detail-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 10px 0;
-        border-bottom: 1px solid #F1F5F9;
-        font-size: 13px;
-    }
+    @media(max-width: 480px) {
+        .payment-summary {
+            gap: 8px;
+        }
 
-    .bms-detail-row:last-child {
-        border-bottom: none;
-    }
+        .payment-summary-card {
+            padding: 12px 9px;
+        }
 
-    .bms-detail-label {
-        color: #64748B;
-    }
+        .payment-summary-card h3 {
+            font-size: 19px;
+        }
 
-    .bms-detail-value {
-        font-weight: 700;
-        text-align: right;
-    }
+        .payment-summary-card p {
+            font-size: 10px;
+        }
 
-    .bms-total-box {
-        background: #0A0F1D;
-        color: #fff;
-        border-radius: 11px;
-        padding: 17px;
-        margin-top: 12px;
-    }
-
-    .bms-total-box small {
-        color: #CBD5E1;
-    }
-
-    .bms-total-amount {
-        color: #F59E0B;
-        font-size: 25px;
-        font-weight: 800;
-        margin-top: 5px;
-    }
-
-    .bms-payment-option {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        border: 1px solid #E2E8F0;
-        border-radius: 10px;
-        padding: 14px;
-        margin-bottom: 10px;
-        cursor: pointer;
-    }
-
-    .bms-payment-option:has(input:checked) {
-        border-color: #F59E0B;
-        background: #FFFBEB;
-    }
-
-    .bms-payment-option input {
-        accent-color: #0A0F1D;
-        width: 17px;
-        height: 17px;
-    }
-
-    .bms-payment-option strong {
-        display: block;
-        font-size: 13px;
-    }
-
-    .bms-payment-option small {
-        color: #64748B;
-        font-size: 11px;
-    }
-
-    .bms-pay-button {
-        width: 100%;
-        border: none;
-        border-radius: 9px;
-        padding: 14px;
-        background: #0A0F1D;
-        color: #F59E0B;
-        font-size: 14px;
-        font-weight: 800;
-        margin-top: 10px;
-    }
-
-    .bms-payment-note {
-        color: #64748B;
-        font-size: 11px;
-        line-height: 1.6;
-        margin-top: 12px;
-        text-align: center;
+        .payment-card-header h5 {
+            font-size: 13px;
+        }
     }
 </style>
 
-<div class="bms-payment-page">
+<div class="payments-page">
 
-    <h3 class="payment-heading">Make Payment</h3>
-    <p class="payment-subtitle">
-        Complete your payment for the approved booking.
+    <h2 class="payments-title">My Payments</h2>
+
+    <p class="payments-subtitle">
+        View your approved bookings and manage your payments.
     </p>
 
-    <div class="bms-payment-card">
+    <!-- PAYMENT SUMMARY -->
+    <div class="payment-summary">
 
-        <span class="bms-approved">
-            <i class="fas fa-check-circle"></i> Booking Approved
-        </span>
-
-        <h5>Booking Details</h5>
-
-        <div class="bms-detail-row">
-            <span class="bms-detail-label">Booking ID</span>
-            <span class="bms-detail-value">BMS-2026-001</span>
+        <div class="payment-summary-card">
+            <h3>03</h3>
+            <p>Total Approved</p>
         </div>
 
-        <div class="bms-detail-row">
-            <span class="bms-detail-label">Convention Centre</span>
-            <span class="bms-detail-value">Grand Palace Convention Hall</span>
+        <div class="payment-summary-card">
+            <h3>02</h3>
+            <p>Payment Due</p>
         </div>
 
-        <div class="bms-detail-row">
-            <span class="bms-detail-label">Location</span>
-            <span class="bms-detail-value">Bengaluru</span>
-        </div>
-
-        <div class="bms-detail-row">
-            <span class="bms-detail-label">Event Type</span>
-            <span class="bms-detail-value">Wedding</span>
-        </div>
-
-        <div class="bms-detail-row">
-            <span class="bms-detail-label">Event Date</span>
-            <span class="bms-detail-value">20 November 2026</span>
-        </div>
-
-        <div class="bms-detail-row">
-            <span class="bms-detail-label">Duration</span>
-            <span class="bms-detail-value">1 Day</span>
+        <div class="payment-summary-card">
+            <h3>01</h3>
+            <p>Paid</p>
         </div>
 
     </div>
 
-    <div class="bms-payment-card">
+    <h5 class="payments-section-title">Approved Bookings</h5>
 
-        <h5>Payment Summary</h5>
+    <!-- PAYMENT 1 -->
+    <div class="payment-list-card">
 
-        <div class="bms-detail-row">
-            <span class="bms-detail-label">Hall Booking Amount</span>
-            <span class="bms-detail-value">₹25,000</span>
+        <div class="payment-card-header">
+            <h5>Grand Palace Convention Hall</h5>
+            <span class="payment-status payment-approved">Approved</span>
         </div>
 
-        <div class="bms-detail-row">
-            <span class="bms-detail-label">Additional Charges</span>
-            <span class="bms-detail-value">₹0</span>
+        <div class="payment-booking-id">Booking ID: BMS-2026-001</div>
+
+        <div class="payment-detail-row">
+            <span>Event Date</span>
+            <strong>20 November 2026</strong>
         </div>
 
-        <div class="bms-total-box">
-            <small>Total Amount Payable</small>
-            <div class="bms-total-amount">₹25,000</div>
+        <div class="payment-detail-row">
+            <span>Event Type</span>
+            <strong>Wedding</strong>
         </div>
+
+        <div class="payment-detail-row">
+            <span>Booking Amount</span>
+            <strong class="payment-amount">₹25,000</strong>
+        </div>
+
+        <div class="payment-detail-row">
+            <span>Payment Status</span>
+            <strong style="color:#D97706;">Payment Due</strong>
+        </div>
+
+        <a href="{{ route('user.payments.show', ['booking' => 'BMS-2026-001']) }}"
+   class="payment-action">
+    <i class="fas fa-credit-card me-2"></i>
+    View & Pay
+</a>
 
     </div>
 
-    <div class="bms-payment-card">
+    <!-- PAYMENT 2 -->
+    <div class="payment-list-card">
 
-        <h5>Select Payment Method</h5>
+        <div class="payment-card-header">
+            <h5>Sri Convention Centre</h5>
+            <span class="payment-status payment-approved">Approved</span>
+        </div>
 
-        <form id="paymentForm">
+        <div class="payment-booking-id">Booking ID: BMS-2026-002</div>
 
-            <label class="bms-payment-option">
-                <input type="radio" name="payment_method" value="upi" checked>
-                <div>
-                    <strong><i class="fas fa-mobile-alt me-2"></i>UPI</strong>
-                    <small>Google Pay, PhonePe, Paytm, BHIM</small>
-                </div>
-            </label>
+        <div class="payment-detail-row">
+            <span>Event Date</span>
+            <strong>15 December 2026</strong>
+        </div>
 
-            <label class="bms-payment-option">
-                <input type="radio" name="payment_method" value="card">
-                <div>
-                    <strong><i class="fas fa-credit-card me-2"></i>Credit / Debit Card</strong>
-                    <small>Visa, Mastercard and RuPay</small>
-                </div>
-            </label>
+        <div class="payment-detail-row">
+            <span>Event Type</span>
+            <strong>Reception</strong>
+        </div>
 
-            <label class="bms-payment-option">
-                <input type="radio" name="payment_method" value="netbanking">
-                <div>
-                    <strong><i class="fas fa-university me-2"></i>Net Banking</strong>
-                    <small>Pay through your bank account</small>
-                </div>
-            </label>
+        <div class="payment-detail-row">
+            <span>Booking Amount</span>
+            <strong class="payment-amount">₹30,000</strong>
+        </div>
 
-            <button type="submit" class="bms-pay-button">
-                Proceed to Pay ₹25,000
-                <i class="fas fa-arrow-right ms-2"></i>
-            </button>
+        <div class="payment-detail-row">
+            <span>Payment Status</span>
+            <strong style="color:#D97706;">Payment Due</strong>
+        </div>
 
-            <p class="bms-payment-note">
-                <i class="fas fa-lock me-1"></i>
-                Your payment will be processed securely through the payment gateway.
-            </p>
+       <a href="{{ route('user.payments.show', ['booking' => 'BMS-2026-002']) }}"
+   class="payment-action">
+    <i class="fas fa-credit-card me-2"></i>
+    View & Pay
+</a>
 
-        </form>
+    </div>
 
+    <!-- PAYMENT 3 -->
+    <div class="payment-list-card">
+
+        <div class="payment-card-header">
+            <h5>Green Garden Convention Centre</h5>
+            <span class="payment-status payment-paid">Paid</span>
+        </div>
+
+        <div class="payment-booking-id">Booking ID: BMS-2026-003</div>
+
+        <div class="payment-detail-row">
+            <span>Event Date</span>
+            <strong>25 December 2026</strong>
+        </div>
+
+        <div class="payment-detail-row">
+            <span>Event Type</span>
+            <strong>Engagement</strong>
+        </div>
+
+        <div class="payment-detail-row">
+            <span>Booking Amount</span>
+            <strong class="payment-amount">₹18,000</strong>
+        </div>
+
+        <div class="payment-detail-row">
+            <span>Payment Status</span>
+            <strong style="color:#15803D;">Paid</strong>
+        </div>
+
+        <a href="{{ route('user.invoice.preview', ['bookingId' => 'BMS-2026-003']) }}"
+   class="payment-action">
+    <i class="fas fa-file-invoice me-2"></i>
+    Download Receipt
+</a>
     </div>
 
 </div>
 
 @endsection
-
-@push('scripts')
-<script>
-    document.getElementById('paymentForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        alert('Payment gateway integration will be connected here.');
-    });
-</script>
-@endpush

@@ -55,6 +55,7 @@ Route::prefix('conventions')->group(function () {
  Route::get('venue-lists', [UserConventionController::class,'conventions'])->name('user.venue-lists');
  Route::get('venue-lists/{id}', [UserConventionController::class,'show'])->name('user.venue-lists.show');
 
+
 Route::prefix('user')->group(function () {
 
     Route::get('/register', [UserLoginController::class, 'register'])->name('user.register');
@@ -188,21 +189,29 @@ Route::get('/login', function () {
 Route::view('/user/login', 'user.auth.login')->name('user.login');
 Route::view('/user/otp', 'user.auth.otp')->name('user.otp');
 Route::view('/user/dashboard', 'user.dashboard')->name('user.dashboard');
+Route::view('/user/center', 'user.venue.index')->name('user.center.index');
 Route::view('/user/center/details', 'user.venue.show')->name('user.center.details');
 Route::view('/user/center/booking', 'user.venue.booking')->name('user.center.booking');
-Route::view('/user/payments', 'user.payments.index')->name('user.payments');
+
 Route::view('/user/bookings', 'user.bookings')->name('user.bookings');
 Route::view('/user/forgot-password', 'user.auth.forgot-password')->name('user.forgot-password');
 Route::view('/user/reviews/create', 'user.reviews.create')->name('user.reviews.create');
  Route::view('/user/profile', 'user.profile')
     ->name('user.profile');
 
-
-Route::get('/invoice-preview', function () {
+Route::get('/invoice-preview', function (\Illuminate\Http\Request $request) {
     return view('user.invoice.show', [
-        'bookingId' => 'BMS-2026-001'
+        'bookingId' => $request->query('bookingId', 'BMS-2026-001')
     ]);
 })->name('user.invoice.preview');
+
+// User Payments
+Route::view('/user/payments', 'user.payments.index')
+    ->name('user.payments.index');
+
+Route::get('/user/payments/{booking}', function ($booking) {
+    return view('user.payments.show', compact('booking'));
+})->name('user.payments.show');
 
 
 // SUPERADMIN BOOKINGS
@@ -244,3 +253,47 @@ Route::get('/payments/{id}', function ($id) {
 Route::get('/venue-details/{slug}', function ($slug) {
     return view('venue-details');
 })->name('venue.details');
+
+
+// CONVENTION CENTRE PORTAL ROUTES
+
+Route::prefix('conventions')->name('conventions.')->group(function () {
+
+    // Bookings
+    Route::view('/bookings', 'conventions.booking.index')
+        ->name('bookings.index');
+
+    Route::view('/bookings/show', 'conventions.booking.show')
+        ->name('bookings.show');
+
+    // Calendar
+    Route::view('/calendar', 'conventions.calendar.index')
+        ->name('calendar.index');
+
+    // Payments
+    Route::view('/payments', 'conventions.payments.index')
+        ->name('payments.index');
+
+    Route::view('/payments/view', 'conventions.payments.view')
+        ->name('payments.view');
+
+});
+
+Route::prefix('conventions-preview')->name('conventions.preview.')->group(function () {
+
+    Route::view('/venues', 'conventions.venues.index')
+        ->name('venues.index');
+
+    Route::get('/venues/{id}/edit', function ($id) {
+        return view('conventions.venues.edit', [
+            'previewId' => $id
+        ]);
+    })->name('venues.edit');
+
+    Route::get('/venues/{id}/show', function ($id) {
+        return view('conventions.venues.show', [
+            'previewId' => $id
+        ]);
+    })->name('venues.show');
+
+});

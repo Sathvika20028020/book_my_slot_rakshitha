@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,27 +9,32 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 
+
     <style>
         :root {
             --navy: #0A0F1D;
             --gold: #F59E0B;
-            --gold-light: #FFFBEB;
             --text: #334155;
             --muted: #64748B;
             --border: #E2E8F0;
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            padding: 35px 15px;
+            padding: 25px 15px;
             background: #F1F5F9;
             font-family: Arial, sans-serif;
             color: var(--text);
         }
 
+        /* ACTION BUTTONS */
         .invoice-actions {
             max-width: 950px;
-            margin: 0 auto 18px;
+            margin: 0 auto 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -39,16 +44,17 @@
 
         .invoice-actions a,
         .invoice-actions button {
+            padding: 10px 15px;
             border: none;
-            border-radius: 8px;
-            padding: 11px 17px;
-            font-size: 13px;
+            border-radius: 7px;
+            font-size: 12px;
             font-weight: 700;
             text-decoration: none;
+            cursor: pointer;
         }
 
         .back-btn {
-            background: #fff;
+            background: white;
             color: var(--navy);
             border: 1px solid var(--border) !important;
         }
@@ -63,175 +69,207 @@
             color: var(--navy);
         }
 
+        /* INVOICE PAPER */
         .invoice-paper {
+            width: 100%;
             max-width: 950px;
             margin: auto;
-            background: #fff;
-            border-radius: 12px;
+            background: white;
+            border-radius: 9px;
             overflow: hidden;
-            box-shadow: 0 10px 35px rgba(15, 23, 42, .08);
+            box-shadow: 0 8px 30px rgba(15, 23, 42, .08);
         }
 
+        /* HEADER */
         .invoice-header {
             background: var(--navy);
             color: white;
-            padding: 38px 42px;
-            position: relative;
-            overflow: hidden;
+            padding: 23px 32px;
+            text-align: center;
         }
 
-        .invoice-header::after {
-            content: "";
-            position: absolute;
-            width: 230px;
-            height: 230px;
-            border: 35px solid rgba(245, 158, 11, .10);
-            border-radius: 50%;
-            right: -65px;
-            top: -110px;
+        .header-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            text-align: center;
+        }
+
+        .invoice-heading {
+            width: 100%;
+            text-align: center;
+            margin: 0 auto;
         }
 
         .brand {
-            font-size: 25px;
-            font-weight: 900;
-            letter-spacing: .5px;
             color: white;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: .4px;
         }
 
-        .brand span {
+        .brand span,
+        .footer-brand span {
             color: var(--gold);
         }
 
         .brand-tagline {
             color: #CBD5E1;
-            font-size: 11px;
-            letter-spacing: 2px;
-            margin-top: 5px;
-        }
-
-        .invoice-heading {
-            text-align: right;
-            position: relative;
-            z-index: 1;
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            margin-top: 4px;
         }
 
         .invoice-heading h1 {
-            font-size: 34px;
+            font-size: 29px;
             font-weight: 900;
             letter-spacing: 2px;
-            margin: 0;
+            margin: 10px 0 0;
         }
 
         .invoice-heading p {
             color: #CBD5E1;
-            font-size: 12px;
-            margin: 6px 0 0;
+            font-size: 9px;
+            letter-spacing: .8px;
+            margin: 4px 0 0;
         }
 
+        /* INVOICE BODY */
         .invoice-body {
-            padding: 38px 42px;
-        }
-
-        .paid-stamp {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 9px 16px;
-            border: 2px solid #16A34A;
-            color: #15803D;
-            border-radius: 7px;
-            font-size: 13px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            transform: rotate(-4deg);
-        }
-
-        .invoice-meta {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin: 28px 0;
-            flex-wrap: wrap;
+            padding: 23px 32px;
         }
 
         .meta-label {
             color: var(--muted);
-            font-size: 11px;
+            font-size: 9px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 7px;
+            letter-spacing: .8px;
+            margin-bottom: 4px;
         }
 
         .meta-value {
             color: var(--navy);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 800;
         }
 
         .meta-sub {
             color: var(--muted);
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        /* INVOICE NUMBER AND PAYMENT STATUS */
+        .invoice-top {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .invoice-identifiers {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .paid-area {
+            text-align: right;
+        }
+
+        .paid-stamp {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 13px;
+            border: 2px solid #16A34A;
+            border-radius: 5px;
+            color: #15803D;
             font-size: 12px;
-            margin-top: 5px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            transform: none !important;
         }
 
         .invoice-divider {
             border: 0;
             border-top: 1px solid var(--border);
-            margin: 27px 0;
+            margin: 15px 0;
+            opacity: 1;
         }
 
+        /* BILLING INFORMATION */
+        .billing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .billing-right {
+            text-align: right;
+        }
+
+        /* SECTION HEADINGS */
         .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 7px;
             color: var(--navy);
-            font-size: 15px;
+            font-size: 12px;
             font-weight: 900;
-            margin-bottom: 17px;
+            margin-bottom: 10px;
         }
 
         .section-heading i {
             color: var(--gold);
-            margin-right: 8px;
+            width: 16px;
+            text-align: center;
+            flex-shrink: 0;
         }
 
+        /* EVENT DETAILS */
         .details-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px 30px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px 18px;
         }
 
         .detail-item label {
             display: block;
             color: var(--muted);
-            font-size: 11px;
+            font-size: 9px;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
 
         .detail-item strong {
             color: var(--navy);
-            font-size: 13px;
+            font-size: 10px;
             font-weight: 800;
         }
 
+        /* INVOICE TABLE */
         .invoice-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            margin-top: 8px;
         }
 
         .invoice-table th {
             background: var(--navy);
-            color: #fff;
-            padding: 14px 15px;
-            font-size: 11px;
+            color: white;
+            padding: 9px 11px;
+            font-size: 9px;
             text-align: left;
-            letter-spacing: .5px;
+            letter-spacing: .3px;
         }
 
         .invoice-table td {
-            padding: 17px 15px;
+            padding: 10px 11px;
             border-bottom: 1px solid var(--border);
-            font-size: 13px;
+            font-size: 10px;
             color: var(--text);
         }
 
@@ -243,143 +281,188 @@
             text-align: right !important;
         }
 
+        /* PAYMENT INFORMATION */
         .payment-box {
             background: #F8FAFC;
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 25px;
+            border-radius: 7px;
+            padding: 12px 15px;
+            margin-top: 14px;
         }
 
-        .payment-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            padding: 8px 0;
-            font-size: 13px;
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
         }
 
-        .payment-row span {
+        .payment-item span {
+            display: block;
             color: var(--muted);
+            font-size: 9px;
+            margin-bottom: 4px;
         }
 
-        .payment-row strong {
+        .payment-item strong {
+            display: block;
             color: var(--navy);
-            text-align: right;
+            font-size: 10px;
+            overflow-wrap: anywhere;
         }
 
+        /* TOTAL */
         .grand-total {
-            background: var(--navy);
-            color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            background: var(--navy);
+            color: white;
+            border-radius: 7px;
+            padding: 12px 17px;
+            margin-top: 12px;
         }
 
         .grand-total span {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 700;
         }
 
         .grand-total strong {
             color: var(--gold);
-            font-size: 25px;
+            font-size: 21px;
             font-weight: 900;
         }
 
+        /* PAYMENT SUCCESS */
         .payment-success {
             background: #F0FDF4;
             border: 1px solid #BBF7D0;
             color: #166534;
-            border-radius: 9px;
-            padding: 15px;
-            margin-top: 22px;
-            font-size: 12px;
-            line-height: 1.7;
+            border-radius: 6px;
+            padding: 9px 12px;
+            margin-top: 12px;
+            font-size: 10px;
+            line-height: 1.5;
         }
 
+        /* FOOTER */
         .invoice-footer {
             background: #F8FAFC;
             border-top: 1px solid var(--border);
-            padding: 25px 42px;
+            padding: 13px 25px;
             text-align: center;
         }
 
         .invoice-footer h6 {
             color: var(--navy);
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 900;
+            margin-bottom: 4px;
         }
 
         .invoice-footer p {
             color: var(--muted);
-            font-size: 11px;
-            margin: 5px 0;
+            font-size: 9px;
+            margin: 3px 0;
         }
 
         .footer-brand {
             color: var(--navy);
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 900;
-            margin-top: 14px;
+            margin-top: 7px;
         }
 
-        .footer-brand span {
-            color: var(--gold);
-        }
-
-        @media(max-width: 600px) {
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 600px) {
             body {
-                padding: 15px 8px;
+                padding: 12px 7px;
             }
 
-            .invoice-header,
-            .invoice-body {
-                padding: 25px 18px;
+            .invoice-header {
+                padding: 20px 15px;
             }
 
+            .header-grid,
             .invoice-heading {
-                text-align: left;
-                margin-top: 25px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center !important;
+            }
+
+            .brand {
+                font-size: 17px;
+                text-align: center;
+            }
+
+            .brand-tagline,
+            .invoice-heading h1,
+            .invoice-heading p {
+                text-align: center !important;
             }
 
             .invoice-heading h1 {
-                font-size: 27px;
+                font-size: 25px;
             }
 
-            .details-grid {
+            .invoice-body {
+                padding: 18px 14px;
+            }
+
+            .invoice-top {
                 grid-template-columns: 1fr 1fr;
-                gap: 17px 12px;
+            }
+
+            .invoice-identifiers {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .billing-grid {
+                gap: 12px;
+            }
+
+            .billing-right {
+                text-align: right;
+            }
+
+            .details-grid,
+            .payment-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px 9px;
             }
 
             .invoice-table th,
             .invoice-table td {
-                padding: 11px 8px;
-                font-size: 11px;
-            }
-
-            .invoice-footer {
-                padding: 22px 15px;
+                padding: 8px 5px;
+                font-size: 9px;
             }
 
             .grand-total strong {
-                font-size: 20px;
+                font-size: 18px;
+            }
+
+            .invoice-footer {
+                padding: 13px 10px;
             }
         }
 
+        /* PRINT */
         @media print {
             @page {
-                size: A4;
-                margin: 10mm;
+                size: A4 portrait;
+                margin: 7mm;
             }
 
+            html,
             body {
-                padding: 0;
-                background: white;
+                width: 100%;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
             }
 
             .invoice-actions {
@@ -387,19 +470,83 @@
             }
 
             .invoice-paper {
-                max-width: 100%;
-                box-shadow: none;
-                border-radius: 0;
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                overflow: visible !important;
             }
 
-            .invoice-header,
-            .invoice-table th,
-            .grand-total {
+            .invoice-header {
+                padding: 17px 23px !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
+
+            .header-grid,
+            .invoice-heading {
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+                text-align: center !important;
+            }
+
+            .invoice-body {
+                padding: 17px 23px !important;
+            }
+
+            .invoice-divider {
+                margin: 11px 0 !important;
+            }
+
+            .details-grid {
+                gap: 9px 14px !important;
+            }
+
+            .payment-box {
+                padding: 9px 12px !important;
+                margin-top: 10px !important;
+            }
+
+            .grand-total {
+                padding: 9px 14px !important;
+                margin-top: 9px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .payment-success {
+                padding: 7px 10px !important;
+                margin-top: 9px !important;
+            }
+
+            .invoice-footer {
+                padding: 10px 15px !important;
+            }
+
+            .invoice-table th {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .invoice-table,
+            .payment-box,
+            .grand-total,
+            .payment-success,
+            .billing-grid,
+            .details-grid {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            * {
+                box-shadow: none !important;
+            }
         }
     </style>
+
 </head>
 
 <body>
@@ -425,57 +572,63 @@
     <div class="invoice-paper" id="invoiceContent">
 
         <!-- HEADER -->
-        <div class="invoice-header">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <div class="brand">BOOK MY <span>SLOT</span></div>
-                    <div class="brand-tagline">YOUR EVENT. YOUR PERFECT VENUE.</div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="invoice-heading">
-                        <h1>INVOICE</h1>
-                        <p>OFFICIAL PAYMENT RECEIPT</p>
-                    </div>
-                </div>
-            </div>
+       <div class="invoice-header">
+    <div class="header-grid">
+        <div class="invoice-heading">
+            <div class="brand">BOOK MY <span>SLOT</span></div>
+            <div class="brand-tagline">YOUR EVENT. YOUR PERFECT VENUE.</div>
+            <h1>INVOICE</h1>
+            <p>OFFICIAL PAYMENT RECEIPT</p>
         </div>
+    </div>
+</div>
 
         <div class="invoice-body">
 
-            <!-- INVOICE STATUS -->
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                <div>
+            <!-- INVOICE NUMBER AND PAID STATUS -->
+            <div class="invoice-top">
+
+                <div class="invoice-identifiers">
+                    <div>
+                        <div class="meta-label">Invoice Number</div>
+                        <div class="meta-value">BMS-INV-2026-00125</div>
+                        <div class="meta-sub">Invoice Date: 17 November 2026</div>
+                    </div>
+
+                    <div>
+                        <div class="meta-label">Booking Reference</div>
+                        <div class="meta-value">BMS-BOOK-00125</div>
+                    </div>
+                </div>
+
+                <div class="paid-area">
                     <div class="meta-label">Payment Status</div>
                     <div class="paid-stamp">
                         <i class="fas fa-check-circle"></i> PAID
                     </div>
                 </div>
 
-                <div class="text-md-end">
-                    <div class="meta-label">Invoice Number</div>
-                    <div class="meta-value">BMS-INV-2026-00125</div>
-                    <div class="meta-sub">Invoice Date: 17 November 2026</div>
-                </div>
             </div>
 
             <hr class="invoice-divider">
 
             <!-- BILLING INFORMATION -->
-            <div class="row g-4">
-                <div class="col-md-6">
+            <div class="billing-grid">
+
+                <div>
                     <div class="meta-label">Billed To</div>
                     <div class="meta-value">Rahul Kumar</div>
                     <div class="meta-sub">Mobile: +91 9876543210</div>
                     <div class="meta-sub">Bengaluru, Karnataka</div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="billing-right">
                     <div class="meta-label">Venue / Convention Centre</div>
                     <div class="meta-value">Grand Palace Convention Hall</div>
                     <div class="meta-sub">Bengaluru, Karnataka, India</div>
                     <div class="meta-sub">Booking Reference: BMS-BOOK-00125</div>
                 </div>
+
             </div>
 
             <hr class="invoice-divider">
@@ -536,62 +689,65 @@
                 <i class="fas fa-receipt"></i> Invoice Breakdown
             </h6>
 
-            <div class="table-responsive">
-                <table class="invoice-table">
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th>Duration</th>
-                            <th class="text-right">Rate</th>
-                            <th class="text-right">Amount</th>
-                        </tr>
-                    </thead>
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Duration</th>
+                        <th class="text-right">Rate</th>
+                        <th class="text-right">Amount</th>
+                    </tr>
+                </thead>
 
-                    <tbody>
-                        <tr>
-                            <td>
-                                <strong>AC Hall Rental</strong>
-                                <div class="text-muted small">Grand Palace Convention Hall</div>
-                            </td>
-                            <td>3 Days</td>
-                            <td class="text-right">₹25,000</td>
-                            <td class="text-right"><strong>₹75,000</strong></td>
-                        </tr>
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>AC Hall Rental</strong>
+                            <div class="text-muted">Grand Palace Convention Hall</div>
+                        </td>
+                        <td>3 Days</td>
+                        <td class="text-right">₹25,000</td>
+                        <td class="text-right"><strong>₹75,000</strong></td>
+                    </tr>
 
-                        <tr>
-                            <td>Additional Services</td>
-                            <td>—</td>
-                            <td class="text-right">₹0</td>
-                            <td class="text-right">₹0</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                    <tr>
+                        <td><strong>Additional Services</strong></td>
+                        <td>—</td>
+                        <td class="text-right">₹0</td>
+                        <td class="text-right">₹0</td>
+                    </tr>
+                </tbody>
+            </table>
 
             <!-- PAYMENT DETAILS -->
             <div class="payment-box">
+
                 <h6 class="section-heading mb-2">
                     <i class="fas fa-credit-card"></i> Payment Information
                 </h6>
 
-                <div class="payment-row">
-                    <span>Payment Method</span>
-                    <strong>UPI</strong>
-                </div>
+                <div class="payment-grid">
 
-                <div class="payment-row">
-                    <span>Transaction ID</span>
-                    <strong>TXN2026111700125</strong>
-                </div>
+                    <div class="payment-item">
+                        <span>Payment Method</span>
+                        <strong>UPI</strong>
+                    </div>
 
-                <div class="payment-row">
-                    <span>Payment Date</span>
-                    <strong>17 November 2026</strong>
-                </div>
+                    <div class="payment-item">
+                        <span>Transaction ID</span>
+                        <strong>TXN2026111700125</strong>
+                    </div>
 
-                <div class="payment-row">
-                    <span>Payment Status</span>
-                    <strong style="color:#15803D;">Successful</strong>
+                    <div class="payment-item">
+                        <span>Payment Date</span>
+                        <strong>17 November 2026</strong>
+                    </div>
+
+                    <div class="payment-item">
+                        <span>Payment Status</span>
+                        <strong style="color:#15803D;">Successful</strong>
+                    </div>
+
                 </div>
             </div>
 
@@ -601,10 +757,10 @@
                 <strong>₹75,000</strong>
             </div>
 
+            <!-- SUCCESS MESSAGE -->
             <div class="payment-success">
                 <i class="fas fa-check-circle me-2"></i>
                 <strong>Payment received successfully!</strong>
-                <br>
                 Your venue booking has been confirmed. Please retain this invoice
                 as proof of payment and booking confirmation.
             </div>
@@ -613,7 +769,9 @@
 
         <!-- FOOTER -->
         <div class="invoice-footer">
+
             <h6>Thank You for Choosing Book My Slot!</h6>
+
             <p>This is a computer-generated invoice for the booking and payment details shown above.</p>
             <p>For booking-related assistance, please contact the convention centre.</p>
 
@@ -621,7 +779,8 @@
                 BOOK MY <span>SLOT</span>
             </div>
 
-            <p class="mt-2">Making every event memorable.</p>
+            <p>Making every event memorable.</p>
+
         </div>
 
     </div>
@@ -646,7 +805,8 @@
                 html2canvas: {
                     scale: 2,
                     useCORS: true,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
+                    scrollY: 0
                 },
 
                 jsPDF: {
@@ -655,17 +815,29 @@
                     orientation: 'portrait'
                 },
 
+                // Export the complete invoice as one A4 page.
                 pagebreak: {
-                    mode: ['avoid-all', 'css', 'legacy']
+                    mode: ['avoid-all']
                 }
             };
 
             html2pdf()
                 .set(options)
                 .from(invoice)
+                .toPdf()
+                .get('pdf')
+                .then(function(pdf) {
+
+                    // Keep the PDF to one page for this compact invoice.
+                    while (pdf.internal.getNumberOfPages() > 1) {
+                        pdf.deletePage(pdf.internal.getNumberOfPages());
+                    }
+
+                })
                 .save();
         }
     </script>
 
 </body>
+
 </html>

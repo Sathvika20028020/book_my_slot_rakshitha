@@ -384,7 +384,7 @@
                             data-payout="147000"
                         >
                             <td>
-                                <a href="{{ route('center_admin.payments.view') }}?id=TXN-9041"
+                                <a href="{{ route('conventions.payments.view') }}?id=TXN-9041"
                                    class="fw-bold text-primary text-decoration-none">
                                     TXN-2026-9041
                                 </a>
@@ -425,7 +425,7 @@
                             <td class="small text-muted">Today, 10:22 AM</td>
 
                             <td class="text-end">
-                                <a href="{{ route('center_admin.payments.view') }}?id=TXN-9041"
+                                <a href="{{ route('conventions.payments.view') }}?id=TXN-9041"
                                    class="btn btn-sm btn-primary">
                                     <i class="bi bi-eye me-1"></i> View
                                 </a>
@@ -441,7 +441,7 @@
                             data-payout="666400"
                         >
                             <td>
-                                <a href="{{ route('center_admin.payments.view') }}?id=TXN-9035"
+                                <a href="{{ route('conventions.payments.view') }}?id=TXN-9035"
                                    class="fw-bold text-primary text-decoration-none">
                                     TXN-2026-9035
                                 </a>
@@ -449,7 +449,7 @@
                             </td>
 
                             <td>
-                                <a href="{{ route('center_admin.booking.show') }}?id=CC-9035"
+                                <a href="{{ route('conventions.bookings.show') }}?id=CC-9035"
                                    class="badge bg-light text-dark border text-decoration-none fw-semibold">
                                     #CC-9035
                                 </a>
@@ -482,7 +482,7 @@
                             <td class="small text-muted">08 Nov 2026</td>
 
                             <td class="text-end">
-                                <a href="{{ route('center_admin.payments.view') }}?id=TXN-9035"
+                                <a href="{{ route('conventions.payments.view') }}?id=TXN-9035"
                                    class="btn btn-sm btn-primary">
                                     <i class="bi bi-eye me-1"></i> View
                                 </a>
@@ -498,7 +498,7 @@
                             data-payout="303800"
                         >
                             <td>
-                                <a href="{{ route('center_admin.payments.view') }}?id=TXN-9032"
+                                <a href="{{ route('conventions.payments.view') }}?id=TXN-9032"
                                    class="fw-bold text-primary text-decoration-none">
                                     TXN-2026-9032
                                 </a>
@@ -506,7 +506,7 @@
                             </td>
 
                             <td>
-                                <a href="{{ route('center_admin.booking.show') }}?id=CC-9032"
+                                <a href="{{ route('conventions.bookings.show') }}?id=CC-9032"
                                    class="badge bg-light text-dark border text-decoration-none fw-semibold">
                                     #CC-9032
                                 </a>
@@ -539,7 +539,7 @@
                             <td class="small text-muted">04 Nov 2026</td>
 
                             <td class="text-end">
-                                <a href="{{ route('center_admin.payments.view') }}?id=TXN-9032"
+                                <a href="{{ route('conventions.payments.view') }}?id=TXN-9032"
                                    class="btn btn-sm btn-primary">
                                     <i class="bi bi-eye me-1"></i> View
                                 </a>
@@ -555,7 +555,7 @@
                             data-payout="0"
                         >
                             <td>
-                                <a href="{{ route('center_admin.payments.view') }}?id=TXN-9028"
+                                <a href="{{ route('conventions.payments.view') }}?id=TXN-9028"
                                    class="fw-bold text-danger text-decoration-none">
                                     TXN-2026-9028
                                 </a>
@@ -563,7 +563,7 @@
                             </td>
 
                             <td>
-                                <a href="{{ route('center_admin.booking.show') }}?id=CC-9028"
+                                <a href="{{ route('conventions.bookings.show') }}?id=CC-9028"
                                    class="badge bg-light text-dark border text-decoration-none fw-semibold">
                                     #CC-9028
                                 </a>
@@ -596,7 +596,7 @@
                             <td class="small text-muted">01 Nov 2026</td>
 
                             <td class="text-end">
-                                <a href="{{ route('center_admin.payments.view') }}?id=TXN-9028"
+                                <a href="{{ route('conventions.payments.view') }}?id=TXN-9028"
                                    class="btn btn-sm btn-primary">
                                     <i class="bi bi-eye me-1"></i> View
                                 </a>

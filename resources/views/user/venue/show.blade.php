@@ -302,20 +302,42 @@
 
             </div>
 
-            <!-- LOCATION -->
-            <div class="detail-card mb-4">
-                <h5 class="section-heading">Location</h5>
+<!-- LOCATION -->
+<div class="detail-card mb-4">
 
-                <p class="description mb-0">
-                    <i class="fas fa-map-marker-alt location-icon"></i>
-                    Bengaluru, Karnataka, India
-                </p>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="section-heading mb-0">Location</h5>
 
-                <div class="location-placeholder mt-3">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <span>Location map will be displayed here</span>
-                </div>
-            </div>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=Grand+Palace+Convention+Hall,+Bengaluru,+Karnataka,+India"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="direction-btn">
+            <i class="fas fa-directions"></i>
+            Get Directions
+        </a>
+    </div>
+
+    <p class="description mb-0">
+        <i class="fas fa-map-marker-alt location-icon"></i>
+        Bengaluru, Karnataka, India
+    </p>
+
+    <!-- GOOGLE MAP -->
+    <div class="mt-3" style="width:100%; height:300px; overflow:hidden; border-radius:10px;">
+
+        <iframe
+            src="https://maps.google.com/maps?q=Grand%20Palace%20Convention%20Hall%2C%20Bengaluru%2C%20Karnataka&t=&z=15&ie=UTF8&iwloc=&output=embed"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+
+    </div>
+
+</div>
 
         </div>
 
@@ -1033,6 +1055,27 @@
     .summary-book-btn {
         width: 100%;
     }
+}
+
+.direction-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 10px;
+    background: #0A0F1D;
+    color: #F59E0B;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all .2s ease;
+}
+
+.direction-btn:hover {
+    background: #1E293B;
+    color: #FBBF24;
 }
 </style>
 

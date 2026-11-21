@@ -239,8 +239,8 @@
                 <h6 class="fw-bold text-dark mb-2">Slot Color Legend</h6>
                 <div class="d-flex flex-wrap align-items-center gap-3">
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-light text-success border fw-bold">3 slots free</span>
-                        <span class="small text-muted">All slots open for booking</span>
+                       <span class="badge bg-light text-success border fw-bold">Available</span>
+<span class="small text-muted">Available for booking</span>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <span class="slot-tag-badge slot-tag-blue" style="width: auto; padding: 2px 10px;">Booked</span>
@@ -258,15 +258,16 @@
             <div class="card border-0 shadow-sm rounded-4 p-3">
                 <h6 class="fw-bold text-dark mb-2">Quick Slot Rules</h6>
                 <p class="small text-muted mb-0">
-                    Each hall operates 3 standard slots daily: Morning (8:00 AM - 2:00 PM), Evening (5:00 PM - 11:30 PM), or Full Day (8:00 AM - 11:30 PM). Clicking a date allows you to view bookings or block dates.
-                </p>
+    Bookings are available from today evening until tomorrow evening.
+    Click a booked date to view the customer booking details.
+</p>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Modal: Date Details / Slot Management -->
-<div class="modal fade" id="dateSlotModal" tabindex="-1" aria-hidden="true">
+<!-- <div class="modal fade" id="dateSlotModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
@@ -278,7 +279,7 @@
             </div>
             <div class="modal-body py-4">
                 <div class="d-flex flex-column gap-3" id="slotDetailList">
-                    <!-- Morning Slot -->
+               
                     <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
                         <div>
                             <strong class="text-dark small d-block">Morning Slot (08:00 AM - 02:00 PM)</strong>
@@ -287,7 +288,7 @@
                         <button class="btn btn-sm btn-outline-secondary rounded-pill" onclick="toggleSlot('morning')">Toggle</button>
                     </div>
 
-                    <!-- Evening Slot -->
+                  
                     <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
                         <div>
                             <strong class="text-dark small d-block">Evening Slot (05:00 PM - 11:30 PM)</strong>
@@ -296,7 +297,7 @@
                         <button class="btn btn-sm btn-outline-secondary rounded-pill" onclick="toggleSlot('evening')">Toggle</button>
                     </div>
 
-                    <!-- Full Day -->
+           
                     <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
                         <div>
                             <strong class="text-dark small d-block">Full Day Booking</strong>
@@ -311,7 +312,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- Modal: Block Date -->
 <div class="modal fade" id="blockDateModal" tabindex="-1" aria-hidden="true">
@@ -364,6 +365,7 @@
 </div>
 @endsection
 
+
 @section('script')
 <script>
     const monthNames = [
@@ -372,94 +374,94 @@
     ];
 
     let currentYear = 2026;
-    let currentMonth = 10; // 0-indexed: 10 = November
+    let currentMonth = 10;
     let currentHall = 'Grand Ballroom';
 
-    // Mock schedules for November 2026 matching exact reference image
+    // Existing sample booking data
     const november2026Schedule = {
-        4: { type: 'blue', text: 'Morning' },
-        7: { type: 'blue', text: 'Evening' },
-        9: { type: 'blue', text: 'Full day' },
-        12: { type: 'blocked', text: 'Blocked', selected: true },
-        14: { type: 'blue', text: 'Evening' },
-        15: { type: 'blue', text: 'Full day' },
-        17: { type: 'blue', text: 'Evening' },
-        19: { type: 'blue', text: 'Morning' },
-        21: { type: 'blue', text: 'Evening' },
-        22: { type: 'blue', text: 'Evening' },
-        26: { type: 'blocked', text: 'Blocked' },
-        28: { type: 'blue', text: 'Full day' }
+        4: { type: 'blue' },
+        7: { type: 'blue' },
+        9: { type: 'blue' },
+        12: { type: 'blocked', selected: true },
+        14: { type: 'blue' },
+        15: { type: 'blue' },
+        17: { type: 'blue' },
+        19: { type: 'blue' },
+        21: { type: 'blue' },
+        22: { type: 'blue' },
+        26: { type: 'blocked' },
+        28: { type: 'blue' }
     };
 
+    // Existing customer booking details page
+   const customerBookingUrl = @json(route('bookings.show'));
     function renderCalendar(year, month) {
         currentYear = year;
         currentMonth = month;
 
-        // Update Header Title
-        document.getElementById('currentMonthYear').innerText = `${monthNames[month]} ${year}`;
+        document.getElementById('currentMonthYear').innerText =
+            `${monthNames[month]} ${year}`;
 
-        // Update Dropdown selects
-        const monthDropdown = document.getElementById('monthSelectDropdown');
-        const yearDropdown = document.getElementById('yearSelectDropdown');
-        if (monthDropdown) monthDropdown.value = month;
-        if (yearDropdown) yearDropdown.value = year;
+        document.getElementById('monthSelectDropdown').value = month;
+        document.getElementById('yearSelectDropdown').value = year;
 
-        // Calculate days in month & starting weekday
-        const firstDayWeekday = new Date(year, month, 1).getDay(); // 0 = Sun
+        const firstDayWeekday = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
         const grid = document.getElementById('calendarDaysGrid');
         grid.innerHTML = '';
 
-        // Add leading padding empty cells
+        // Empty cells before the first day
         for (let i = 0; i < firstDayWeekday; i++) {
             const padCell = document.createElement('div');
             padCell.className = 'cal-day-cell empty-pad';
             grid.appendChild(padCell);
         }
 
-        // Render each day of the month
+        // Calendar dates
         for (let day = 1; day <= daysInMonth; day++) {
             const cell = document.createElement('div');
             cell.className = 'cal-day-cell';
 
-            let slotHtml = '';
             let slotType = 'free';
-            let slotText = '3 slots free';
+            let slotHtml = '<span class="slot-tag-free">Available</span>';
 
             if (year === 2026 && month === 10) {
-                // Exact November 2026 data matching reference image
                 const dayData = november2026Schedule[day];
+
                 if (dayData) {
                     slotType = dayData.type;
-                    slotText = dayData.text;
+
                     if (dayData.selected) {
                         cell.classList.add('selected');
                     }
+
                     if (slotType === 'blue') {
-                        slotHtml = `<span class="slot-tag-badge slot-tag-blue">${slotText}</span>`;
+                        slotHtml = `
+                            <span class="slot-tag-badge slot-tag-blue">
+                                Booked
+                            </span>`;
                     } else if (slotType === 'blocked') {
-                        slotHtml = `<span class="slot-tag-badge slot-tag-blocked">${slotText}</span>`;
+                        slotHtml = `
+                            <span class="slot-tag-badge slot-tag-blocked">
+                                Blocked
+                            </span>`;
                     }
-                } else {
-                    slotHtml = `<span class="slot-tag-free">3 slots free</span>`;
                 }
             } else {
-                // Procedural slots for other months
-                if (day % 7 === 0) {
+                // Sample calendar data for other months
+                if (day % 7 === 0 || day % 5 === 0) {
                     slotType = 'blue';
-                    slotText = 'Full day';
-                    slotHtml = `<span class="slot-tag-badge slot-tag-blue">Full day</span>`;
-                } else if (day % 5 === 0) {
-                    slotType = 'blue';
-                    slotText = 'Evening';
-                    slotHtml = `<span class="slot-tag-badge slot-tag-blue">Evening</span>`;
+                    slotHtml = `
+                        <span class="slot-tag-badge slot-tag-blue">
+                            Booked
+                        </span>`;
                 } else if (day === 15) {
                     slotType = 'blocked';
-                    slotText = 'Blocked';
-                    slotHtml = `<span class="slot-tag-badge slot-tag-blocked">Blocked</span>`;
-                } else {
-                    slotHtml = `<span class="slot-tag-free">3 slots free</span>`;
+                    slotHtml = `
+                        <span class="slot-tag-badge slot-tag-blocked">
+                            Blocked
+                        </span>`;
                 }
             }
 
@@ -468,22 +470,31 @@
                 ${slotHtml}
             `;
 
+            // Clicking a booked date opens its booking details page
             cell.onclick = function() {
-                selectDate(day, slotText, slotType);
+                if (slotType === 'blue') {
+                    window.location.href = customerBookingUrl;
+                }
             };
 
             grid.appendChild(cell);
         }
     }
 
-    // Dropdown change handler
+    // Month and year dropdowns
     function onDropdownChange() {
-        const m = parseInt(document.getElementById('monthSelectDropdown').value);
-        const y = parseInt(document.getElementById('yearSelectDropdown').value);
-        renderCalendar(y, m);
+        const month = parseInt(
+            document.getElementById('monthSelectDropdown').value
+        );
+
+        const year = parseInt(
+            document.getElementById('yearSelectDropdown').value
+        );
+
+        renderCalendar(year, month);
     }
 
-    // Arrow navigation
+    // Previous / Next month
     function navigateMonth(delta) {
         let newMonth = currentMonth + delta;
         let newYear = currentYear;
@@ -499,47 +510,32 @@
         renderCalendar(newYear, newMonth);
     }
 
-    // Hall switcher
+    // Hall selector
     const hallPills = document.querySelectorAll('#hallSelector .hall-pill');
+
     hallPills.forEach(pill => {
         pill.addEventListener('click', function() {
             hallPills.forEach(p => p.classList.remove('active'));
+
             this.classList.add('active');
             currentHall = this.getAttribute('data-hall');
+
             renderCalendar(currentYear, currentMonth);
         });
     });
 
-    // Date detail modal
-    function selectDate(day, statusText, type) {
-        document.querySelectorAll('.cal-day-cell').forEach(c => c.classList.remove('selected'));
-        if (event && event.currentTarget) {
-            event.currentTarget.classList.add('selected');
-        }
-
-        document.getElementById('modalDateTitle').innerText = `${day} ${monthNames[currentMonth]} ${currentYear}`;
-        document.getElementById('modalActiveHall').innerText = currentHall;
-
-        document.getElementById('morningSlotStatus').innerText = (type === 'blue' || type === 'blocked') ? 'Booked / Reserved' : 'Free (Rs. 1,80,000)';
-        document.getElementById('eveningSlotStatus').innerText = (type === 'blue' || type === 'blocked') ? 'Booked / Reserved' : 'Free (Rs. 2,50,000)';
-        document.getElementById('fullDaySlotStatus').innerText = statusText;
-
-        const modal = new bootstrap.Modal(document.getElementById('dateSlotModal'));
-        modal.show();
-    }
-
+    // Block date modal
     function openBlockModal() {
-        const modal = new bootstrap.Modal(document.getElementById('blockDateModal'));
+        const modal = new bootstrap.Modal(
+            document.getElementById('blockDateModal')
+        );
+
         modal.show();
     }
 
-    function toggleSlot(slot) {
-        alert(slot.toUpperCase() + ' slot status updated for this date.');
-    }
-
-    // Initial render on page load
+    // Initial calendar
     document.addEventListener('DOMContentLoaded', function() {
-        renderCalendar(2026, 10); // November 2026
+        renderCalendar(2026, 10);
     });
 </script>
 @endsection

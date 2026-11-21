@@ -323,6 +323,21 @@
                                     <div class="invalid-feedback">Please enter the conventional centre name (at least 3 characters).</div>
                                 </div>
                             </div>
+
+
+<!-- Convention Centre Description -->
+<div class="col-12">
+    <label class="form-label fw-semibold text-dark small">
+        Convention Centre Description
+        <span class="text-muted">(Optional)</span>
+    </label>
+    <textarea name="description"
+              id="centreDescriptionInput"
+              class="form-control"
+              rows="3"
+              placeholder="Describe the convention centre, its facilities, ambience, amenities and suitable events...">{{ old('description') }}</textarea>
+</div>
+
                         </div>
                     </div>
                 </div>
@@ -829,8 +844,22 @@
                 </div>
                 <span class="small text-muted">Hall-specific details</span>
             </div>
-            <div class="card-body p-3 p-md-4">
-                <section class="mb-4">
+           <div class="card-body p-3 p-md-4">
+
+    <!-- Individual Hall Description -->
+    <section class="mb-4">
+        <label class="form-label fw-semibold text-dark small">
+            Hall Description
+            <span class="text-muted">(Optional)</span>
+        </label>
+        <textarea
+            name="halls[${index}][description]"
+            class="form-control hall-description-input"
+            rows="3"
+            placeholder="Describe this hall, its ambience, seating arrangements, facilities and suitable events...">${escapeHtml(oldHallValues?.[index]?.description || '')}</textarea>
+    </section>
+
+    <section class="mb-4">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                         <div>
                             <h6 class="fw-bold text-dark mb-1"><i class="bi bi-building text-primary me-2"></i>Facilities / Sub-units</h6>

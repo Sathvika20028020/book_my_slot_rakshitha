@@ -536,7 +536,7 @@
                                         onclick="openRejectModal('CC-9041', 'Aditya Kumar')">
                                         <i class="bi bi-x-lg"></i> Reject
                                     </button>
-                                    <a href="{{ route('center_admin.booking.show') }}?id=CC-9041"
+                                    <a href="{{ route('conventions.bookings.show') }}?id=CC-9041"
                                         class="btn btn-sm btn-primary" title="View details">
                                         <i class="bi bi-eye"></i>
                                     </a>
@@ -584,7 +584,7 @@
                                 <div class="d-flex align-items-center justify-content-center gap-2">
                                     <span class="badge bg-light text-success border fw-semibold px-2 py-1 small">Slot
                                         Confirmed</span>
-                                    <a href="{{ route('center_admin.booking.show') }}?id=CC-9035"
+                                    <a href="{{ route('conventions.bookings.show') }}?id=CC-9035"
                                         class="btn btn-sm btn-primary" title="View details">
                                         <i class="bi bi-eye"></i>
                                     </a>
@@ -859,7 +859,7 @@ function confirmApproveAction() {
         actionCell.innerHTML = `
                 <div class="d-flex align-items-center justify-content-center gap-2">
                     <span class="badge bg-light text-success border fw-semibold px-2 py-1 small">Slot Confirmed</span>
-                    <a href="{{ route('center_admin.booking.show') }}?id=${activeBookingId}" class="btn btn-sm btn-primary" title="View details">
+                    <a href="{{ route('conventions.bookings.show') }}?id=${activeBookingId}" class="btn btn-sm btn-primary" title="View details">
                         <i class="bi bi-eye"></i>
                     </a>
                 </div>
@@ -892,7 +892,7 @@ function confirmRejectAction() {
         actionCell.innerHTML = `
                 <div class="d-flex align-items-center justify-content-center gap-2">
                     <span class="badge bg-light text-danger border fw-semibold px-2 py-1 small">Rejected</span>
-                    <a href="{{ route('center_admin.booking.show') }}?id=${activeBookingId}" class="btn btn-sm btn-primary" title="View details">
+                    <a href="{{ route('conventions.bookings.show') }}?id=${activeBookingId}" class="btn btn-sm btn-primary" title="View details">
                         <i class="bi bi-eye"></i>
                     </a>
                 </div>
